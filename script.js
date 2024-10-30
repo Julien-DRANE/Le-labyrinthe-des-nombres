@@ -11,11 +11,38 @@ const messageBox = document.getElementById('message');
 const character = document.getElementById('character');
 const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
+const scoreDisplay = document.getElementById('score');
+
+const modal = document.getElementById('modal');
+const closeModal = document.querySelector('.close');
+const saveScoreButton = document.getElementById('saveScore');
+const playerNameInput = document.getElementById('playerName');
+
+const highScoresDiv = document.getElementById('highScores');
+const highScoresBody = document.getElementById('highScoresBody');
+const closeHighScoresButton = document.getElementById('closeHighScores');
 
 let currentQuestion = 0;
 let score = 0;
 let correctDoor = 0;
 let difficulty = 1;
+const maxQuestions = 10;
+
+// Fonction pour calculer la réponse sans utiliser eval
+function calculateAnswer(num1, num2, operator) {
+    switch(operator) {
+        case '+':
+            return num1 + num2;
+        case '-':
+            return num1 - num2;
+        case '*':
+            return num1 * num2;
+        case '/':
+            return Math.floor(num1 / num2); // Assure un entier
+        default:
+            return null;
+    }
+}
 
 // Génération aléatoire des questions avec une difficulté croissante
 function generateQuestions() {
@@ -35,26 +62,14 @@ function generateQuestions() {
 
         door.textContent = question;
         door.dataset.answer = answer;
+        door.dataset.operator = operator; // Stocker l'opérateur pour le score
     });
 
     // Choisir une porte correcte au hasard
     correctDoor = Math.floor(Math.random() * doors.length);
-}
 
-// Fonction pour calculer la réponse sans utiliser eval
-function calculateAnswer(num1, num2, operator) {
-    switch(operator) {
-        case '+':
-            return num1 + num2;
-        case '-':
-            return num1 - num2;
-        case '*':
-            return num1 * num2;
-        case '/':
-            return Math.floor(num1 / num2); // Assure un entier
-        default:
-            return null;
-    }
+    // Déplacer le personnage aléatoirement devant une porte
+    moveCharacterTo(Math.floor(Math.random() * doors.length));
 }
 
 // Fonction pour démarrer le jeu
@@ -62,16 +77,23 @@ function startGame() {
     currentQuestion = 0;
     score = 0;
     difficulty = 1;
+    scoreDisplay.textContent = score;
     nextRound();
     startButton.style.display = "none";
     submitButton.style.display = "inline";
     answerInput.style.display = "inline";
+    answerInput.value = "";
+    answerInput.focus();
     messageBox.textContent = "";
     character.style.left = "50%";
 }
 
 // Fonction pour le prochain tour de questions
 function nextRound() {
+    if (currentQuestion >= maxQuestions) {
+        endGame();
+        return;
+    }
     generateQuestions();
     answerInput.value = "";
     answerInput.focus();
@@ -87,21 +109,40 @@ function checkAnswer() {
         return;
     }
 
-    if (userAnswer === parseInt(doors[correctDoor].dataset.answer, 10)) {
-        score++;
+    const correctAnswer = parseInt(doors[correctDoor].dataset.answer, 10);
+    const operator = doors[correctDoor].dataset.operator;
+
+    if (userAnswer === correctAnswer) {
         currentQuestion++;
+        // Attribuer des points selon l'opération
+        let points = 0;
+        switch(operator) {
+            case '+':
+                points = 2;
+                break;
+            case '-':
+                points = 3;
+                break;
+            case '*':
+                points = 4;
+                break;
+            case '/':
+                points = 6;
+                break;
+            default:
+                points = 0;
+        }
+        score += points;
+        scoreDisplay.textContent = score;
         correctSound.play();
-        messageBox.textContent = "Bonne réponse ! Continuez.";
+        messageBox.textContent = `Bonne réponse ! +${points} points.`;
         messageBox.style.color = "#4CAF50";
-        moveCharacterTo(correctDoor);
+        // Déplacer le personnage devant une nouvelle porte aléatoirement
+        moveCharacterTo(Math.floor(Math.random() * doors.length));
 
         // Augmenter la difficulté progressivement
         if (currentQuestion % 3 === 0) difficulty++;
 
-        if (currentQuestion >= 10) {
-            endGame();
-            return;
-        }
         nextRound();
     } else {
         // Appliquer l'animation de secousse
@@ -116,7 +157,7 @@ function checkAnswer() {
     }
 }
 
-// Fonction de déplacement du personnage vers la porte correcte
+// Fonction de déplacement du personnage vers une porte spécifique
 function moveCharacterTo(doorIndex) {
     const door = doors[doorIndex];
     const doorRect = door.getBoundingClientRect();
@@ -127,20 +168,66 @@ function moveCharacterTo(doorIndex) {
 
 // Fonction pour terminer le jeu
 function endGame() {
-    messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score}/10 🎉`;
     submitButton.style.display = "none";
+    answerInput.style.display = "none";
+    messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score} points 🎉`;
+    // Afficher la fenêtre modale pour entrer le nom
+    modal.style.display = "block";
+}
+
+// Fonction pour enregistrer le score
+function saveScore() {
+    const playerName = playerNameInput.value.trim();
+    if (playerName === "") {
+        alert("Veuillez entrer un nom.");
+        return;
+    }
+
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+    highScores.push({ name: playerName, score: score });
+
+    // Trier les scores par ordre décroissant
+    highScores.sort((a, b) => b.score - a.score);
+
+    // Limiter le tableau à 10 meilleurs scores
+    if (highScores.length > 10) {
+        highScores.pop();
+    }
+
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+
+    // Fermer la modale et afficher le tableau des scores
+    modal.style.display = "none";
+    displayHighScores();
+}
+
+// Fonction pour afficher le tableau des scores
+function displayHighScores() {
+    highScoresBody.innerHTML = "";
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    highScores.forEach(scoreEntry => {
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        const scoreCell = document.createElement('td');
+
+        nameCell.textContent = scoreEntry.name;
+        scoreCell.textContent = scoreEntry.score;
+
+        row.appendChild(nameCell);
+        row.appendChild(scoreCell);
+        highScoresBody.appendChild(row);
+    });
+
+    highScoresDiv.style.display = "block";
+}
+
+// Fonction pour fermer le tableau des scores
+function closeHighScores() {
+    highScoresDiv.style.display = "none";
+    // Réinitialiser le jeu
     startButton.style.display = "inline";
     startButton.textContent = "Rejouer";
-    answerInput.style.display = "none";
-
-    // Stocker le score
-    let highScore = localStorage.getItem('highScore') || 0;
-    if (score > highScore) {
-        localStorage.setItem('highScore', score);
-        messageBox.textContent += ` Nouveau record !`;
-    } else {
-        messageBox.textContent += ` Record actuel : ${highScore}/10`;
-    }
 }
 
 // Écouteurs d'événements
@@ -154,10 +241,28 @@ answerInput.addEventListener('keypress', function(event) {
     }
 });
 
-// Optionnel : Permettre de cliquer sur une porte pour sélectionner la réponse
+// Gestion de la modale
+closeModal.addEventListener('click', () => {
+    modal.style.display = "none";
+});
+
+saveScoreButton.addEventListener('click', saveScore);
+
+// Gestion de l'affichage du tableau des scores
+closeHighScoresButton.addEventListener('click', closeHighScores);
+
+// Permettre de cliquer sur une porte pour sélectionner la réponse
 doors.forEach((door, index) => {
     door.addEventListener('click', () => {
         answerInput.value = door.dataset.answer;
         checkAnswer();
     });
 });
+
+// Fonction pour afficher les scores au chargement (optionnel)
+function loadHighScores() {
+    // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
+}
+
+// Appeler la fonction au chargement
+window.onload = loadHighScores;
