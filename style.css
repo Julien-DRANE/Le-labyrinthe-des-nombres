@@ -1,3 +1,4 @@
+/* Style Global */
 body {
     background-color: #000000;
     color: #ffffff;
@@ -36,23 +37,25 @@ body {
     justify-content: center;
     align-items: center;
     transition: transform 0.5s ease, background-color 0.5s ease;
+    cursor: pointer;
 }
 
 .door:hover {
     background-color: #777777;
 }
 
-#door1 {
+/* Mise à jour des identifiants pour correspondre au JavaScript */
+#question1 {
     left: 20%;
     transform: translateZ(200px) rotateY(-20deg);
 }
 
-#door2 {
+#question2 {
     left: 50%;
     transform: translateX(-50%) translateZ(300px);
 }
 
-#door3 {
+#question3 {
     right: 20%;
     transform: translateZ(200px) rotateY(20deg);
 }
@@ -63,6 +66,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     font-size: 40px;
+    transition: left 0.5s ease;
 }
 
 .controls {
@@ -101,4 +105,34 @@ button:hover {
     font-size: 18px;
     margin-top: 20px;
     color: #ffcc00;
+}
+
+/* Animation de secousse pour les mauvaises réponses */
+.shake {
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .door {
+        width: 80px;
+        height: 150px;
+        font-size: 16px;
+    }
+
+    .character {
+        font-size: 30px;
+    }
+
+    input[type="number"] {
+        width: 120px;
+    }
 }
