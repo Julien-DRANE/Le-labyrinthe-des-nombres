@@ -11,12 +11,30 @@
         <div class="score-board">
             Score: <span id="score">0</span>
         </div>
-        <div class="room">
-            <div id="question1" class="door">Question 1</div>
-            <div id="question2" class="door">Question 2</div>
-            <div id="question3" class="door">Question 3</div>
-            <div id="character" class="character">🧑‍🚀</div> <!-- Astronaute Stylisé -->
+        
+        <!-- Jauge Verticale -->
+        <div class="gauge-container">
+            <div class="gauge">
+                <div class="gauge-fill" id="gaugeFill"></div>
+            </div>
+            <div class="gauge-label">Voyage Spatial</div>
         </div>
+        
+        <div class="room">
+            <div id="question1" class="door">
+                <div class="question-text">Question 1</div>
+            </div>
+            <div id="question2" class="door">
+                <div class="question-text">Question 2</div>
+            </div>
+            <div id="question3" class="door">
+                <div class="question-text">Question 3</div>
+            </div>
+            <div id="character" class="character">
+                <img src="astronaut.png" alt="Astronaute" />
+            </div>
+        </div>
+        
         <div class="controls">
             <input type="number" id="answer" style="display:none;" placeholder="Votre réponse" />
             <button id="submit" style="display:none;">Submit</button>
