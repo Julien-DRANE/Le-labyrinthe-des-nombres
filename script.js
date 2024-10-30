@@ -14,6 +14,7 @@ const character = document.getElementById('character');
 const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
 const scoreDisplay = document.getElementById('score');
+const gaugeFill = document.getElementById('gaugeFill');
 
 const modal = document.getElementById('modal');
 const closeModal = document.querySelector('.close');
@@ -46,11 +47,24 @@ function calculateAnswer(num1, num2, operator) {
     }
 }
 
-// Génération aléatoire des questions avec une difficulté croissante
-function generateQuestions() {
+// Fonction pour générer 3 opérateurs uniques
+function getUniqueOperators() {
     const operators = ['+', '-', '*', '/'];
+    // Shuffle les opérateurs
+    for (let i = operators.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [operators[i], operators[j]] = [operators[j], operators[i]];
+    }
+    return operators.slice(0, 3);
+}
+
+// Fonction pour générer une question
+function generateQuestions() {
+    const selectedOperators = getUniqueOperators();
+    // Randomly choose one door to be the correct door
+    const correctDoorIndex = Math.floor(Math.random() * doors.length);
     doors.forEach((door, index) => {
-        const operator = operators[Math.floor(Math.random() * operators.length)];
+        const operator = selectedOperators[index];
         let num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
         let num2 = Math.floor(Math.random() * (10 * difficulty)) + 1;
 
@@ -62,14 +76,21 @@ function generateQuestions() {
         let answer = calculateAnswer(num1, num2, operator);
         let question = `${num1} ${operator} ${num2}`;
 
-        door.textContent = question;
+        const questionText = door.querySelector('.question-text');
+        questionText.textContent = question;
         door.dataset.answer = answer;
-        door.dataset.operator = operator; // Stocker l'opérateur pour le score
+        door.dataset.operator = operator;
+
+        // Marquer une porte comme correcte
+        if (index === correctDoorIndex) {
+            door.dataset.correct = 'true';
+        } else {
+            door.dataset.correct = 'false';
+        }
     });
 
-    // Déplacer le personnage aléatoirement devant une porte
-    const newSelectedDoor = Math.floor(Math.random() * doors.length);
-    selectDoor(newSelectedDoor);
+    // Déplacer le personnage devant la porte correcte
+    moveCharacterTo(correctDoorIndex);
 }
 
 // Fonction pour sélectionner une porte
@@ -92,6 +113,7 @@ function startGame() {
     score = 0;
     difficulty = 1;
     scoreDisplay.textContent = score;
+    updateGauge();
     nextRound();
     startButton.style.display = "none";
     submitButton.style.display = "inline";
@@ -99,6 +121,13 @@ function startGame() {
     answerInput.value = "";
     answerInput.focus();
     messageBox.textContent = "";
+    character.style.left = "50%";
+    selectedDoor = null;
+    // Réinitialiser les portes
+    doors.forEach(door => {
+        door.style.border = '2px solid #ffffff';
+        door.classList.remove('open');
+    });
 }
 
 // Fonction pour le prochain tour de questions
@@ -110,6 +139,12 @@ function nextRound() {
     generateQuestions();
     answerInput.value = "";
     answerInput.focus();
+    selectedDoor = null;
+    // Réinitialiser les styles des portes
+    doors.forEach(door => {
+        door.style.border = '2px solid #ffffff';
+        door.classList.remove('open');
+    });
 }
 
 // Fonction pour vérifier la réponse
@@ -130,12 +165,13 @@ function checkAnswer() {
 
     const door = doors[selectedDoor];
     const correctAnswer = parseInt(door.dataset.answer, 10);
-    const operator = door.dataset.operator;
+    const isCorrect = door.dataset.correct === 'true';
 
-    if (userAnswer === correctAnswer) {
+    if (userAnswer === correctAnswer && isCorrect) {
         currentQuestion++;
         // Attribuer des points selon l'opération
         let points = 0;
+        const operator = door.dataset.operator;
         switch(operator) {
             case '+':
                 points = 2;
@@ -157,7 +193,17 @@ function checkAnswer() {
         correctSound.play();
         messageBox.textContent = `Bonne réponse ! +${points} points.`;
         messageBox.style.color = "#4CAF50";
-        // Passer à la prochaine question
+        // Animer l'ouverture de la porte
+        door.classList.add('open');
+
+        // Mettre à jour la jauge
+        updateGauge();
+
+        // Augmenter la difficulté progressivement
+        if (currentQuestion % 3 === 0 && difficulty < 5) { // Limite de difficulté pour éviter des nombres trop grands
+            difficulty++;
+        }
+
         nextRound();
     } else {
         // Appliquer l'animation de secousse
@@ -245,6 +291,12 @@ function closeHighScores() {
     startButton.textContent = "Rejouer";
 }
 
+// Fonction pour mettre à jour la jauge verticale
+function updateGauge() {
+    const progress = (currentQuestion / maxQuestions) * 100;
+    gaugeFill.style.height = `${progress}%`;
+}
+
 // Écouteurs d'événements
 submitButton.addEventListener('click', checkAnswer);
 startButton.addEventListener('click', startGame);
@@ -269,7 +321,9 @@ closeHighScoresButton.addEventListener('click', closeHighScores);
 // Permettre de cliquer sur une porte pour sélectionner la réponse
 doors.forEach((door, index) => {
     door.addEventListener('click', () => {
+        // Sélectionner la porte cliquée
         selectDoor(index);
+        // Laisser l'utilisateur soumettre sa réponse manuellement
     });
 });
 
@@ -278,5 +332,4 @@ function loadHighScores() {
     // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
 }
 
-// Appeler la fonction au chargement
 window.onload = loadHighScores;
