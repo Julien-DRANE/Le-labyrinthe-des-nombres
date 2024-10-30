@@ -1,7 +1,7 @@
 body {
     background-color: #000000;
     color: #ffffff;
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,65 +9,96 @@ body {
     margin: 0;
 }
 
-.container {
+.game-container {
     text-align: center;
     width: 90%;
-    max-width: 600px;
+    max-width: 800px;
 }
 
-#game {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
+.room {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    perspective: 800px;
+    margin-bottom: 30px;
 }
 
-#character {
-    font-size: 40px;
-    animation: move 1s linear infinite;
-}
-
-@keyframes move {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(20px); }
-}
-
-#doors {
-    font-size: 32px;
-}
-
-#question-box {
-    margin-bottom: 20px;
-}
-
-#question {
+.door {
+    position: absolute;
+    width: 100px;
+    height: 180px;
+    background-color: #444444;
+    border: 2px solid #ffffff;
+    border-radius: 5px;
+    color: #ffffff;
     font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.5s ease, background-color 0.5s ease;
+}
+
+.door:hover {
+    background-color: #777777;
+}
+
+#door1 {
+    left: 20%;
+    transform: translateZ(200px) rotateY(-20deg);
+}
+
+#door2 {
+    left: 50%;
+    transform: translateX(-50%) translateZ(300px);
+}
+
+#door3 {
+    right: 20%;
+    transform: translateZ(200px) rotateY(20deg);
+}
+
+.character {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 40px;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
 }
 
 input[type="number"] {
     padding: 10px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #444444;
     border-radius: 8px;
-    width: 60%;
-    font-size: 18px;
+    width: 150px;
+    font-size: 16px;
+    background-color: #222222;
+    color: #ffffff;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 button {
-    padding: 10px 15px;
+    padding: 12px 20px;
     border: none;
-    background-color: #444444;
-    color: white;
+    background-color: #a0c4ff;
+    color: #000000;
     font-size: 16px;
     border-radius: 8px;
     cursor: pointer;
-    margin: 10px 5px;
+    transition: all 0.3s ease;
 }
 
 button:hover {
-    background-color: #777777;
+    background-color: #84a9dd;
 }
 
 #message {
     font-size: 18px;
-    margin-top: 15px;
+    margin-top: 20px;
+    color: #ffcc00;
 }
