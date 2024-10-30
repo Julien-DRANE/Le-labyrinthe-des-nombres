@@ -6,13 +6,20 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div id="game">
-            <pre id="character">🙂</pre>
-            <pre id="doors">🚪 🚪 🚪</pre>
+    <div class="game-container">
+        <div class="room">
+            <div class="door" id="door1">
+                <p class="question" id="question1"></p>
+            </div>
+            <div class="door" id="door2">
+                <p class="question" id="question2"></p>
+            </div>
+            <div class="door" id="door3">
+                <p class="question" id="question3"></p>
+            </div>
+            <div class="character" id="character">🙂</div>
         </div>
-        <div id="question-box">
-            <p id="question">Appuyez sur "Commencer" pour démarrer !</p>
+        <div class="controls">
             <input type="number" id="answer" placeholder="Votre réponse..." autocomplete="off">
             <button id="submit">Valider</button>
             <button id="start">Commencer</button>
