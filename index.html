@@ -7,20 +7,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌸 Le Labyrinthe des Nombres 🌸</h1>
+        <div id="game">
+            <pre id="character">🙂</pre>
+            <pre id="doors">🚪 🚪 🚪</pre>
+        </div>
         <div id="question-box">
-            <p id="question">Cliquez sur "Commencer" pour démarrer !</p>
+            <p id="question">Appuyez sur "Commencer" pour démarrer !</p>
             <input type="number" id="answer" placeholder="Votre réponse..." autocomplete="off">
             <button id="submit">Valider</button>
             <button id="start">Commencer</button>
         </div>
         <div id="message"></div>
-        <div id="labyrinth">
-            <div class="path" id="path1"></div>
-            <div class="path hidden" id="path2"></div>
-            <div class="path hidden" id="path3"></div>
-        </div>
     </div>
+    <audio id="correctSound" src="correct.mp3"></audio>
+    <audio id="wrongSound" src="wrong.mp3"></audio>
     <script src="script.js"></script>
 </body>
 </html>
