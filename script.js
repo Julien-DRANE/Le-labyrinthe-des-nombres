@@ -230,9 +230,22 @@ function moveCharacterTo(doorIndex) {
     const door = doors[doorIndex];
     const doorRect = door.getBoundingClientRect();
     const containerRect = door.parentElement.getBoundingClientRect();
-    const leftPosition = ((doorRect.left - containerRect.left) + doorRect.width / 2) / containerRect.width * 100;
-    character.style.left = `${leftPosition}%`;
-    character.style.top = "-60px"; // Assure que le personnage est en haut
+    const isMobile = window.innerWidth <= 600; // Détecter si l'écran est mobile
+
+    if (isMobile) {
+        // Layout vertical
+        // Positionner le personnage au-dessus de la porte sélectionnée
+        const topPosition = door.offsetTop - character.offsetHeight - 10; // 10px d'espace
+        character.style.top = `${topPosition}px`;
+        character.style.left = "50%"; // Centré horizontalement
+    } else {
+        // Layout horizontal
+        const doorCenterX = door.offsetLeft + door.offsetWidth / 2;
+        const containerCenterX = containerRect.width / 2;
+        const leftPosition = doorCenterX - (character.offsetWidth / 2);
+        character.style.left = `${leftPosition}px`;
+        character.style.top = "-60px"; // Assure que le personnage est en haut
+    }
 }
 
 // Fonction pour terminer le jeu
