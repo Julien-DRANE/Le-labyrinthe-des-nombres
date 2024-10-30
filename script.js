@@ -13,6 +13,8 @@ const messageBox = document.getElementById('message');
 const character = document.getElementById('character');
 const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
+const spaceshipSound = document.getElementById('spaceshipSound');
+const jetpackSound = document.getElementById('jetpackSound');
 const scoreDisplay = document.getElementById('score');
 const gaugeFill = document.getElementById('gaugeFill');
 
@@ -87,6 +89,12 @@ function generateQuestions() {
 
 // Fonction pour sélectionner une porte
 function selectDoor(doorIndex) {
+    if (selectedDoor !== null && selectedDoor !== doorIndex) {
+        // Jouer le son du jetpack lorsqu'on change de porte
+        jetpackSound.currentTime = 0;
+        jetpackSound.play();
+    }
+
     selectedDoor = doorIndex;
     moveCharacterTo(doorIndex);
     // Mettre en évidence la porte sélectionnée
@@ -120,6 +128,9 @@ function startGame() {
         door.style.border = '2px solid #ffffff';
         door.classList.remove('open', 'rotate');
     });
+    // Démarrer le son d'ambiance
+    spaceshipSound.volume = 0.2; // Faible volume
+    spaceshipSound.play();
 }
 
 // Fonction pour le prochain tour de questions
@@ -223,6 +234,8 @@ function endGame() {
     submitButton.style.display = "none";
     answerInput.style.display = "none";
     messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score} points 🎉`;
+    // Arrêter le son d'ambiance
+    spaceshipSound.pause();
     // Afficher la fenêtre modale pour entrer le nom
     modal.style.display = "block";
 }
@@ -291,7 +304,7 @@ function updateGauge() {
 // Génération des étoiles pour le fond étoilé
 function generateStars() {
     const starfield = document.querySelector('.starfield');
-    const numberOfStars = 100; // Ajustez ce nombre selon vos préférences
+    const numberOfStars = 150; // Ajustez ce nombre selon vos préférences
 
     for (let i = 0; i < numberOfStars; i++) {
         const star = document.createElement('div');
@@ -319,6 +332,12 @@ function generateStars() {
             star.style.background = '#aaaaaa';
             star.style.animationName = 'twinkle';
             star.style.animationDuration = `${animationDuration + 20}s`; // Plus lent pour les petites étoiles
+        }
+
+        // Ajouter une classe spéciale pour certaines étoiles proches
+        if (Math.random() < 0.05) { // 5% des étoiles seront des étoiles proches
+            star.classList.add('fast-star');
+            star.style.animation = `twinkle ${animationDuration / 2}s infinite, moveStar ${animationDuration / 2}s linear forwards`;
         }
 
         starfield.appendChild(star);
@@ -365,6 +384,12 @@ doors.forEach((door, index) => {
 // Fonction pour afficher les scores au chargement (optionnel)
 function loadHighScores() {
     // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
+}
+
+// Animation pour les étoiles proches
+@keyframes moveStar {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(200px, -200px); } /* Ajustez selon l'effet désiré */
 }
 
 // Initialiser le fond étoilé au chargement de la fenêtre
