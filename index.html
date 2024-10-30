@@ -3,119 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Jeu Mathématique</title>
-    <style>
-        /* Votre code CSS ici */
-        body {
-            background-color: #000000;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .game-container {
-            text-align: center;
-            width: 90%;
-            max-width: 800px;
-        }
-
-        .room {
-            position: relative;
-            width: 100%;
-            height: 300px;
-            perspective: 800px;
-            margin-bottom: 30px;
-        }
-
-        .door {
-            position: absolute;
-            width: 100px;
-            height: 180px;
-            background-color: #444444;
-            border: 2px solid #ffffff;
-            border-radius: 5px;
-            color: #ffffff;
-            font-size: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.5s ease, background-color 0.5s ease;
-            cursor: pointer;
-        }
-
-        .door:hover {
-            background-color: #777777;
-        }
-
-        /* Mise à jour des identifiants pour correspondre au JavaScript */
-        #question1 {
-            left: 20%;
-            transform: translateZ(200px) rotateY(-20deg);
-        }
-
-        #question2 {
-            left: 50%;
-            transform: translateX(-50%) translateZ(300px);
-        }
-
-        #question3 {
-            right: 20%;
-            transform: translateZ(200px) rotateY(20deg);
-        }
-
-        .character {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 40px;
-            transition: left 0.5s ease;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        input[type="number"] {
-            padding: 10px;
-            border: 1px solid #444444;
-            border-radius: 8px;
-            width: 150px;
-            font-size: 16px;
-            background-color: #222222;
-            color: #ffffff;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        button {
-            padding: 12px 20px;
-            border: none;
-            background-color: #a0c4ff;
-            color: #000000;
-            font-size: 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #84a9dd;
-        }
-
-        #message {
-            font-size: 18px;
-            margin-top: 20px;
-            color: #ffcc00;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
+        <h1>Jeu Mathématique</h1>
+        <div class="score-board">
+            Score: <span id="score">0</span>
+        </div>
         <div class="room">
             <div id="question1" class="door">Question 1</div>
             <div id="question2" class="door">Question 2</div>
@@ -123,7 +18,7 @@
             <div id="character" class="character">😀</div>
         </div>
         <div class="controls">
-            <input type="number" id="answer" style="display:none;" />
+            <input type="number" id="answer" style="display:none;" placeholder="Votre réponse" />
             <button id="submit" style="display:none;">Submit</button>
             <button id="start">Start</button>
         </div>
@@ -134,141 +29,35 @@
     <audio id="correctSound" src="correct.mp3"></audio>
     <audio id="wrongSound" src="wrong.mp3"></audio>
 
+    <!-- Fenêtre modale pour le nom du joueur -->
+    <div id="modal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Félicitations !</h2>
+            <p>Entrez votre nom pour enregistrer votre score :</p>
+            <input type="text" id="playerName" placeholder="Votre nom" />
+            <button id="saveScore">Enregistrer</button>
+        </div>
+    </div>
+
+    <!-- Tableau des scores -->
+    <div id="highScores" class="high-scores" style="display:none;">
+        <h2>Tableau des Scores</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Score</th>
+                </tr>
+            </thead>
+            <tbody id="highScoresBody">
+                <!-- Les scores seront injectés ici -->
+            </tbody>
+        </table>
+        <button id="closeHighScores">Fermer</button>
+    </div>
+
     <!-- Votre script JavaScript -->
-    <script>
-        // Votre code JavaScript ici
-        // Sélection des éléments
-        const doors = [
-            document.getElementById('question1'),
-            document.getElementById('question2'),
-            document.getElementById('question3')
-        ];
-        const answerInput = document.getElementById('answer');
-        const submitButton = document.getElementById('submit');
-        const startButton = document.getElementById('start');
-        const messageBox = document.getElementById('message');
-        const character = document.getElementById('character');
-        const correctSound = document.getElementById('correctSound');
-        const wrongSound = document.getElementById('wrongSound');
-        
-        let currentQuestion = 0;
-        let score = 0;
-        let correctDoor = 0;
-        let difficulty = 1;
-        
-        // Génération aléatoire des questions avec une difficulté croissante
-        function generateQuestions() {
-            const operators = ['+', '-', '*', '/'];
-            doors.forEach((door, index) => {
-                const operator = operators[Math.floor(Math.random() * operators.length)];
-                let num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
-                let num2 = Math.floor(Math.random() * (10 * difficulty)) + 1;
-        
-                if (operator === '/' && num2 === 0) num2 = 1; // Éviter la division par zéro
-                if (operator === '/' && num1 % num2 !== 0) {
-                    num1 = num1 * num2;
-                }
-        
-                let answer = calculateAnswer(num1, num2, operator);
-                let question = `${num1} ${operator} ${num2}`;
-        
-                door.textContent = question;
-                door.dataset.answer = answer;
-            });
-        
-            // Choisir une porte correcte au hasard
-            correctDoor = Math.floor(Math.random() * doors.length);
-        }
-
-        // Fonction pour calculer la réponse sans utiliser eval
-        function calculateAnswer(num1, num2, operator) {
-            switch(operator) {
-                case '+':
-                    return num1 + num2;
-                case '-':
-                    return num1 - num2;
-                case '*':
-                    return num1 * num2;
-                case '/':
-                    return Math.floor(num1 / num2); // Assure un entier
-                default:
-                    return null;
-            }
-        }
-        
-        // Fonction pour démarrer le jeu
-        function startGame() {
-            currentQuestion = 0;
-            score = 0;
-            difficulty = 1;
-            nextRound();
-            startButton.style.display = "none";
-            submitButton.style.display = "inline";
-            answerInput.style.display = "inline";
-            messageBox.textContent = "";
-            character.style.left = "50%";
-        }
-        
-        // Fonction pour le prochain tour de questions
-        function nextRound() {
-            generateQuestions();
-            answerInput.value = "";
-            answerInput.focus();
-        }
-        
-        // Fonction pour vérifier la réponse
-        function checkAnswer() {
-            const userAnswer = parseInt(answerInput.value, 10);
-        
-            if (isNaN(userAnswer)) {
-                messageBox.textContent = "Veuillez entrer un nombre valide.";
-                messageBox.style.color = "#FF5733";
-                return;
-            }
-        
-            if (userAnswer === parseInt(doors[correctDoor].dataset.answer, 10)) {
-                score++;
-                currentQuestion++;
-                correctSound.play();
-                messageBox.textContent = "Bonne réponse ! Continuez.";
-                messageBox.style.color = "#4CAF50";
-                moveCharacterTo(correctDoor);
-        
-                // Augmenter la difficulté progressivement
-                if (currentQuestion % 3 === 0) difficulty++;
-        
-                if (currentQuestion >= 10) {
-                    messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score}/10 🎉`;
-                    submitButton.style.display = "none";
-                    startButton.style.display = "inline";
-                    startButton.textContent = "Rejouer";
-                    answerInput.style.display = "none";
-                    return;
-                }
-                nextRound();
-            } else {
-                wrongSound.play();
-                messageBox.textContent = "Mauvaise réponse, essayez encore.";
-                messageBox.style.color = "#FF5733";
-            }
-        }
-        
-        // Fonction de déplacement du personnage vers la porte correcte
-        function moveCharacterTo(doorIndex) {
-            const doorPositions = [20, 50, 80];
-            character.style.left = `${doorPositions[doorIndex]}%`;
-        }
-        
-        // Écouteurs d'événements
-        submitButton.addEventListener('click', checkAnswer);
-        startButton.addEventListener('click', startGame);
-
-        // Permettre de soumettre la réponse en appuyant sur "Entrée"
-        answerInput.addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                checkAnswer();
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
