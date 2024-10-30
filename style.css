@@ -19,6 +19,17 @@ body {
     background: black;
     overflow: hidden;
     z-index: -1; /* Place le fond derrière tous les autres éléments */
+    animation: zoomIn 60s linear infinite;
+}
+
+/* Animation de zoom infini pour le fond étoilé */
+@keyframes zoomIn {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
 }
 
 /* Animation de scintillement des étoiles */
@@ -37,20 +48,6 @@ body {
         transform: translate(-1000px, -1000px);
         opacity: 0;
     }
-}
-
-/* Animation de zoom infini pour le fond étoilé */
-@keyframes zoomIn {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.05);
-    }
-}
-
-.starfield {
-    animation: zoomIn 60s linear infinite;
 }
 
 /* Style des étoiles */
@@ -253,12 +250,12 @@ button:hover {
 /* Tablette */
 @media (max-width: 800px) {
     .door {
-        width: 120px;
-        height: 200px;
+        width: 140px;
+        height: 220px;
     }
 
     .question-text {
-        font-size: 18px;
+        font-size: 20px;
     }
 
     .gauge-container {
@@ -276,7 +273,7 @@ button:hover {
     }
 
     input[type="number"], input[type="text"] {
-        width: 150px;
+        width: 180px;
         font-size: 14px;
     }
 
@@ -302,12 +299,12 @@ button:hover {
 /* Mobile */
 @media (max-width: 500px) {
     .door {
-        width: 100px;
-        height: 170px;
+        width: 120px;
+        height: 200px;
     }
 
     .question-text {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .gauge-container {
@@ -325,8 +322,8 @@ button:hover {
     }
 
     input[type="number"], input[type="text"] {
-        width: 120px;
-        font-size: 12px;
+        width: 150px;
+        font-size: 14px;
     }
 
     button {
@@ -345,6 +342,14 @@ button:hover {
 
     .door {
         margin: 5px 0;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .score-board {
+        font-size: 1em;
     }
 }
 
