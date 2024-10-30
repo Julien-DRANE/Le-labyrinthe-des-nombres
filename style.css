@@ -1,11 +1,16 @@
 /* style.css */
 
 /* Style Global */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background-color: #000;
     color: #fff;
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    margin: 0;
     overflow: hidden; /* Empêche les barres de défilement causées par le fond étoilé */
 }
 
@@ -66,12 +71,14 @@ body {
 
 /* Game Container */
 .game-container {
-    text-align: center;
-    width: 90%;
-    max-width: 1200px;
-    position: relative;
-    margin: auto;
-    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 /* Titre */
@@ -80,13 +87,6 @@ h1 {
     font-size: 3em;
     color: #ffcc00;
     text-shadow: 2px 2px 4px #000;
-}
-
-/* Score Board */
-.score-board {
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    color: #00ff99;
 }
 
 /* Jauge Horizontale */
@@ -127,12 +127,12 @@ h1 {
 .room {
     position: relative;
     width: 100%;
-    height: 400px;
+    height: 60vh; /* Utilisé pour les écrans de tablette et desktop */
     perspective: 800px;
-    margin-bottom: 30px;
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
+    margin-bottom: 20px; /* Réduit la marge inférieure */
 }
 
 .door {
@@ -207,9 +207,12 @@ h1 {
 /* Controls */
 .controls {
     display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
+    flex-direction: column; /* Aligne les éléments verticalement sur mobile */
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 input[type="number"], input[type="text"] {
@@ -271,17 +274,26 @@ button:active {
     animation: shake 0.5s;
 }
 
-/* Responsive Design */
+/* Score Board Positionné en Bas */
+.score-board {
+    position: absolute;
+    bottom: 60px; /* Positionné juste au-dessus de la jauge */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.5em;
+    color: #00ff99;
+    text-shadow: 2px 2px 4px #000;
+}
 
-/* Tablette */
+/* Ajustements dans les Media Queries */
 @media (max-width: 1024px) {
     .room {
-        height: 350px;
+        height: 60vh; /* Ajuster si nécessaire */
     }
 
     .door {
-        width: 180px;
-        height: 270px;
+        width: 160px;
+        height: 240px;
     }
 
     .question-text {
@@ -297,9 +309,9 @@ button:active {
     }
 
     .character {
-        width: 100px; /* Ajuster la taille pour tablette */
+        width: 100px;
         height: 100px;
-        top: -50px; /* Ajuster la position */
+        top: -50px;
     }
 
     input[type="number"], input[type="text"] {
@@ -315,18 +327,21 @@ button:active {
     #message {
         font-size: 1em;
     }
+
+    .score-board {
+        bottom: 50px; /* Ajustement pour tablette */
+    }
 }
 
-/* Mobile */
 @media (max-width: 600px) {
     .room {
         flex-direction: column;
-        height: 300px;
+        height: 50vh; /* Utilise 50% de la hauteur de l'écran */
     }
 
     .door {
         width: 140px;
-        height: 220px;
+        height: 200px;
         margin: 10px 0;
     }
 
@@ -360,6 +375,10 @@ button:active {
 
     #message {
         font-size: 0.9em;
+    }
+
+    .score-board {
+        bottom: 40px; /* Ajustement pour mobile */
     }
 }
 
