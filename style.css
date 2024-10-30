@@ -1,6 +1,7 @@
 body {
-    background-color: #f6f1f0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Courier New', Courier, monospace;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,19 +10,30 @@ body {
 }
 
 .container {
-    background: linear-gradient(145deg, #ffffff, #e6e6e6);
-    border-radius: 15px;
-    padding: 25px 30px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 90%;
+    max-width: 600px;
 }
 
-h1 {
-    font-size: 24px;
-    color: #5a7d9a;
-    margin-bottom: 15px;
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#character {
+    font-size: 40px;
+    animation: move 1s linear infinite;
+}
+
+@keyframes move {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(20px); }
+}
+
+#doors {
+    font-size: 32px;
 }
 
 #question-box {
@@ -29,80 +41,33 @@ h1 {
 }
 
 #question {
-    font-size: 18px;
-    color: #4b5563;
-    margin-bottom: 10px;
+    font-size: 20px;
 }
 
 input[type="number"] {
     padding: 10px;
     border: 1px solid #cbd5e1;
-    border-radius: 10px;
-    width: 85%;
-    font-size: 16px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    width: 60%;
+    font-size: 18px;
 }
 
 button {
-    padding: 12px 20px;
+    padding: 10px 15px;
     border: none;
-    background-color: #a0c4ff;
+    background-color: #444444;
     color: white;
     font-size: 16px;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s ease;
     margin: 10px 5px;
 }
 
 button:hover {
-    background-color: #84a9dd;
+    background-color: #777777;
 }
 
 #message {
-    font-size: 16px;
-    margin-top: 10px;
-}
-
-#labyrinth {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.path {
-    width: 90%;
-    height: 25px;
-    background-color: #dfe7fd;
-    border-radius: 12px;
-    margin: 10px 0;
-    transition: background-color 0.3s ease;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-.path.visible {
-    background-color: #b8cfff;
-}
-
-.hidden {
-    visibility: hidden;
-}
-
-@media (max-width: 600px) {
-    h1 {
-        font-size: 22px;
-    }
-
-    input[type="number"] {
-        width: 90%;
-    }
-
-    button {
-        font-size: 14px;
-    }
-
-    .path {
-        width: 95%;
-    }
+    font-size: 18px;
+    margin-top: 15px;
 }
