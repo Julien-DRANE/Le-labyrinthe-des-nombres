@@ -82,7 +82,7 @@ function generateQuestions() {
         door.dataset.operator = operator;
     });
 
-    // Déplacer le personnage aléatoirement devant une porte
+    // Déplacer le personnage devant une porte aléatoire
     const newSelectedDoor = Math.floor(Math.random() * doors.length);
     selectDoor(newSelectedDoor);
 }
@@ -100,9 +100,9 @@ function selectDoor(doorIndex) {
     // Mettre en évidence la porte sélectionnée
     doors.forEach((door, index) => {
         if (index === doorIndex) {
-            door.style.border = '2px solid #00FF00'; // Bordure verte pour la porte sélectionnée
+            door.style.border = '4px solid #00ff99'; // Bordure verte pour la porte sélectionnée
         } else {
-            door.style.border = '2px solid #ffffff'; // Bordure blanche pour les autres portes
+            door.style.border = '4px solid #ffffff'; // Bordure blanche pour les autres portes
         }
     });
 }
@@ -117,19 +117,19 @@ function startGame() {
     nextRound();
     startButton.style.display = "none";
     submitButton.style.display = "inline";
-    answerInput.style.display = "inline";
+    answerInput.style.display = "inline-block";
     answerInput.value = "";
     answerInput.focus();
     messageBox.textContent = "";
     selectedDoor = null;
     // Réinitialiser les portes
     doors.forEach(door => {
-        door.style.border = '2px solid #ffffff';
-        door.classList.remove('open', 'rotate');
+        door.style.border = '4px solid #ffffff';
+        door.classList.remove('rotate');
     });
-    // Repositionner le personnage en bas
+    // Repositionner le personnage en bas au centre
     character.style.left = "50%";
-    character.style.bottom = "10px";
+    character.style.bottom = "20px";
     // Démarrer le son d'ambiance
     spaceshipSound.volume = 0.2; // Faible volume
     spaceshipSound.play();
@@ -147,19 +147,19 @@ function nextRound() {
     selectedDoor = null;
     // Réinitialiser les styles des portes
     doors.forEach(door => {
-        door.style.border = '2px solid #ffffff';
-        door.classList.remove('open', 'rotate');
+        door.style.border = '4px solid #ffffff';
+        door.classList.remove('rotate');
     });
-    // Repositionner le personnage en bas
+    // Repositionner le personnage en bas au centre
     character.style.left = "50%";
-    character.style.bottom = "10px";
+    character.style.bottom = "20px";
 }
 
 // Fonction pour vérifier la réponse
 function checkAnswer() {
     if (selectedDoor === null) {
         messageBox.textContent = "Veuillez sélectionner une porte.";
-        messageBox.style.color = "#FF5733";
+        messageBox.style.color = "#ff5722";
         return;
     }
 
@@ -167,7 +167,7 @@ function checkAnswer() {
 
     if (isNaN(userAnswer)) {
         messageBox.textContent = "Veuillez entrer un nombre valide.";
-        messageBox.style.color = "#FF5733";
+        messageBox.style.color = "#ff5722";
         return;
     }
 
@@ -198,8 +198,8 @@ function checkAnswer() {
         score += points;
         scoreDisplay.textContent = score;
         correctSound.play();
-        messageBox.textContent = `Bonne réponse ! +${points} points.`;
-        messageBox.style.color = "#4CAF50";
+        messageBox.textContent = `Bravo ! +${points} points.`;
+        messageBox.style.color = "#00ff99";
         // Animer la rotation de la porte
         door.classList.add('rotate');
 
@@ -220,8 +220,8 @@ function checkAnswer() {
         }, 500);
 
         wrongSound.play();
-        messageBox.textContent = "Mauvaise réponse, essayez encore.";
-        messageBox.style.color = "#FF5733";
+        messageBox.textContent = "Mauvaise réponse, réessaie !";
+        messageBox.style.color = "#ff5722";
     }
 }
 
@@ -232,14 +232,15 @@ function moveCharacterTo(doorIndex) {
     const containerRect = door.parentElement.getBoundingClientRect();
     const leftPosition = ((doorRect.left - containerRect.left) + doorRect.width / 2) / containerRect.width * 100;
     character.style.left = `${leftPosition}%`;
-    character.style.bottom = "10px"; // Assure que le personnage est en bas
+    character.style.bottom = "20px"; // Assure que le personnage est en bas
 }
 
 // Fonction pour terminer le jeu
 function endGame() {
     submitButton.style.display = "none";
     answerInput.style.display = "none";
-    messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score} points 🎉`;
+    messageBox.textContent = `Mission Accomplie ! Ton score est de ${score} points 🎉`;
+    messageBox.style.color = "#00ff99";
     // Arrêter le son d'ambiance
     spaceshipSound.pause();
     // Afficher la fenêtre modale pour entrer le nom
@@ -298,19 +299,19 @@ function closeHighScores() {
     highScoresDiv.style.display = "none";
     // Réinitialiser le jeu
     startButton.style.display = "inline";
-    startButton.textContent = "Rejouer";
+    startButton.textContent = "Rejouer la Mission";
 }
 
-// Fonction pour mettre à jour la jauge verticale
+// Fonction pour mettre à jour la jauge horizontale
 function updateGauge() {
     const progress = (currentQuestion / maxQuestions) * 100;
-    gaugeFill.style.height = `${progress}%`;
+    gaugeFill.style.width = `${progress}%`;
 }
 
 // Génération des étoiles pour le fond étoilé avec zoom continu
 function generateStars() {
     const starfield = document.querySelector('.starfield');
-    const numberOfStars = 150; // Ajustez ce nombre selon vos préférences
+    const numberOfStars = 200; // Ajustez ce nombre selon vos préférences
 
     for (let i = 0; i < numberOfStars; i++) {
         const star = document.createElement('div');
@@ -330,7 +331,7 @@ function generateStars() {
             star.classList.add('fast-star');
         }
 
-        // Assignation de délais et durées aléatoires pour éviter les clumps
+        // Assignation de délais et durées aléatoires pour éviter les regroupements
         const twinkleDuration = Math.random() * 2 + 3; // 3s à 5s pour twinkle
         const zoomDuration = Math.random() * 5 + 5; // 5s à 10s pour zoom
         const animationDelay = Math.random() * 10; // 0s à 10s de délai
@@ -374,8 +375,11 @@ doors.forEach((door, index) => {
     door.addEventListener('click', () => {
         // Sélectionner la porte cliquée
         selectDoor(index);
-        // Ne pas remplir automatiquement la réponse
-        // Laisser l'utilisateur saisir la réponse
+        // Afficher le champ de saisie si ce n'est pas déjà fait
+        if (answerInput.style.display === "none") {
+            answerInput.style.display = "inline-block";
+            submitButton.style.display = "inline-block";
+        }
     });
 });
 
