@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Jeu Mathématique</title>
+    <title>Mission Mathématique</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -10,54 +10,54 @@
     <div class="starfield"></div>
 
     <div class="game-container">
-        <h1>Jeu Mathématique</h1>
+        <h1>Mission Mathématique</h1>
         <div class="score-board">
-            Score: <span id="score">0</span>
+            Score : <span id="score">0</span> ⭐
         </div>
         
-        <!-- Jauge Verticale -->
+        <!-- Jauge Horizontale -->
         <div class="gauge-container">
             <div class="gauge">
                 <div class="gauge-fill" id="gaugeFill"></div>
             </div>
-            <div class="gauge-label">Voyage Spatial</div>
+            <div class="gauge-label">Progression</div>
         </div>
         
         <div class="room">
             <div id="question1" class="door">
-                <div class="question-text">Question 1</div>
+                <div class="question-text">?</div>
             </div>
             <div id="question2" class="door">
-                <div class="question-text">Question 2</div>
+                <div class="question-text">?</div>
             </div>
             <div id="question3" class="door">
-                <div class="question-text">Question 3</div>
+                <div class="question-text">?</div>
             </div>
         </div>
         
         <div id="character" class="character">
-            <img src="astronaut.png" alt="Astronaute" />
+            <img src="images/astronaut.png" alt="Astronaute" />
         </div>
         
         <div class="controls">
             <input type="number" id="answer" style="display:none;" placeholder="Votre réponse" />
-            <button id="submit" style="display:none;">Submit</button>
-            <button id="start">Start</button>
+            <button id="submit" style="display:none;">Soumettre</button>
+            <button id="start">Démarrer la Mission</button>
         </div>
         <div id="message"></div>
     </div>
 
     <!-- Sons -->
-    <audio id="spaceshipSound" src="spaceship.mp3" loop></audio>
-    <audio id="jetpackSound" src="jetpack.mp3"></audio>
-    <audio id="correctSound" src="correct.mp3"></audio>
-    <audio id="wrongSound" src="wrong.mp3"></audio>
+    <audio id="spaceshipSound" src="sounds/spaceship.mp3" loop></audio>
+    <audio id="jetpackSound" src="sounds/jetpack.mp3"></audio>
+    <audio id="correctSound" src="sounds/correct.mp3"></audio>
+    <audio id="wrongSound" src="sounds/wrong.mp3"></audio>
 
     <!-- Fenêtre modale pour le nom du joueur -->
     <div id="modal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>Félicitations !</h2>
+            <h2>Bravo, Capitaine !</h2>
             <p>Entrez votre nom pour enregistrer votre score :</p>
             <input type="text" id="playerName" placeholder="Votre nom" />
             <button id="saveScore">Enregistrer</button>
@@ -66,7 +66,7 @@
 
     <!-- Tableau des scores -->
     <div id="highScores" class="high-scores" style="display:none;">
-        <h2>Tableau des Scores</h2>
+        <h2>Top Scores</h2>
         <table>
             <thead>
                 <tr>
@@ -81,7 +81,7 @@
         <button id="closeHighScores">Fermer</button>
     </div>
 
-    <!-- Votre script JavaScript -->
+    <!-- Script JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
