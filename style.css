@@ -21,20 +21,6 @@ body {
     z-index: -1; /* Place le fond derrière tous les autres éléments */
 }
 
-/* Animation de zoom infini pour le fond étoilé */
-@keyframes zoomIn {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.05);
-    }
-}
-
-.starfield {
-    animation: zoomIn 60s linear infinite;
-}
-
 /* Animation de scintillement des étoiles */
 @keyframes twinkle {
     0%, 100% { opacity: 0.8; }
@@ -53,6 +39,21 @@ body {
     }
 }
 
+/* Animation de zoom infini pour le fond étoilé */
+@keyframes zoomIn {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.05);
+    }
+}
+
+.starfield {
+    animation: zoomIn 60s linear infinite;
+}
+
+/* Style des étoiles */
 .star {
     position: absolute;
     background: white;
@@ -77,12 +78,15 @@ body {
     padding-top: 20px;
 }
 
+/* Titre */
 h1 {
     margin-bottom: 20px;
+    font-size: 2em;
 }
 
+/* Score Board */
 .score-board {
-    font-size: 20px;
+    font-size: 1.2em;
     margin-bottom: 20px;
     color: #00FF00;
 }
@@ -183,7 +187,7 @@ h1 {
     transform: translateX(-50%);
     width: 60px;
     height: 60px;
-    transition: left 0.5s ease;
+    transition: left 0.5s ease, bottom 0.5s ease;
 }
 
 .character img {
@@ -284,6 +288,15 @@ button:hover {
     #message {
         font-size: 16px;
     }
+
+    .room {
+        flex-direction: column;
+        height: 400px;
+    }
+
+    .door {
+        margin: 10px 0;
+    }
 }
 
 /* Mobile */
@@ -323,6 +336,15 @@ button:hover {
 
     #message {
         font-size: 14px;
+    }
+
+    .room {
+        flex-direction: column;
+        height: 350px;
+    }
+
+    .door {
+        margin: 5px 0;
     }
 }
 
