@@ -335,9 +335,8 @@ function generateStars() {
         }
 
         // Ajouter une classe spéciale pour certaines étoiles proches
-        if (Math.random() < 0.05) { // 5% des étoiles seront des étoiles proches
+        if (Math.random() < 0.05) { // 5% des étoiles seront des étoiles rapides
             star.classList.add('fast-star');
-            star.style.animation = `twinkle ${animationDuration / 2}s infinite, moveStar ${animationDuration / 2}s linear forwards`;
         }
 
         starfield.appendChild(star);
@@ -384,12 +383,6 @@ doors.forEach((door, index) => {
 // Fonction pour afficher les scores au chargement (optionnel)
 function loadHighScores() {
     // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
-}
-
-// Animation pour les étoiles proches
-@keyframes moveStar {
-    0% { transform: translate(0, 0); }
-    100% { transform: translate(200px, -200px); } /* Ajustez selon l'effet désiré */
 }
 
 // Initialiser le fond étoilé au chargement de la fenêtre
