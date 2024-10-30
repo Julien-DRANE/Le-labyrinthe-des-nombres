@@ -1,425 +1,391 @@
-/* style.css */
+// script.js
 
-/* Style Global */
-body {
-    background-color: #000000;
-    color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    overflow: hidden; /* Empêche les barres de défilement causées par le fond étoilé */
-}
+// Sélection des éléments
+const doors = [
+    document.getElementById('question1'),
+    document.getElementById('question2'),
+    document.getElementById('question3')
+];
+const answerInput = document.getElementById('answer');
+const submitButton = document.getElementById('submit');
+const startButton = document.getElementById('start');
+const messageBox = document.getElementById('message');
+const character = document.getElementById('character');
+const correctSound = document.getElementById('correctSound');
+const wrongSound = document.getElementById('wrongSound');
+const spaceshipSound = document.getElementById('spaceshipSound');
+const jetpackSound = document.getElementById('jetpackSound');
+const scoreDisplay = document.getElementById('score');
+const gaugeFill = document.getElementById('gaugeFill');
 
-/* Fond étoilé */
-.starfield {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: black;
-    overflow: hidden;
-    z-index: -1; /* Place le fond derrière tous les autres éléments */
-}
+const modal = document.getElementById('modal');
+const closeModal = document.querySelector('.close');
+const saveScoreButton = document.getElementById('saveScore');
+const playerNameInput = document.getElementById('playerName');
 
-/* Animation de scintillement des étoiles */
-@keyframes twinkle {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 0.4; }
-}
+const highScoresDiv = document.getElementById('highScores');
+const highScoresBody = document.getElementById('highScoresBody');
+const closeHighScoresButton = document.getElementById('closeHighScores');
 
-/* Animation pour les étoiles rapides passant près du spectateur */
-@keyframes moveStar {
-    from {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateY(-100vh);
-        opacity: 0;
-    }
-}
+let currentQuestion = 0;
+let score = 0;
+let selectedDoor = null;
+let difficulty = 1;
+const maxQuestions = 10;
 
-/* Animation de zoom infini pour le fond étoilé */
-@keyframes zoomIn {
-    from {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.05);
-    }
-}
-
-.starfield {
-    animation: zoomIn 60s linear infinite;
-}
-
-/* Style des étoiles */
-.star {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: twinkle 5s infinite, moveStar 20s linear infinite;
-}
-
-/* Classe pour les étoiles rapides */
-.fast-star {
-    background: #ffffff;
-    animation: twinkle 1s infinite, moveStar 10s linear infinite;
-}
-
-/* Game Container */
-.game-container {
-    text-align: center;
-    width: 90%;
-    max-width: 1000px;
-    position: relative;
-    margin: auto;
-    padding-top: 20px;
-}
-
-/* Titre */
-h1 {
-    margin-bottom: 20px;
-    font-size: 2em;
-}
-
-/* Score Board */
-.score-board {
-    font-size: 1.2em;
-    margin-bottom: 20px;
-    color: #00FF00;
-}
-
-/* Jauge Verticale */
-.gauge-container {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 30px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.gauge {
-    width: 10px;
-    height: 100%;
-    background-color: #555555;
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-}
-
-.gauge-fill {
-    width: 100%;
-    height: 0%;
-    background-color: #00FF00;
-    transition: height 0.5s ease;
-}
-
-.gauge-label {
-    margin-top: 10px;
-    font-size: 14px;
-    color: #ffffff;
-}
-
-/* Room and Doors */
-.room {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    perspective: 800px;
-    margin-bottom: 30px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-.door {
-    position: relative;
-    width: 150px;
-    height: 250px;
-    background-image: url('vortex.png');
-    background-size: cover;
-    background-position: center;
-    border: 2px solid #ffffff;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.5s ease, border 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-}
-
-.door:hover {
-    transform: scale(1.05);
-}
-
-.question-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px #000000;
-    pointer-events: none; /* Permet de cliquer sur la porte sans interférence du texte */
-}
-
-/* Animation de rotation de la porte pour les bonnes réponses */
-@keyframes rotateDoor {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
-}
-
-.door.rotate {
-    animation: rotateDoor 1s forwards;
-}
-
-/* Personnage Astronaute */
-.character {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 60px;
-    transition: left 0.5s ease, bottom 0.5s ease;
-}
-
-.character img {
-    width: 100%;
-    height: 100%;
-}
-
-/* Controls */
-.controls {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-input[type="number"], input[type="text"] {
-    padding: 10px;
-    border: 1px solid #444444;
-    border-radius: 8px;
-    width: 200px;
-    font-size: 16px;
-    background-color: #222222;
-    color: #ffffff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-}
-
-button {
-    padding: 12px 20px;
-    border: none;
-    background-color: #a0c4ff;
-    color: #000000;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-button:hover {
-    background-color: #84a9dd;
-}
-
-#message {
-    font-size: 18px;
-    margin-top: 20px;
-    color: #ffcc00;
-}
-
-/* Animation de secousse pour les mauvaises réponses */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
-    100% { transform: translateX(0); }
-}
-
-.shake {
-    animation: shake 0.5s;
-}
-
-/* Responsive Design */
-
-/* Tablette */
-@media (max-width: 800px) {
-    .door {
-        width: 120px;
-        height: 200px;
-    }
-
-    .question-text {
-        font-size: 18px;
-    }
-
-    .gauge-container {
-        width: 25px;
-        height: 250px;
-    }
-
-    .gauge-label {
-        font-size: 12px;
-    }
-
-    .character {
-        width: 50px;
-        height: 50px;
-    }
-
-    input[type="number"], input[type="text"] {
-        width: 150px;
-        font-size: 14px;
-    }
-
-    button {
-        padding: 10px 16px;
-        font-size: 14px;
-    }
-
-    #message {
-        font-size: 16px;
-    }
-
-    .room {
-        flex-direction: column;
-        height: 400px;
-    }
-
-    .door {
-        margin: 10px 0;
+// Fonction pour calculer la réponse sans utiliser eval
+function calculateAnswer(num1, num2, operator) {
+    switch(operator) {
+        case '+':
+            return num1 + num2;
+        case '-':
+            return num1 - num2;
+        case '*':
+            return num1 * num2;
+        case '/':
+            return Math.floor(num1 / num2); // Assure un entier
+        default:
+            return null;
     }
 }
 
-/* Mobile */
-@media (max-width: 500px) {
-    .door {
-        width: 100px;
-        height: 170px;
+// Fonction pour générer 3 opérateurs uniques
+function getUniqueOperators() {
+    const operators = ['+', '-', '*', '/'];
+    // Shuffle les opérateurs
+    for (let i = operators.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [operators[i], operators[j]] = [operators[j], operators[i]];
+    }
+    return operators.slice(0, 3);
+}
+
+// Fonction pour générer des questions pour chaque porte
+function generateQuestions() {
+    const selectedOperators = getUniqueOperators();
+    doors.forEach((door, index) => {
+        const operator = selectedOperators[index];
+        let num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
+        let num2 = Math.floor(Math.random() * (10 * difficulty)) + 1;
+
+        if (operator === '/' && num2 === 0) num2 = 1; // Éviter la division par zéro
+        if (operator === '/' && num1 % num2 !== 0) {
+            num1 = num1 * num2;
+        }
+
+        let answer = calculateAnswer(num1, num2, operator);
+        let question = `${num1} ${operator} ${num2}`;
+
+        const questionText = door.querySelector('.question-text');
+        questionText.textContent = question;
+        door.dataset.answer = answer;
+        door.dataset.operator = operator;
+    });
+
+    // Déplacer le personnage aléatoirement devant une porte
+    const newSelectedDoor = Math.floor(Math.random() * doors.length);
+    selectDoor(newSelectedDoor);
+}
+
+// Fonction pour sélectionner une porte
+function selectDoor(doorIndex) {
+    if (selectedDoor !== null && selectedDoor !== doorIndex) {
+        // Jouer le son du jetpack lorsqu'on change de porte
+        jetpackSound.currentTime = 0;
+        jetpackSound.play();
     }
 
-    .question-text {
-        font-size: 16px;
+    selectedDoor = doorIndex;
+    moveCharacterTo(doorIndex);
+    // Mettre en évidence la porte sélectionnée
+    doors.forEach((door, index) => {
+        if (index === doorIndex) {
+            door.style.border = '2px solid #00FF00'; // Bordure verte pour la porte sélectionnée
+        } else {
+            door.style.border = '2px solid #ffffff'; // Bordure blanche pour les autres portes
+        }
+    });
+}
+
+// Fonction pour démarrer le jeu
+function startGame() {
+    currentQuestion = 0;
+    score = 0;
+    difficulty = 1;
+    scoreDisplay.textContent = score;
+    updateGauge();
+    nextRound();
+    startButton.style.display = "none";
+    submitButton.style.display = "inline";
+    answerInput.style.display = "inline";
+    answerInput.value = "";
+    answerInput.focus();
+    messageBox.textContent = "";
+    selectedDoor = null;
+    // Réinitialiser les portes
+    doors.forEach(door => {
+        door.style.border = '2px solid #ffffff';
+        door.classList.remove('open', 'rotate');
+    });
+    // Repositionner le personnage en bas
+    character.style.left = "50%";
+    character.style.bottom = "10px";
+    // Démarrer le son d'ambiance
+    spaceshipSound.volume = 0.2; // Faible volume
+    spaceshipSound.play();
+}
+
+// Fonction pour le prochain tour de questions
+function nextRound() {
+    if (currentQuestion >= maxQuestions) {
+        endGame();
+        return;
+    }
+    generateQuestions();
+    answerInput.value = "";
+    answerInput.focus();
+    selectedDoor = null;
+    // Réinitialiser les styles des portes
+    doors.forEach(door => {
+        door.style.border = '2px solid #ffffff';
+        door.classList.remove('open', 'rotate');
+    });
+    // Repositionner le personnage en bas
+    character.style.left = "50%";
+    character.style.bottom = "10px";
+}
+
+// Fonction pour vérifier la réponse
+function checkAnswer() {
+    if (selectedDoor === null) {
+        messageBox.textContent = "Veuillez sélectionner une porte.";
+        messageBox.style.color = "#FF5733";
+        return;
     }
 
-    .gauge-container {
-        width: 20px;
-        height: 200px;
+    const userAnswer = parseInt(answerInput.value, 10);
+
+    if (isNaN(userAnswer)) {
+        messageBox.textContent = "Veuillez entrer un nombre valide.";
+        messageBox.style.color = "#FF5733";
+        return;
     }
 
-    .gauge-label {
-        font-size: 10px;
+    const door = doors[selectedDoor];
+    const correctAnswer = parseInt(door.dataset.answer, 10);
+
+    if (userAnswer === correctAnswer) {
+        currentQuestion++;
+        // Attribuer des points selon l'opération
+        let points = 0;
+        const operator = door.dataset.operator;
+        switch(operator) {
+            case '+':
+                points = 2;
+                break;
+            case '-':
+                points = 3;
+                break;
+            case '*':
+                points = 4;
+                break;
+            case '/':
+                points = 6;
+                break;
+            default:
+                points = 0;
+        }
+        score += points;
+        scoreDisplay.textContent = score;
+        correctSound.play();
+        messageBox.textContent = `Bonne réponse ! +${points} points.`;
+        messageBox.style.color = "#4CAF50";
+        // Animer la rotation de la porte
+        door.classList.add('rotate');
+
+        // Mettre à jour la jauge
+        updateGauge();
+
+        // Augmenter la difficulté progressivement
+        if (currentQuestion % 3 === 0 && difficulty < 5) { // Limite de difficulté pour éviter des nombres trop grands
+            difficulty++;
+        }
+
+        nextRound();
+    } else {
+        // Appliquer l'animation de secousse
+        doors.forEach(door => door.classList.add('shake'));
+        setTimeout(() => {
+            doors.forEach(door => door.classList.remove('shake'));
+        }, 500);
+
+        wrongSound.play();
+        messageBox.textContent = "Mauvaise réponse, essayez encore.";
+        messageBox.style.color = "#FF5733";
+    }
+}
+
+// Fonction de déplacement du personnage vers une porte spécifique
+function moveCharacterTo(doorIndex) {
+    const door = doors[doorIndex];
+    const doorRect = door.getBoundingClientRect();
+    const containerRect = door.parentElement.getBoundingClientRect();
+    const leftPosition = ((doorRect.left - containerRect.left) + doorRect.width / 2) / containerRect.width * 100;
+    character.style.left = `${leftPosition}%`;
+    character.style.bottom = "10px"; // Assure que le personnage est en bas
+}
+
+// Fonction pour terminer le jeu
+function endGame() {
+    submitButton.style.display = "none";
+    answerInput.style.display = "none";
+    messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score} points 🎉`;
+    // Arrêter le son d'ambiance
+    spaceshipSound.pause();
+    // Afficher la fenêtre modale pour entrer le nom
+    modal.style.display = "block";
+}
+
+// Fonction pour enregistrer le score
+function saveScore() {
+    const playerName = playerNameInput.value.trim();
+    if (playerName === "") {
+        alert("Veuillez entrer un nom.");
+        return;
     }
 
-    .character {
-        width: 40px;
-        height: 40px;
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+    highScores.push({ name: playerName, score: score });
+
+    // Trier les scores par ordre décroissant
+    highScores.sort((a, b) => b.score - a.score);
+
+    // Limiter le tableau à 10 meilleurs scores
+    if (highScores.length > 10) {
+        highScores.pop();
     }
 
-    input[type="number"], input[type="text"] {
-        width: 120px;
-        font-size: 12px;
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+
+    // Fermer la modale et afficher le tableau des scores
+    modal.style.display = "none";
+    displayHighScores();
+}
+
+// Fonction pour afficher le tableau des scores
+function displayHighScores() {
+    highScoresBody.innerHTML = "";
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    highScores.forEach(scoreEntry => {
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        const scoreCell = document.createElement('td');
+
+        nameCell.textContent = scoreEntry.name;
+        scoreCell.textContent = scoreEntry.score;
+
+        row.appendChild(nameCell);
+        row.appendChild(scoreCell);
+        highScoresBody.appendChild(row);
+    });
+
+    highScoresDiv.style.display = "block";
+}
+
+// Fonction pour fermer le tableau des scores
+function closeHighScores() {
+    highScoresDiv.style.display = "none";
+    // Réinitialiser le jeu
+    startButton.style.display = "inline";
+    startButton.textContent = "Rejouer";
+}
+
+// Fonction pour mettre à jour la jauge verticale
+function updateGauge() {
+    const progress = (currentQuestion / maxQuestions) * 100;
+    gaugeFill.style.height = `${progress}%`;
+}
+
+// Génération des étoiles pour le fond étoilé avec zoom continu
+function generateStars() {
+    const starfield = document.querySelector('.starfield');
+    const numberOfStars = 150; // Ajustez ce nombre selon vos préférences
+
+    for (let i = 0; i < numberOfStars; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+
+        // Taille des étoiles (plus petite pour les étoiles lointaines)
+        const size = Math.random() * 2 + 1; // Taille entre 1px et 3px
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+
+        // Position aléatoire : bottom dans les 30% inférieurs, left aléatoire
+        star.style.bottom = `${Math.random() * 30}%`;
+        star.style.left = `${Math.random() * 100}%`;
+
+        // Ajouter une classe spéciale pour certaines étoiles rapides
+        if (Math.random() < 0.05) { // 5% des étoiles seront des étoiles rapides
+            star.classList.add('fast-star');
+        }
+
+        // Assignation de délais et durées aléatoires pour éviter les clumps
+        const twinkleDuration = Math.random() * 2 + 3; // 3s à 5s pour twinkle
+        const zoomDuration = Math.random() * 5 + 5; // 5s à 10s pour zoom
+        const animationDelay = Math.random() * 10; // 0s à 10s de délai
+
+        star.style.animationDuration = `twinkle ${twinkleDuration}s infinite, zoom ${zoomDuration}s linear infinite`;
+        star.style.animationDelay = `${animationDelay}s, ${animationDelay}s`; // Même délai pour les deux animations
+
+        starfield.appendChild(star);
     }
+}
 
-    button {
-        padding: 8px 12px;
-        font-size: 12px;
+// Fonction pour initialiser le fond étoilé
+function initStarfield() {
+    generateStars();
+}
+
+// Écouteurs d'événements
+submitButton.addEventListener('click', checkAnswer);
+startButton.addEventListener('click', startGame);
+
+// Permettre de soumettre la réponse en appuyant sur "Entrée"
+answerInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        checkAnswer();
     }
+});
 
-    #message {
-        font-size: 14px;
-    }
+// Gestion de la modale
+closeModal.addEventListener('click', () => {
+    modal.style.display = "none";
+});
 
-    .room {
-        flex-direction: column;
-        height: 350px;
-    }
+// Enregistrer le score
+saveScoreButton.addEventListener('click', saveScore);
 
-    .door {
-        margin: 5px 0;
-    }
+// Gestion de l'affichage du tableau des scores
+closeHighScoresButton.addEventListener('click', closeHighScores);
+
+// Permettre de cliquer sur une porte pour sélectionner la réponse
+doors.forEach((door, index) => {
+    door.addEventListener('click', () => {
+        // Sélectionner la porte cliquée
+        selectDoor(index);
+        // Ne pas remplir automatiquement la réponse
+        // Laisser l'utilisateur saisir la réponse
+    });
+});
+
+// Fonction pour afficher les scores au chargement (optionnel)
+function loadHighScores() {
+    // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
 }
 
-/* Styles pour la fenêtre modale */
-.modal {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.8);
-}
-
-.modal-content {
-    background-color: #1a1a1a;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    max-width: 400px;
-    border-radius: 10px;
-    color: #ffffff;
-    text-align: center;
-}
-
-.close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover,
-.close:focus {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.high-scores {
-    position: fixed;
-    z-index: 2;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #1a1a1a;
-    padding: 20px;
-    border: 2px solid #ffffff;
-    border-radius: 10px;
-    color: #ffffff;
-}
-
-.high-scores table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-}
-
-.high-scores th, .high-scores td {
-    border: 1px solid #ffffff;
-    padding: 8px;
-    text-align: center;
-}
-
-.high-scores th {
-    background-color: #333333;
-}
-
-#closeHighScores {
-    padding: 10px 15px;
-    background-color: #ff6b6b;
-}
-
-#closeHighScores:hover {
-    background-color: #ff4757;
-}
+// Initialiser le fond étoilé au chargement de la fenêtre
+window.onload = () => {
+    loadHighScores();
+    initStarfield();
+};
