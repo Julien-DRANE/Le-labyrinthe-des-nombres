@@ -25,13 +25,13 @@ function generateQuestions() {
         let num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
         let num2 = Math.floor(Math.random() * (10 * difficulty)) + 1;
 
+        if (operator === '/' && num2 === 0) num2 = 1; // Éviter la division par zéro
         if (operator === '/' && num1 % num2 !== 0) {
             num1 = num1 * num2;
         }
 
+        let answer = calculateAnswer(num1, num2, operator);
         let question = `${num1} ${operator} ${num2}`;
-        let answer = eval(question);
-        if (operator === '/') answer = Math.floor(answer);
 
         door.textContent = question;
         door.dataset.answer = answer;
@@ -39,6 +39,22 @@ function generateQuestions() {
 
     // Choisir une porte correcte au hasard
     correctDoor = Math.floor(Math.random() * doors.length);
+}
+
+// Fonction pour calculer la réponse sans utiliser eval
+function calculateAnswer(num1, num2, operator) {
+    switch(operator) {
+        case '+':
+            return num1 + num2;
+        case '-':
+            return num1 - num2;
+        case '*':
+            return num1 * num2;
+        case '/':
+            return Math.floor(num1 / num2); // Assure un entier
+        default:
+            return null;
+    }
 }
 
 // Fonction pour démarrer le jeu
@@ -63,9 +79,15 @@ function nextRound() {
 
 // Fonction pour vérifier la réponse
 function checkAnswer() {
-    const userAnswer = parseInt(answerInput.value);
+    const userAnswer = parseInt(answerInput.value, 10);
 
-    if (userAnswer === parseInt(doors[correctDoor].dataset.answer)) {
+    if (isNaN(userAnswer)) {
+        messageBox.textContent = "Veuillez entrer un nombre valide.";
+        messageBox.style.color = "#FF5733";
+        return;
+    }
+
+    if (userAnswer === parseInt(doors[correctDoor].dataset.answer, 10)) {
         score++;
         currentQuestion++;
         correctSound.play();
@@ -77,15 +99,17 @@ function checkAnswer() {
         if (currentQuestion % 3 === 0) difficulty++;
 
         if (currentQuestion >= 10) {
-            messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score}/10 🎉`;
-            submitButton.style.display = "none";
-            startButton.style.display = "inline";
-            startButton.textContent = "Rejouer";
-            answerInput.style.display = "none";
+            endGame();
             return;
         }
         nextRound();
     } else {
+        // Appliquer l'animation de secousse
+        doors.forEach(door => door.classList.add('shake'));
+        setTimeout(() => {
+            doors.forEach(door => door.classList.remove('shake'));
+        }, 500);
+
         wrongSound.play();
         messageBox.textContent = "Mauvaise réponse, essayez encore.";
         messageBox.style.color = "#FF5733";
@@ -94,10 +118,46 @@ function checkAnswer() {
 
 // Fonction de déplacement du personnage vers la porte correcte
 function moveCharacterTo(doorIndex) {
-    const doorPositions = [20, 50, 80];
-    character.style.left = `${doorPositions[doorIndex]}%`;
+    const door = doors[doorIndex];
+    const doorRect = door.getBoundingClientRect();
+    const containerRect = door.parentElement.getBoundingClientRect();
+    const leftPosition = ((doorRect.left - containerRect.left) + doorRect.width / 2) / containerRect.width * 100;
+    character.style.left = `${leftPosition}%`;
+}
+
+// Fonction pour terminer le jeu
+function endGame() {
+    messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score}/10 🎉`;
+    submitButton.style.display = "none";
+    startButton.style.display = "inline";
+    startButton.textContent = "Rejouer";
+    answerInput.style.display = "none";
+
+    // Stocker le score
+    let highScore = localStorage.getItem('highScore') || 0;
+    if (score > highScore) {
+        localStorage.setItem('highScore', score);
+        messageBox.textContent += ` Nouveau record !`;
+    } else {
+        messageBox.textContent += ` Record actuel : ${highScore}/10`;
+    }
 }
 
 // Écouteurs d'événements
 submitButton.addEventListener('click', checkAnswer);
 startButton.addEventListener('click', startGame);
+
+// Permettre de soumettre la réponse en appuyant sur "Entrée"
+answerInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+        checkAnswer();
+    }
+});
+
+// Optionnel : Permettre de cliquer sur une porte pour sélectionner la réponse
+doors.forEach((door, index) => {
+    door.addEventListener('click', () => {
+        answerInput.value = door.dataset.answer;
+        checkAnswer();
+    });
+});
