@@ -2,9 +2,9 @@
 
 /* Style Global */
 body {
-    background-color: #000000;
-    color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #000;
+    color: #fff;
+    font-family: 'Comic Sans MS', cursive, sans-serif;
     margin: 0;
     overflow: hidden; /* Empêche les barres de défilement causées par le fond étoilé */
 }
@@ -16,7 +16,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: black;
+    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
     overflow: hidden;
     z-index: -1; /* Place le fond derrière tous les autres éléments */
     animation: zoomIn 60s linear infinite;
@@ -68,7 +68,7 @@ body {
 .game-container {
     text-align: center;
     width: 90%;
-    max-width: 1000px;
+    max-width: 1200px;
     position: relative;
     margin: auto;
     padding-top: 20px;
@@ -76,47 +76,49 @@ body {
 
 /* Titre */
 h1 {
-    margin-bottom: 20px;
-    font-size: 2em;
+    margin-bottom: 10px;
+    font-size: 3em;
+    color: #ffcc00;
+    text-shadow: 2px 2px 4px #000;
 }
 
 /* Score Board */
 .score-board {
-    font-size: 1.2em;
+    font-size: 1.5em;
     margin-bottom: 20px;
-    color: #00FF00;
+    color: #00ff99;
 }
 
-/* Jauge Verticale */
+/* Jauge Horizontale */
 .gauge-container {
     position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 30px;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 20px;
+    background-color: #444;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
 .gauge {
-    width: 10px;
+    width: 100%;
     height: 100%;
-    background-color: #555555;
-    border-radius: 5px;
-    overflow: hidden;
+    background-color: #555;
+    border-radius: 10px;
     position: relative;
 }
 
 .gauge-fill {
-    width: 100%;
-    height: 0%;
-    background-color: #00FF00;
-    transition: height 0.5s ease;
+    width: 0%;
+    height: 100%;
+    background-color: #00ff99;
+    transition: width 0.5s ease;
 }
 
 .gauge-label {
-    margin-top: 10px;
+    margin-top: 5px;
     font-size: 14px;
     color: #ffffff;
 }
@@ -125,43 +127,45 @@ h1 {
 .room {
     position: relative;
     width: 100%;
-    height: 300px;
+    height: 400px;
     perspective: 800px;
     margin-bottom: 30px;
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-end;
 }
 
 .door {
     position: relative;
-    width: 150px;
-    height: 250px;
-    background-image: url('vortex.png');
+    width: 200px;
+    height: 300px;
+    background-image: url('images/vortex.png');
     background-size: cover;
     background-position: center;
-    border: 2px solid #ffffff;
-    border-radius: 10px;
+    border: 4px solid #ffffff;
+    border-radius: 15px;
     cursor: pointer;
-    transition: transform 0.5s ease, border 0.3s ease;
+    transition: transform 0.3s ease, border 0.3s ease;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 .door:hover {
     transform: scale(1.05);
+    border-color: #00ff99;
 }
 
 .question-text {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 24px;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
     color: #ffffff;
-    text-shadow: 2px 2px 4px #000000;
+    text-shadow: 2px 2px 4px #000;
     pointer-events: none; /* Permet de cliquer sur la porte sans interférence du texte */
 }
 
@@ -178,17 +182,24 @@ h1 {
 /* Personnage Astronaute */
 .character {
     position: absolute;
-    bottom: 10px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     transition: left 0.5s ease, bottom 0.5s ease;
+    z-index: 1;
 }
 
 .character img {
     width: 100%;
     height: 100%;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(-50%, 0px); }
+    50% { transform: translate(-50%, -10px); }
 }
 
 /* Controls */
@@ -200,43 +211,57 @@ h1 {
 }
 
 input[type="number"], input[type="text"] {
-    padding: 10px;
-    border: 1px solid #444444;
-    border-radius: 8px;
-    width: 200px;
+    padding: 12px 20px;
+    border: 2px solid #444444;
+    border-radius: 10px;
+    width: 250px;
     font-size: 16px;
     background-color: #222222;
     color: #ffffff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    transition: border 0.3s ease;
+}
+
+input[type="number"]:focus, input[type="text"]:focus {
+    border-color: #00ff99;
+    outline: none;
 }
 
 button {
-    padding: 12px 20px;
+    padding: 12px 25px;
     border: none;
-    background-color: #a0c4ff;
+    background-color: #00ff99;
     color: #000000;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 button:hover {
-    background-color: #84a9dd;
+    background-color: #00e676;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0px);
 }
 
 #message {
-    font-size: 18px;
+    font-size: 1.2em;
     margin-top: 20px;
-    color: #ffcc00;
+    color: #ff5722;
+    min-height: 24px;
 }
 
 /* Animation de secousse pour les mauvaises réponses */
 @keyframes shake {
     0% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    50% { transform: translateX(5px); }
-    75% { transform: translateX(-5px); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
     100% { transform: translateX(0); }
 }
 
@@ -247,19 +272,22 @@ button:hover {
 /* Responsive Design */
 
 /* Tablette */
-@media (max-width: 800px) {
+@media (max-width: 1024px) {
+    .room {
+        height: 350px;
+    }
+
     .door {
-        width: 120px;
-        height: 200px;
+        width: 180px;
+        height: 270px;
     }
 
     .question-text {
-        font-size: 18px;
+        font-size: 1.3em;
     }
 
     .gauge-container {
-        width: 25px;
-        height: 250px;
+        width: 180px;
     }
 
     .gauge-label {
@@ -267,48 +295,44 @@ button:hover {
     }
 
     .character {
-        width: 50px;
-        height: 50px;
+        width: 70px;
+        height: 70px;
     }
 
     input[type="number"], input[type="text"] {
-        width: 150px;
+        width: 220px;
         font-size: 14px;
     }
 
     button {
-        padding: 10px 16px;
+        padding: 10px 20px;
         font-size: 14px;
     }
 
     #message {
-        font-size: 16px;
-    }
-
-    .room {
-        flex-direction: column;
-        height: 400px;
-    }
-
-    .door {
-        margin: 10px 0;
+        font-size: 1em;
     }
 }
 
 /* Mobile */
-@media (max-width: 500px) {
+@media (max-width: 600px) {
+    .room {
+        flex-direction: column;
+        height: 300px;
+    }
+
     .door {
-        width: 100px;
-        height: 170px;
+        width: 140px;
+        height: 220px;
+        margin: 10px 0;
     }
 
     .question-text {
-        font-size: 16px;
+        font-size: 1.1em;
     }
 
     .gauge-container {
-        width: 20px;
-        height: 200px;
+        width: 150px;
     }
 
     .gauge-label {
@@ -316,62 +340,56 @@ button:hover {
     }
 
     .character {
-        width: 40px;
-        height: 40px;
+        width: 60px;
+        height: 60px;
     }
 
     input[type="number"], input[type="text"] {
-        width: 120px;
+        width: 180px;
         font-size: 12px;
     }
 
     button {
-        padding: 8px 12px;
+        padding: 8px 16px;
         font-size: 12px;
     }
 
     #message {
-        font-size: 14px;
-    }
-
-    .room {
-        flex-direction: column;
-        height: 350px;
-    }
-
-    .door {
-        margin: 5px 0;
+        font-size: 0.9em;
     }
 }
 
 /* Styles pour la fenêtre modale */
 .modal {
     position: fixed;
-    z-index: 1;
+    z-index: 3;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.8);
+    background-color: rgba(0,0,0,0.85);
 }
 
 .modal-content {
     background-color: #1a1a1a;
     margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
+    padding: 30px;
+    border: 2px solid #00ff99;
     width: 80%;
     max-width: 400px;
-    border-radius: 10px;
+    border-radius: 15px;
     color: #ffffff;
     text-align: center;
+    position: relative;
 }
 
 .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
+    color: #00ff99;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 30px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -382,17 +400,46 @@ button:hover {
     text-decoration: none;
 }
 
+.modal-content h2 {
+    color: #00ff99;
+    margin-bottom: 20px;
+}
+
+.modal-content input[type="text"] {
+    width: 80%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 2px solid #444444;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #222222;
+    color: #ffffff;
+}
+
+.modal-content input[type="text"]:focus {
+    border-color: #00ff99;
+    outline: none;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Tableau des scores */
 .high-scores {
     position: fixed;
-    z-index: 2;
+    z-index: 4;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     background-color: #1a1a1a;
-    padding: 20px;
-    border: 2px solid #ffffff;
-    border-radius: 10px;
+    padding: 25px;
+    border: 2px solid #00ff99;
+    border-radius: 15px;
     color: #ffffff;
+    width: 90%;
+    max-width: 500px;
 }
 
 .high-scores table {
@@ -402,18 +449,24 @@ button:hover {
 }
 
 .high-scores th, .high-scores td {
-    border: 1px solid #ffffff;
-    padding: 8px;
+    border: 1px solid #00ff99;
+    padding: 10px;
     text-align: center;
 }
 
 .high-scores th {
-    background-color: #333333;
+    background-color: #00ff99;
+    color: #000;
 }
 
 #closeHighScores {
-    padding: 10px 15px;
+    padding: 10px 20px;
     background-color: #ff6b6b;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 #closeHighScores:hover {
