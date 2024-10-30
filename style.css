@@ -1,6 +1,6 @@
 body {
-    background-color: #f0f5f9;
-    font-family: 'Arial', sans-serif;
+    background-color: #f6f1f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -9,107 +9,19 @@ body {
 }
 
 .container {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 30px;
-    width: 80%;
-    max-width: 600px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-h1 {
-    color: #8aacc8;
-    margin-bottom: 20px;
-}
-
-#question-box {
-    margin-bottom: 20px;
-}
-
-#question {
-    font-size: 18px;
-    color: #556987;
-}
-
-input[type="number"] {
-    padding: 8px;
-    border: 2px solid #c5dfe9;
-    border-radius: 8px;
-    width: 60%;
-    font-size: 16px;
-}
-
-button {
-    padding: 10px 15px;
-    border: none;
-    background-color: #b0c4de;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #93b5d7;
-}
-
-#message {
-    font-size: 16px;
-    color: #333333;
-    margin-top: 15px;
-}
-
-#labyrinth {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.path {
-    width: 70%;
-    height: 20px;
-    background-color: #dbe6ef;
-    border-radius: 4px;
-    margin: 10px 0;
-    transition: background-color 0.3s ease;
-}
-
-.path.visible {
-    background-color: #b2c9dd;
-}
-
-.hidden {
-    visibility: hidden;
-}
-/* Règles existantes... */
-
-body {
-    background-color: #f0f5f9;
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
-.container {
-    background-color: #ffffff;
-    border-radius: 12px;
-    padding: 20px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    border-radius: 15px;
+    padding: 25px 30px;
     width: 90%;
-    max-width: 500px; /* Réduction de la largeur max */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
 h1 {
-    color: #8aacc8;
+    font-size: 24px;
+    color: #5a7d9a;
     margin-bottom: 15px;
-    font-size: 24px; /* Réduction de la taille pour les petits écrans */
 }
 
 #question-box {
@@ -118,35 +30,37 @@ h1 {
 
 #question {
     font-size: 18px;
-    color: #556987;
+    color: #4b5563;
+    margin-bottom: 10px;
 }
 
 input[type="number"] {
     padding: 10px;
-    border: 2px solid #c5dfe9;
-    border-radius: 8px;
-    width: 80%; /* Ajustement de la largeur */
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    width: 85%;
     font-size: 16px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 button {
-    padding: 10px 20px; /* Plus grand pour les écrans tactiles */
+    padding: 12px 20px;
     border: none;
-    background-color: #b0c4de;
+    background-color: #a0c4ff;
     color: white;
     font-size: 16px;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    margin: 10px 5px;
 }
 
 button:hover {
-    background-color: #93b5d7;
+    background-color: #84a9dd;
 }
 
 #message {
     font-size: 16px;
-    color: #333333;
     margin-top: 10px;
 }
 
@@ -158,26 +72,26 @@ button:hover {
 }
 
 .path {
-    width: 90%; /* Plus étroit pour s'adapter à l'écran */
-    height: 20px;
-    background-color: #dbe6ef;
-    border-radius: 4px;
+    width: 90%;
+    height: 25px;
+    background-color: #dfe7fd;
+    border-radius: 12px;
     margin: 10px 0;
     transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .path.visible {
-    background-color: #b2c9dd;
+    background-color: #b8cfff;
 }
 
 .hidden {
     visibility: hidden;
 }
 
-/* Media query pour les petits écrans */
 @media (max-width: 600px) {
     h1 {
-        font-size: 20px;
+        font-size: 22px;
     }
 
     input[type="number"] {
@@ -185,12 +99,10 @@ button:hover {
     }
 
     button {
-        padding: 10px 15px;
         font-size: 14px;
     }
 
     .path {
         width: 95%;
-        height: 15px;
     }
 }
