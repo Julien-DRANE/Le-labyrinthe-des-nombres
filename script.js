@@ -58,11 +58,9 @@ function getUniqueOperators() {
     return operators.slice(0, 3);
 }
 
-// Fonction pour générer une question
+// Fonction pour générer des questions pour chaque porte
 function generateQuestions() {
     const selectedOperators = getUniqueOperators();
-    // Randomly choose one door to be the correct door
-    const correctDoorIndex = Math.floor(Math.random() * doors.length);
     doors.forEach((door, index) => {
         const operator = selectedOperators[index];
         let num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
@@ -80,17 +78,11 @@ function generateQuestions() {
         questionText.textContent = question;
         door.dataset.answer = answer;
         door.dataset.operator = operator;
-
-        // Marquer une porte comme correcte
-        if (index === correctDoorIndex) {
-            door.dataset.correct = 'true';
-        } else {
-            door.dataset.correct = 'false';
-        }
     });
 
-    // Déplacer le personnage devant la porte correcte
-    moveCharacterTo(correctDoorIndex);
+    // Déplacer le personnage aléatoirement devant une porte
+    const newSelectedDoor = Math.floor(Math.random() * doors.length);
+    selectDoor(newSelectedDoor);
 }
 
 // Fonction pour sélectionner une porte
@@ -165,9 +157,8 @@ function checkAnswer() {
 
     const door = doors[selectedDoor];
     const correctAnswer = parseInt(door.dataset.answer, 10);
-    const isCorrect = door.dataset.correct === 'true';
 
-    if (userAnswer === correctAnswer && isCorrect) {
+    if (userAnswer === correctAnswer) {
         currentQuestion++;
         // Attribuer des points selon l'opération
         let points = 0;
@@ -313,6 +304,7 @@ closeModal.addEventListener('click', () => {
     modal.style.display = "none";
 });
 
+// Enregistrer le score
 saveScoreButton.addEventListener('click', saveScore);
 
 // Gestion de l'affichage du tableau des scores
@@ -323,7 +315,8 @@ doors.forEach((door, index) => {
     door.addEventListener('click', () => {
         // Sélectionner la porte cliquée
         selectDoor(index);
-        // Laisser l'utilisateur soumettre sa réponse manuellement
+        // Ne pas remplir automatiquement la réponse
+        // Laisser l'utilisateur saisir la réponse
     });
 });
 
