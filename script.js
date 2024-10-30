@@ -1,3 +1,5 @@
+// script.js
+
 // Sélection des éléments
 const doors = [
     document.getElementById('question1'),
@@ -24,6 +26,7 @@ const closeHighScoresButton = document.getElementById('closeHighScores');
 
 let currentQuestion = 0;
 let score = 0;
+let selectedDoor = null;
 let difficulty = 1;
 const maxQuestions = 10;
 
@@ -65,7 +68,22 @@ function generateQuestions() {
     });
 
     // Déplacer le personnage aléatoirement devant une porte
-    moveCharacterTo(Math.floor(Math.random() * doors.length));
+    const newSelectedDoor = Math.floor(Math.random() * doors.length);
+    selectDoor(newSelectedDoor);
+}
+
+// Fonction pour sélectionner une porte
+function selectDoor(doorIndex) {
+    selectedDoor = doorIndex;
+    moveCharacterTo(doorIndex);
+    // Mettre en évidence la porte sélectionnée
+    doors.forEach((door, index) => {
+        if (index === doorIndex) {
+            door.style.border = '2px solid #00FF00'; // Bordure verte pour la porte sélectionnée
+        } else {
+            door.style.border = '2px solid #ffffff'; // Bordure blanche pour les autres portes
+        }
+    });
 }
 
 // Fonction pour démarrer le jeu
@@ -81,7 +99,6 @@ function startGame() {
     answerInput.value = "";
     answerInput.focus();
     messageBox.textContent = "";
-    character.style.left = "50%";
 }
 
 // Fonction pour le prochain tour de questions
@@ -96,7 +113,13 @@ function nextRound() {
 }
 
 // Fonction pour vérifier la réponse
-function checkAnswer(doorIndex) {
+function checkAnswer() {
+    if (selectedDoor === null) {
+        messageBox.textContent = "Veuillez sélectionner une porte.";
+        messageBox.style.color = "#FF5733";
+        return;
+    }
+
     const userAnswer = parseInt(answerInput.value, 10);
 
     if (isNaN(userAnswer)) {
@@ -105,7 +128,7 @@ function checkAnswer(doorIndex) {
         return;
     }
 
-    const door = doors[doorIndex];
+    const door = doors[selectedDoor];
     const correctAnswer = parseInt(door.dataset.answer, 10);
     const operator = door.dataset.operator;
 
@@ -134,12 +157,7 @@ function checkAnswer(doorIndex) {
         correctSound.play();
         messageBox.textContent = `Bonne réponse ! +${points} points.`;
         messageBox.style.color = "#4CAF50";
-        // Déplacer le personnage devant une nouvelle porte aléatoirement
-        moveCharacterTo(Math.floor(Math.random() * doors.length));
-
-        // Augmenter la difficulté progressivement
-        if (currentQuestion % 3 === 0) difficulty++;
-
+        // Passer à la prochaine question
         nextRound();
     } else {
         // Appliquer l'animation de secousse
@@ -228,32 +246,13 @@ function closeHighScores() {
 }
 
 // Écouteurs d'événements
-submitButton.addEventListener('click', () => {
-    // Nous devons savoir quelle porte a été sélectionnée
-    const selectedDoorIndex = doors.findIndex(door => door.dataset.selected === "true");
-    if (selectedDoorIndex !== -1) {
-        checkAnswer(selectedDoorIndex);
-    } else {
-        // Si aucune porte n'est sélectionnée via le clic, prendre une porte aléatoire
-        // ou empêcher la soumission
-        alert("Veuillez sélectionner une porte ou entrer votre réponse.");
-    }
-});
-
+submitButton.addEventListener('click', checkAnswer);
 startButton.addEventListener('click', startGame);
 
 // Permettre de soumettre la réponse en appuyant sur "Entrée"
 answerInput.addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
-        // Nous devons savoir quelle porte a été sélectionnée
-        const selectedDoorIndex = doors.findIndex(door => door.dataset.selected === "true");
-        if (selectedDoorIndex !== -1) {
-            checkAnswer(selectedDoorIndex);
-        } else {
-            // Si aucune porte n'est sélectionnée via le clic, prendre une porte aléatoire
-            // ou empêcher la soumission
-            alert("Veuillez sélectionner une porte ou entrer votre réponse.");
-        }
+        checkAnswer();
     }
 });
 
@@ -270,13 +269,7 @@ closeHighScoresButton.addEventListener('click', closeHighScores);
 // Permettre de cliquer sur une porte pour sélectionner la réponse
 doors.forEach((door, index) => {
     door.addEventListener('click', () => {
-        // Désélectionner toutes les portes
-        doors.forEach(d => d.dataset.selected = "false");
-        // Sélectionner la porte cliquée
-        door.dataset.selected = "true";
-        // Mettre la valeur de la réponse dans le champ de saisie
-        answerInput.value = door.dataset.answer;
-        checkAnswer(index);
+        selectDoor(index);
     });
 });
 
@@ -285,4 +278,5 @@ function loadHighScores() {
     // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
 }
 
+// Appeler la fonction au chargement
 window.onload = loadHighScores;
