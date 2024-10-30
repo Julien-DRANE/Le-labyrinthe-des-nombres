@@ -118,7 +118,7 @@ function startGame() {
     // Réinitialiser les portes
     doors.forEach(door => {
         door.style.border = '2px solid #ffffff';
-        door.classList.remove('open');
+        door.classList.remove('open', 'rotate');
     });
 }
 
@@ -135,7 +135,7 @@ function nextRound() {
     // Réinitialiser les styles des portes
     doors.forEach(door => {
         door.style.border = '2px solid #ffffff';
-        door.classList.remove('open');
+        door.classList.remove('open', 'rotate');
     });
 }
 
@@ -184,8 +184,8 @@ function checkAnswer() {
         correctSound.play();
         messageBox.textContent = `Bonne réponse ! +${points} points.`;
         messageBox.style.color = "#4CAF50";
-        // Animer l'ouverture de la porte
-        door.classList.add('open');
+        // Animer la rotation de la porte
+        door.classList.add('rotate');
 
         // Mettre à jour la jauge
         updateGauge();
@@ -288,6 +288,48 @@ function updateGauge() {
     gaugeFill.style.height = `${progress}%`;
 }
 
+// Génération des étoiles pour le fond étoilé
+function generateStars() {
+    const starfield = document.querySelector('.starfield');
+    const numberOfStars = 100; // Ajustez ce nombre selon vos préférences
+
+    for (let i = 0; i < numberOfStars; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+
+        // Taille des étoiles (plus petite pour les étoiles lointaines)
+        const size = Math.random() * 2 + 1; // Taille entre 1px et 3px
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
+
+        // Position aléatoire
+        star.style.top = `${Math.random() * 100}%`;
+        star.style.left = `${Math.random() * 100}%`;
+
+        // Animation
+        const animationDuration = Math.random() * 50 + 50; // Durée entre 50s et 100s
+        star.style.animationDuration = `${animationDuration}s`;
+
+        // Différencier les étoiles en fonction de leur taille
+        if (size > 2) {
+            star.style.background = '#ffffff';
+            star.style.animationName = 'twinkle';
+            star.style.animationDuration = `${animationDuration}s`;
+        } else {
+            star.style.background = '#aaaaaa';
+            star.style.animationName = 'twinkle';
+            star.style.animationDuration = `${animationDuration + 20}s`; // Plus lent pour les petites étoiles
+        }
+
+        starfield.appendChild(star);
+    }
+}
+
+// Fonction pour initialiser le fond étoilé
+function initStarfield() {
+    generateStars();
+}
+
 // Écouteurs d'événements
 submitButton.addEventListener('click', checkAnswer);
 startButton.addEventListener('click', startGame);
@@ -325,4 +367,8 @@ function loadHighScores() {
     // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
 }
 
-window.onload = loadHighScores;
+// Initialiser le fond étoilé au chargement de la fenêtre
+window.onload = () => {
+    loadHighScores();
+    initStarfield();
+};
