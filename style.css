@@ -19,7 +19,24 @@ body {
     background: black;
     overflow: hidden;
     z-index: -1; /* Place le fond derrière tous les autres éléments */
-    animation: zoomIn 60s linear infinite;
+}
+
+/* Animation de scintillement des étoiles */
+@keyframes twinkle {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.4; }
+}
+
+/* Animation pour les étoiles rapides passant près du spectateur */
+@keyframes moveStar {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
 }
 
 /* Animation de zoom infini pour le fond étoilé */
@@ -32,22 +49,8 @@ body {
     }
 }
 
-/* Animation de scintillement des étoiles */
-@keyframes twinkle {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 0.4; }
-}
-
-/* Animation pour les étoiles rapides passant près du spectateur */
-@keyframes moveStar {
-    from {
-        transform: translate(0, 0);
-        opacity: 1;
-    }
-    to {
-        transform: translate(-1000px, -1000px);
-        opacity: 0;
-    }
+.starfield {
+    animation: zoomIn 60s linear infinite;
 }
 
 /* Style des étoiles */
@@ -56,13 +59,13 @@ body {
     background: white;
     border-radius: 50%;
     opacity: 0.8;
-    animation: twinkle 5s infinite;
+    animation: twinkle 5s infinite, moveStar 20s linear infinite;
 }
 
 /* Classe pour les étoiles rapides */
 .fast-star {
     background: #ffffff;
-    animation: twinkle 1s infinite, moveStar 3s linear forwards;
+    animation: twinkle 1s infinite, moveStar 10s linear infinite;
 }
 
 /* Game Container */
@@ -250,12 +253,12 @@ button:hover {
 /* Tablette */
 @media (max-width: 800px) {
     .door {
-        width: 140px;
-        height: 220px;
+        width: 120px;
+        height: 200px;
     }
 
     .question-text {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .gauge-container {
@@ -273,7 +276,7 @@ button:hover {
     }
 
     input[type="number"], input[type="text"] {
-        width: 180px;
+        width: 150px;
         font-size: 14px;
     }
 
@@ -299,12 +302,12 @@ button:hover {
 /* Mobile */
 @media (max-width: 500px) {
     .door {
-        width: 120px;
-        height: 200px;
+        width: 100px;
+        height: 170px;
     }
 
     .question-text {
-        font-size: 18px;
+        font-size: 16px;
     }
 
     .gauge-container {
@@ -322,8 +325,8 @@ button:hover {
     }
 
     input[type="number"], input[type="text"] {
-        width: 150px;
-        font-size: 14px;
+        width: 120px;
+        font-size: 12px;
     }
 
     button {
@@ -342,14 +345,6 @@ button:hover {
 
     .door {
         margin: 5px 0;
-    }
-
-    h1 {
-        font-size: 1.5em;
-    }
-
-    .score-board {
-        font-size: 1em;
     }
 }
 
