@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Le Labyrinthe des Nombres</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Le Labyrinthe des Nombres</h1>
+        <div id="question-box">
+            <p id="question">Bienvenue dans le labyrinthe des nombres!</p>
+            <input type="number" id="answer" placeholder="Votre réponse...">
+            <button id="submit">Valider</button>
+        </div>
+        <div id="message"></div>
+        <div id="labyrinth">
+            <div class="path" id="path1"></div>
+            <div class="path hidden" id="path2"></div>
+            <div class="path hidden" id="path3"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
