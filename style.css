@@ -34,9 +34,6 @@ body {
     50% { opacity: 0.4; }
 }
 
-/* Génération des étoiles via JavaScript */
-/* Vous pouvez ajouter des étoiles directement dans le CSS si vous préférez, mais JavaScript permet une meilleure personnalisation */
-
 /* Game Container */
 .game-container {
     text-align: center;
