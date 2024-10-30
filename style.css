@@ -1,3 +1,5 @@
+/* style.css */
+
 /* Style Global */
 body {
     background-color: #000000;
@@ -13,7 +15,8 @@ body {
 .game-container {
     text-align: center;
     width: 90%;
-    max-width: 800px;
+    max-width: 1000px;
+    position: relative;
 }
 
 h1 {
@@ -26,59 +29,111 @@ h1 {
     color: #00FF00;
 }
 
+/* Jauge Verticale */
+.gauge-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.gauge {
+    width: 10px;
+    height: 100%;
+    background-color: #555555;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.gauge-fill {
+    width: 100%;
+    height: 0%;
+    background-color: #00FF00;
+    transition: height 0.5s ease;
+}
+
+.gauge-label {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+/* Room and Doors */
 .room {
     position: relative;
     width: 100%;
     height: 300px;
     perspective: 800px;
     margin-bottom: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .door {
-    position: absolute;
-    width: 100px;
-    height: 180px;
-    background-color: #444444;
+    position: relative;
+    width: 150px;
+    height: 250px;
+    background-image: url('vortex.png');
+    background-size: cover;
+    background-position: center;
     border: 2px solid #ffffff;
-    border-radius: 5px;
-    color: #ffffff;
-    font-size: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.5s ease, border 0.3s ease;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.5s ease, background-color 0.5s ease;
-    cursor: pointer;
+    overflow: hidden;
 }
 
 .door:hover {
-    background-color: #777777;
+    transform: scale(1.05);
 }
 
-/* Mise à jour des identifiants pour correspondre au JavaScript */
-#question1 {
-    left: 20%;
-    transform: translateZ(200px) rotateY(-20deg);
-}
-
-#question2 {
+.question-text {
+    position: absolute;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%) translateZ(300px);
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #000000;
+    pointer-events: none; /* Permet de cliquer sur la porte sans interférence du texte */
 }
 
-#question3 {
-    right: 20%;
-    transform: translateZ(200px) rotateY(20deg);
+/* Animation d'ouverture de la porte pour les bonnes réponses */
+@keyframes openDoor {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(-90deg); }
 }
 
+.door.open {
+    animation: openDoor 1s forwards;
+}
+
+/* Personnage Astronaute */
 .character {
     position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 40px;
+    width: 60px;
+    height: 60px;
     transition: left 0.5s ease;
 }
 
+.character img {
+    width: 100%;
+    height: 100%;
+}
+
+/* Controls */
 .controls {
     display: flex;
     justify-content: center;
@@ -90,7 +145,7 @@ input[type="number"], input[type="text"] {
     padding: 10px;
     border: 1px solid #444444;
     border-radius: 8px;
-    width: 150px;
+    width: 200px;
     font-size: 16px;
     background-color: #222222;
     color: #ffffff;
@@ -132,15 +187,57 @@ button:hover {
 }
 
 /* Responsive Design */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     .door {
-        width: 80px;
-        height: 150px;
-        font-size: 16px;
+        width: 120px;
+        height: 200px;
+    }
+
+    .question-text {
+        font-size: 18px;
+    }
+
+    .gauge-container {
+        width: 20px;
+        height: 250px;
+    }
+
+    .gauge-label {
+        font-size: 12px;
     }
 
     .character {
-        font-size: 30px;
+        width: 50px;
+        height: 50px;
+    }
+
+    input[type="number"], input[type="text"] {
+        width: 150px;
+    }
+}
+
+@media (max-width: 500px) {
+    .door {
+        width: 100px;
+        height: 170px;
+    }
+
+    .question-text {
+        font-size: 16px;
+    }
+
+    .gauge-container {
+        width: 15px;
+        height: 200px;
+    }
+
+    .gauge-label {
+        font-size: 10px;
+    }
+
+    .character {
+        width: 40px;
+        height: 40px;
     }
 
     input[type="number"], input[type="text"] {
