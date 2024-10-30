@@ -20,6 +20,28 @@ body {
     overflow: hidden;
     z-index: -1; /* Place le fond derrière tous les autres éléments */
 }
+/* Ajout des animations pour le mouvement des étoiles */
+@keyframes zoomIn {
+    from {
+        transform: scale(1) translateZ(0);
+    }
+    to {
+        transform: scale(1.5) translateZ(100px);
+    }
+}
+
+@keyframes moveStar {
+    0% { transform: translate(0, 0); opacity: 1; }
+    100% { transform: translate(-500px, -500px); opacity: 0; }
+}
+
+.starfield {
+    animation: zoomIn 300s linear infinite;
+}
+
+.fast-star {
+    animation: twinkle 1s infinite, moveStar 3s linear forwards;
+}
 
 .star {
     position: absolute;
