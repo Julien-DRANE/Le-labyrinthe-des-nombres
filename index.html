@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Mission Mathématique</title>
+    <!-- Balise Meta Viewport pour une bonne responsivité sur mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Lien vers le fichier CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -10,12 +13,10 @@
     <div class="starfield"></div>
 
     <div class="game-container">
+        <!-- Titre du Jeu -->
         <h1>Mission Mathématique</h1>
-        <div class="score-board">
-            Score : <span id="score">0</span> ⭐
-        </div>
         
-        <!-- Jauge Horizontale -->
+        <!-- Jauge Horizontale de Progression -->
         <div class="gauge-container">
             <div class="gauge">
                 <div class="gauge-fill" id="gaugeFill"></div>
@@ -23,10 +24,13 @@
             <div class="gauge-label">Progression</div>
         </div>
         
+        <!-- Salle avec les Portes et le Personnage -->
         <div class="room">
+            <!-- Personnage Astronaute placé au-dessus des portes -->
             <div id="character" class="character">
                 <img src="images/astronaut.png" alt="Astronaute" />
             </div>
+            <!-- Portes avec questions mathématiques -->
             <div id="question1" class="door">
                 <div class="question-text">?</div>
             </div>
@@ -38,12 +42,20 @@
             </div>
         </div>
         
+        <!-- Contrôles du Jeu -->
         <div class="controls">
             <input type="number" id="answer" style="display:none;" placeholder="Votre réponse" />
             <button id="submit" style="display:none;">Soumettre</button>
             <button id="start">Démarrer la Mission</button>
         </div>
+        
+        <!-- Boîte de Message pour les Feedbacks -->
         <div id="message"></div>
+
+        <!-- Score Board Placé en Bas -->
+        <div class="score-board">
+            Score : <span id="score">0</span> ⭐
+        </div>
     </div>
 
     <!-- Sons -->
@@ -52,7 +64,7 @@
     <audio id="correctSound" src="sounds/correct.mp3"></audio>
     <audio id="wrongSound" src="sounds/wrong.mp3"></audio>
 
-    <!-- Fenêtre modale pour le nom du joueur -->
+    <!-- Fenêtre Modale pour Entrer le Nom du Joueur -->
     <div id="modal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -63,7 +75,7 @@
         </div>
     </div>
 
-    <!-- Tableau des scores -->
+    <!-- Tableau des Scores -->
     <div id="highScores" class="high-scores" style="display:none;">
         <h2>Top Scores</h2>
         <table>
