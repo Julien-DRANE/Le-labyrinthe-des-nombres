@@ -27,12 +27,12 @@ body {
         transform: scale(1);
     }
     to {
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
 }
 
 .starfield {
-    animation: zoomIn 300s linear infinite;
+    animation: zoomIn 60s linear infinite;
 }
 
 /* Animation de scintillement des étoiles */
@@ -245,6 +245,8 @@ button:hover {
 }
 
 /* Responsive Design */
+
+/* Tablette */
 @media (max-width: 800px) {
     .door {
         width: 120px;
@@ -256,7 +258,7 @@ button:hover {
     }
 
     .gauge-container {
-        width: 20px;
+        width: 25px;
         height: 250px;
     }
 
@@ -271,9 +273,20 @@ button:hover {
 
     input[type="number"], input[type="text"] {
         width: 150px;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    #message {
+        font-size: 16px;
     }
 }
 
+/* Mobile */
 @media (max-width: 500px) {
     .door {
         width: 100px;
@@ -285,7 +298,7 @@ button:hover {
     }
 
     .gauge-container {
-        width: 15px;
+        width: 20px;
         height: 200px;
     }
 
@@ -300,6 +313,16 @@ button:hover {
 
     input[type="number"], input[type="text"] {
         width: 120px;
+        font-size: 12px;
+    }
+
+    button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    #message {
+        font-size: 14px;
     }
 }
 
