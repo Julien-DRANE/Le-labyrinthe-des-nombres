@@ -307,7 +307,7 @@ function updateGauge() {
     gaugeFill.style.height = `${progress}%`;
 }
 
-// Génération des étoiles pour le fond étoilé
+// Génération des étoiles pour le fond étoilé avec zoom continu
 function generateStars() {
     const starfield = document.querySelector('.starfield');
     const numberOfStars = 150; // Ajustez ce nombre selon vos préférences
@@ -329,6 +329,14 @@ function generateStars() {
         if (Math.random() < 0.05) { // 5% des étoiles seront des étoiles rapides
             star.classList.add('fast-star');
         }
+
+        // Assignation de délais et durées aléatoires pour éviter les clumps
+        const twinkleDuration = Math.random() * 2 + 3; // 3s à 5s pour twinkle
+        const zoomDuration = Math.random() * 5 + 5; // 5s à 10s pour zoom
+        const animationDelay = Math.random() * 10; // 0s à 10s de délai
+
+        star.style.animationDuration = `twinkle ${twinkleDuration}s infinite, zoom ${zoomDuration}s linear infinite`;
+        star.style.animationDelay = `${animationDelay}s, ${animationDelay}s`; // Même délai pour les deux animations
 
         starfield.appendChild(star);
     }
