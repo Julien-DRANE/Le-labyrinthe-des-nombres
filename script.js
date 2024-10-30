@@ -1,42 +1,44 @@
 // Sélection des éléments
-const questionText = document.getElementById('question');
+const doors = [
+    document.getElementById('question1'),
+    document.getElementById('question2'),
+    document.getElementById('question3')
+];
 const answerInput = document.getElementById('answer');
 const submitButton = document.getElementById('submit');
 const startButton = document.getElementById('start');
 const messageBox = document.getElementById('message');
 const character = document.getElementById('character');
-const doors = document.getElementById('doors');
 const correctSound = document.getElementById('correctSound');
 const wrongSound = document.getElementById('wrongSound');
 
 let currentQuestion = 0;
-let difficulty = 1;
 let score = 0;
+let correctDoor = 0;
+let difficulty = 1;
 
-// Génération aléatoire des questions
-function generateQuestion() {
+// Génération aléatoire des questions avec une difficulté croissante
+function generateQuestions() {
     const operators = ['+', '-', '*', '/'];
-    const operator = operators[Math.floor(Math.random() * operators.length)];
+    doors.forEach((door, index) => {
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+        let num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
+        let num2 = Math.floor(Math.random() * (10 * difficulty)) + 1;
 
-    let num1, num2;
-    if (difficulty < 3) {
-        num1 = Math.floor(Math.random() * 10) + 1;
-        num2 = Math.floor(Math.random() * 10) + 1;
-    } else {
-        num1 = Math.floor(Math.random() * 20) + 5;
-        num2 = Math.floor(Math.random() * 10) + 1;
-    }
+        if (operator === '/' && num1 % num2 !== 0) {
+            num1 = num1 * num2;
+        }
 
-    // Éviter les divisions par zéro et les résultats non-entiers
-    if (operator === '/') {
-        num1 = num1 * num2;
-    }
+        let question = `${num1} ${operator} ${num2}`;
+        let answer = eval(question);
+        if (operator === '/') answer = Math.floor(answer);
 
-    let question = `${num1} ${operator} ${num2}`;
-    let answer = eval(question);
-    if (operator === '/') answer = Math.floor(answer);
+        door.textContent = question;
+        door.dataset.answer = answer;
+    });
 
-    return { question, answer };
+    // Choisir une porte correcte au hasard
+    correctDoor = Math.floor(Math.random() * doors.length);
 }
 
 // Fonction pour démarrer le jeu
@@ -44,49 +46,45 @@ function startGame() {
     currentQuestion = 0;
     score = 0;
     difficulty = 1;
-    nextQuestion();
+    nextRound();
     startButton.style.display = "none";
     submitButton.style.display = "inline";
     answerInput.style.display = "inline";
     messageBox.textContent = "";
-    moveCharacter(0);
+    character.style.left = "50%";
 }
 
-// Fonction pour poser la prochaine question
-function nextQuestion() {
-    const { question, answer } = generateQuestion();
-    questionText.textContent = `Question ${currentQuestion + 1}: ${question}`;
+// Fonction pour le prochain tour de questions
+function nextRound() {
+    generateQuestions();
     answerInput.value = "";
     answerInput.focus();
-    questionText.dataset.answer = answer;
 }
 
 // Fonction pour vérifier la réponse
 function checkAnswer() {
     const userAnswer = parseInt(answerInput.value);
-    const correctAnswer = parseInt(questionText.dataset.answer);
 
-    if (userAnswer === correctAnswer) {
+    if (userAnswer === parseInt(doors[correctDoor].dataset.answer)) {
         score++;
         currentQuestion++;
         correctSound.play();
-        moveCharacter(currentQuestion);
         messageBox.textContent = "Bonne réponse ! Continuez.";
         messageBox.style.color = "#4CAF50";
+        moveCharacterTo(correctDoor);
 
-        // Augmenter la difficulté après quelques questions
+        // Augmenter la difficulté progressivement
         if (currentQuestion % 3 === 0) difficulty++;
 
         if (currentQuestion >= 10) {
-            questionText.textContent = "Félicitations, vous avez terminé le labyrinthe ! 🎉";
+            messageBox.textContent = `Félicitations ! Vous avez terminé avec un score de ${score}/10 🎉`;
             submitButton.style.display = "none";
             startButton.style.display = "inline";
             startButton.textContent = "Rejouer";
             answerInput.style.display = "none";
-            messageBox.textContent = `Votre score: ${score}/10`;
             return;
         }
-        nextQuestion();
+        nextRound();
     } else {
         wrongSound.play();
         messageBox.textContent = "Mauvaise réponse, essayez encore.";
@@ -94,11 +92,10 @@ function checkAnswer() {
     }
 }
 
-// Déplacer le personnage
-function moveCharacter(position) {
-    const doorPositions = ["🚪 🚪 🚪", "🚪 🚪 🚪", "🚪 🚪 🚪"];
-    character.style.transform = `translateX(${position * 40}px)`;
-    doors.textContent = doorPositions[position % doorPositions.length];
+// Fonction de déplacement du personnage vers la porte correcte
+function moveCharacterTo(doorIndex) {
+    const doorPositions = [20, 50, 80];
+    character.style.left = `${doorPositions[doorIndex]}%`;
 }
 
 // Écouteurs d'événements
