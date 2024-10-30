@@ -319,22 +319,18 @@ function generateStars() {
         star.style.top = `${Math.random() * 100}%`;
         star.style.left = `${Math.random() * 100}%`;
 
-        // Animation
-        const animationDuration = Math.random() * 50 + 50; // Durée entre 50s et 100s
-        star.style.animationDuration = `${animationDuration}s`;
-
         // Différencier les étoiles en fonction de leur taille
         if (size > 2) {
             star.style.background = '#ffffff';
             star.style.animationName = 'twinkle';
-            star.style.animationDuration = `${animationDuration}s`;
+            star.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5s à 10s
         } else {
             star.style.background = '#aaaaaa';
             star.style.animationName = 'twinkle';
-            star.style.animationDuration = `${animationDuration + 20}s`; // Plus lent pour les petites étoiles
+            star.style.animationDuration = `${Math.random() * 5 + 5}s`; // 5s à 10s
         }
 
-        // Ajouter une classe spéciale pour certaines étoiles proches
+        // Ajouter une classe spéciale pour certaines étoiles rapides
         if (Math.random() < 0.05) { // 5% des étoiles seront des étoiles rapides
             star.classList.add('fast-star');
         }
