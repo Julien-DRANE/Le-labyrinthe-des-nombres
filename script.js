@@ -127,9 +127,9 @@ function startGame() {
         door.style.border = '4px solid #ffffff';
         door.classList.remove('rotate');
     });
-    // Repositionner le personnage en bas au centre
+    // Repositionner le personnage en haut au centre
     character.style.left = "50%";
-    character.style.bottom = "20px";
+    character.style.top = "-60px";
     // Démarrer le son d'ambiance
     spaceshipSound.volume = 0.2; // Faible volume
     spaceshipSound.play();
@@ -150,9 +150,9 @@ function nextRound() {
         door.style.border = '4px solid #ffffff';
         door.classList.remove('rotate');
     });
-    // Repositionner le personnage en bas au centre
+    // Repositionner le personnage en haut au centre
     character.style.left = "50%";
-    character.style.bottom = "20px";
+    character.style.top = "-60px";
 }
 
 // Fonction pour vérifier la réponse
@@ -232,7 +232,7 @@ function moveCharacterTo(doorIndex) {
     const containerRect = door.parentElement.getBoundingClientRect();
     const leftPosition = ((doorRect.left - containerRect.left) + doorRect.width / 2) / containerRect.width * 100;
     character.style.left = `${leftPosition}%`;
-    character.style.bottom = "20px"; // Assure que le personnage est en bas
+    character.style.top = "-60px"; // Assure que le personnage est en haut
 }
 
 // Fonction pour terminer le jeu
