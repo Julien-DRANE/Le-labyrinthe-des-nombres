@@ -82,19 +82,175 @@ body {
 }
 
 /* Titre */
-h1 {
-    margin-bottom: 10px;
+header h1 {
+    margin: 0;
     font-size: 3em;
     color: #ffcc00;
     text-shadow: 2px 2px 4px #000;
+    text-align: center;
 }
 
-/* Jauge Horizontale */
-.gauge-container {
+/* Planète avec Nombre Cible */
+.planet-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 20px 0;
+}
+
+.planet {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.target-number {
     position: absolute;
-    bottom: 20px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
+    font-size: 2em;
+    color: #ff5722;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px #000;
+}
+
+/* Room and Portals */
+.room {
+    position: relative;
+    width: 100%;
+    height: 60vh; /* Utilisé pour les écrans de tablette et desktop */
+    perspective: 800px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    margin-bottom: 20px; /* Réduit la marge inférieure */
+}
+
+.portal {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    background-image: url('images/vortex.png');
+    background-size: cover;
+    background-position: center;
+    border: 4px solid #ffffff;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.3s ease, border 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.portal:hover {
+    transform: scale(1.05);
+    border-color: #00ff99;
+}
+
+.calculation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 90%;
+    height: 90%;
+    font-size: 1.5em;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px #000;
+    pointer-events: none; /* Permet de cliquer sur le portail sans interférence du texte */
+}
+
+/* Animation de rotation du portail pour les bonnes réponses */
+@keyframes rotatePortal {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+.portal.correct {
+    animation: rotatePortal 1s linear forwards;
+}
+
+/* Animation de secousse pour les mauvaises réponses */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-10px); }
+    80% { transform: translateX(10px); }
+    100% { transform: translateX(0); }
+}
+
+.portal.wrong {
+    animation: shake 0.5s;
+}
+
+/* Personnage Astronaute */
+.character {
+    position: absolute;
+    width: 120px; /* Augmenter la taille */
+    height: 120px;
+    transition: left 1s ease-in-out, top 1s ease-in-out;
+    z-index: 2; /* Au-dessus des portails */
+}
+
+.character img {
+    width: 100%;
+    height: 100%;
+    animation: float 3s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(-50%, 0px); }
+    50% { transform: translate(-50%, -10px); }
+}
+
+/* Contrôles et Score */
+footer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.controls {
+    margin-bottom: 10px;
+}
+
+.controls button {
+    padding: 12px 25px;
+    border: none;
+    background-color: #00ff99;
+    color: #000000;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.controls button:hover {
+    background-color: #00e676;
+    transform: translateY(-2px);
+}
+
+.controls button:active {
+    transform: translateY(0px);
+}
+
+.score-board {
+    font-size: 1.5em;
+    color: #00ff99;
+    text-shadow: 2px 2px 4px #000;
+    margin-bottom: 10px;
+}
+
+.gauge-container {
     width: 200px;
     height: 20px;
     background-color: #444;
@@ -121,182 +277,35 @@ h1 {
     margin-top: 5px;
     font-size: 14px;
     color: #ffffff;
-}
-
-/* Room and Doors */
-.room {
-    position: relative;
-    width: 100%;
-    height: 60vh; /* Utilisé pour les écrans de tablette et desktop */
-    perspective: 800px;
-    display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
-    margin-bottom: 20px; /* Réduit la marge inférieure */
-}
-
-.door {
-    position: relative;
-    width: 200px;
-    height: 300px;
-    background-image: url('images/vortex.png');
-    background-size: cover;
-    background-position: center;
-    border: 4px solid #ffffff;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: transform 0.3s ease, border 0.3s ease;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-}
-
-.door:hover {
-    transform: scale(1.05);
-    border-color: #00ff99;
-}
-
-.question-text {
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
     text-align: center;
-    font-size: 1.5em;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px #000;
-    pointer-events: none; /* Permet de cliquer sur la porte sans interférence du texte */
 }
 
-/* Animation de rotation de la porte pour les bonnes réponses */
-@keyframes rotateDoor {
-    from { transform: rotateY(0deg); }
-    to { transform: rotateY(360deg); }
-}
-
-.door.rotate {
-    animation: rotateDoor 1s forwards;
-}
-
-/* Personnage Astronaute */
-.character {
-    position: absolute;
-    top: -60px; /* Positionné au-dessus des portes */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 120px; /* Augmenter la taille */
-    height: 120px;
-    transition: left 0.5s ease, top 0.5s ease;
-    z-index: 2; /* Au-dessus des portes */
-}
-
-.character img {
-    width: 100%;
-    height: 100%;
-    animation: float 3s ease-in-out infinite;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    border-radius: 50%;
-}
-
-@keyframes float {
-    0%, 100% { transform: translate(-50%, 0px); }
-    50% { transform: translate(-50%, -10px); }
-}
-
-/* Controls */
-.controls {
-    display: flex;
-    flex-direction: column; /* Aligne les éléments verticalement sur mobile */
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-input[type="number"], input[type="text"] {
-    padding: 12px 20px;
-    border: 2px solid #444444;
-    border-radius: 10px;
-    width: 250px;
-    font-size: 16px;
-    background-color: #222222;
-    color: #ffffff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-    transition: border 0.3s ease;
-}
-
-input[type="number"]:focus, input[type="text"]:focus {
-    border-color: #00ff99;
-    outline: none;
-}
-
-button {
-    padding: 12px 25px;
-    border: none;
-    background-color: #00ff99;
-    color: #000000;
-    font-size: 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-}
-
-button:hover {
-    background-color: #00e676;
-    transform: translateY(-2px);
-}
-
-button:active {
-    transform: translateY(0px);
-}
-
-#message {
+.message-box {
     font-size: 1.2em;
     margin-top: 20px;
     color: #ff5722;
     min-height: 24px;
 }
 
-/* Animation de secousse pour les mauvaises réponses */
-@keyframes shake {
-    0% { transform: translateX(0); }
-    20% { transform: translateX(-10px); }
-    40% { transform: translateX(10px); }
-    60% { transform: translateX(-10px); }
-    80% { transform: translateX(10px); }
-    100% { transform: translateX(0); }
+/* Animation de déplacement du personnage */
+.character.move-through {
+    transition: left 1s ease-in-out, top 1s ease-in-out;
 }
 
-.shake {
-    animation: shake 0.5s;
-}
+/* Responsive Design */
 
-/* Score Board Positionné en Bas */
-.score-board {
-    position: absolute;
-    bottom: 60px; /* Positionné juste au-dessus de la jauge */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5em;
-    color: #00ff99;
-    text-shadow: 2px 2px 4px #000;
-}
-
-/* Ajustements dans les Media Queries */
+/* Tablette */
 @media (max-width: 1024px) {
     .room {
         height: 60vh; /* Ajuster si nécessaire */
     }
 
-    .door {
+    .portal {
         width: 160px;
         height: 240px;
     }
 
-    .question-text {
+    .calculation {
         font-size: 1.3em;
     }
 
@@ -311,15 +320,9 @@ button:active {
     .character {
         width: 100px;
         height: 100px;
-        top: -50px;
     }
 
-    input[type="number"], input[type="text"] {
-        width: 220px;
-        font-size: 14px;
-    }
-
-    button {
+    footer button {
         padding: 10px 20px;
         font-size: 14px;
     }
@@ -329,23 +332,24 @@ button:active {
     }
 
     .score-board {
-        bottom: 50px; /* Ajustement pour tablette */
+        font-size: 1.3em;
     }
 }
 
+/* Mobile */
 @media (max-width: 600px) {
     .room {
-        flex-direction: column;
+        flex-direction: column; /* Alignement vertical pour mobile */
         height: 50vh; /* Utilise 50% de la hauteur de l'écran */
     }
 
-    .door {
+    .portal {
         width: 140px;
         height: 200px;
         margin: 10px 0;
     }
 
-    .question-text {
+    .calculation {
         font-size: 1.1em;
     }
 
@@ -360,15 +364,9 @@ button:active {
     .character {
         width: 90px; /* Ajuster la taille pour mobile */
         height: 90px;
-        top: -40px; /* Ajuster la position */
     }
 
-    input[type="number"], input[type="text"] {
-        width: 180px;
-        font-size: 12px;
-    }
-
-    button {
+    footer button {
         padding: 8px 16px;
         font-size: 12px;
     }
@@ -378,7 +376,7 @@ button:active {
     }
 
     .score-board {
-        bottom: 40px; /* Ajustement pour mobile */
+        font-size: 1.1em;
     }
 }
 
