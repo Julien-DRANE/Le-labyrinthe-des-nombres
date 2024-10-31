@@ -192,6 +192,9 @@ function generateCalculations() {
         portal.querySelector('.calculation').textContent = allCalculations[index].expression;
         portal.dataset.answer = allCalculations[index].result;
         portal.dataset.isCorrect = allCalculations[index].isCorrect;
+        
+        // **Réinitialiser les classes visuelles des portails**
+        portal.classList.remove('correct', 'wrong');
     });
 }
 
@@ -397,9 +400,6 @@ function startGame() {
         comSound.play();
     }, 35000); // 35 000 ms = 35 secondes
 
-    // Autoriser la lecture du son en jouant un son silencieux
-    beepSound.play().catch(() => {});
-
     // Démarrer la déplétion de l'oxygène
     startOxygenDepletion();
 }
@@ -413,7 +413,7 @@ function nextRound() {
     
     // Réinitialiser les animations des portails
     portals.forEach(portal => {
-        portal.classList.remove('correct');
+        portal.classList.remove('correct', 'wrong');
     });
 
     // Réinitialiser le message
