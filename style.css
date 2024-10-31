@@ -629,7 +629,7 @@ footer {
 }
 
 /* Animation pour faire apparaître progressivement la section Game Over avec zoom inversé */
-@keyframes fadeInZoomOut {
+/*@keyframes fadeInZoomOut {
     0% {
         opacity: 0;
         transform: translate(-50%, -50%) scale(1);
@@ -637,11 +637,11 @@ footer {
     20% {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1.2); /* Zoom avant partiel */
-    }
+  /*  }
     100% {
         opacity: 0;
         transform: translate(-50%, -50%) scale(1.5); /* Zoom avant complet, image semble disparaître */
-    }
+/*    }
 }
 
 /* -------------------- Contrôles et Score -------------------- */
