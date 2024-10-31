@@ -266,10 +266,10 @@ body {
     z-index: 1000; /* Au-dessus de tous les autres éléments */
     text-align: center;
     color: #ff0000; /* Rouge */
-    font-size: 3em;
+    font-size: 4em;
     font-weight: bold;
     /* Ajouter la nouvelle animation fadeInZoomOut */
-    animation: fadeInZoomOut 5s forwards;
+    animation: fadeInZoomOut 7s forwards;
 }
 
 .game-over-image {
@@ -289,7 +289,7 @@ body {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1.2); /* Zoom avant partiel */
     }
-    80% {
+    70% {
         opacity: 1;
         transform: translate(-50%, -50%) scale(1.2); /* Maintien de l'opacité */
     }
