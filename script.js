@@ -124,6 +124,13 @@ function startOxygenDepletion() {
     oxygenLevel = totalOxygenTime; // Réinitialiser à 60 secondes
     drawOxygenGauge(); // Dessiner la jauge initiale
 
+    // Assurer que le son com.mp3 soit programmé pour jouer après 35 secondes
+    clearTimeout(comSoundTimeout); // Effacer tout timeout existant (en cas de redémarrage)
+    comSoundTimeout = setTimeout(() => {
+        comSound.play();
+    }, 35000); // 35 000 ms = 35 secondes
+
+    // Interval pour dépléter l'oxygène
     oxygenInterval = setInterval(() => {
         oxygenLevel -= 0.1; // Décrémenter au dixième de seconde
         if (oxygenLevel < 0) oxygenLevel = 0;
@@ -139,6 +146,7 @@ function startOxygenDepletion() {
     }, 100); // Décrémenter chaque 0.1 seconde
 }
 
+
 /**
  * Fonction pour gérer les bips sonores de l'oxygène
  */
@@ -148,14 +156,18 @@ function handleBeepSounds() {
             beepSound.play();
         }
     } else if (oxygenLevel <= 10 && oxygenLevel > 0) {
-        // Jouer le bip chaque seconde et ajouter le son de stress.mp3
+        // Jouer le bip chaque seconde
         if (Math.floor(oxygenLevel) === oxygenLevel) {
             beepSound.play();
+        }
+        // Jouer stress.mp3 chaque seconde
+        if (Math.floor(oxygenLevel) === oxygenLevel) {
             const stressSound = document.getElementById('stressSound');
             stressSound.play();
         }
     }
 }
+
 
 /**
  * Fonction pour arrêter la déplétion de l'oxygène
