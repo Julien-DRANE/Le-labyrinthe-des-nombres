@@ -200,7 +200,7 @@ function generateCalculations() {
     portals.forEach((portal, index) => {
         portal.querySelector('.calculation').textContent = allCalculations[index].expression;
         portal.dataset.answer = allCalculations[index].result;
-        portal.dataset.isCorrect = allCalculations[index].isCorrect;
+        portal.dataset.isCorrect = allCalculations[index].isCorrect; // 'true' ou 'false'
         
         // **Réinitialiser les classes visuelles des portails**
         portal.classList.remove('correct', 'wrong');
@@ -330,7 +330,7 @@ function generateWrongCalculations(target, correctCalculation) {
  * Fonction pour sélectionner un portail
  */
 function selectPortal(portal) {
-    const isCorrect = parseFloat(portal.dataset.isCorrect) === 1;
+    const isCorrect = portal.dataset.isCorrect === 'true'; // Correction ici
     const calculation = portal.querySelector('.calculation').textContent;
 
     if(isCorrect) {
@@ -657,7 +657,7 @@ function initStarfield() {
 }
 
 /**
- * Fonction pour fermer la Game Over
+ * Fonction pour fermer le Game Over
  */
 function closeGameOver() {
     gameOverDiv.style.display = 'none';
