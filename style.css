@@ -113,6 +113,13 @@ body {
 
 /* -------------------- Animation des Portails -------------------- */
 
+.portals-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
 .portal {
     position: relative;
     width: 120px; /* Taille ajustable */
@@ -454,10 +461,17 @@ footer {
         overflow-y: auto; /* Permet le défilement si nécessaire */
     }
 
+    .portals-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: nowrap;
+    }
+
     .portal {
         width: 140px;
         height: 200px;
-        margin: 10px 0;
+        margin: 10px 5px;
     }
 
     .calculation {
