@@ -266,19 +266,30 @@ body {
     z-index: 1000; /* Au-dessus de tous les autres éléments */
     text-align: center;
     color: #ff0000; /* Rouge */
-    font-size: 4em;
+    font-size: 3em;
     font-weight: bold;
-    /* Ajouter la nouvelle animation fadeInZoomOut */
-    animation: fadeInZoomOut 7s forwards;
+    /* Laisse le texte visible, mais ajoute l’animation de l'image */
 }
 
 .game-over-image {
-    width: 400px; /* Augmentation de la taille de l'image */
+    width: 400px;
     max-width: 80%; /* Assure la responsivité */
     height: auto;
     margin-bottom: 20px;
+    animation: fadeOutShrink 6s ease forwards; /* Animation pour 5 secondes */
 }
 
+/* Animation pour faire rétrécir et disparaître l’image */
+@keyframes fadeOutShrink {
+    0% {
+        opacity: 1;
+        transform: scale(1); /* Taille normale */
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.1); /* Rétrécie à 10 % de la taille */
+    }
+}
 /* Animation pour faire apparaître progressivement la section Game Over avec zoom inversé */
 @keyframes fadeInZoomOut {
     0% {
