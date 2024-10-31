@@ -618,7 +618,7 @@ footer {
     font-size: 3em;
     font-weight: bold;
     /* Ajouter la nouvelle animation fadeInZoomOut */
-    animation: fadeInZoomOut 2s forwards;
+  /*  animation: fadeInZoomOut 2s forwards;
 }
 
 .game-over-image {
