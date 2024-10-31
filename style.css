@@ -192,7 +192,7 @@ header h1 {
 /* Personnage Astronaute */
 .character {
     position: absolute;
-    left: -120px; /* Positionné à gauche des portails */
+    left: -105px; /* Positionné à gauche des portails */
     bottom: 0; /* Aligné en bas */
     width: 100px; /* Taille adaptée pour mobile */
     height: 100px;
