@@ -80,15 +80,10 @@
         <img src="images/station.png" alt="Station Spatiale" />
     </div>
 
-    <!-- Modale Game Over -->
-    <div id="gameOverModal" class="modal" style="display:none;">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Game Over</h2>
-            <img src="images/game_over.png" alt="Game Over" class="game-over-image">
-            <audio id="overSound" src="sounds/over.mp3"></audio>
-            <button id="retryGame">Réessayer</button>
-        </div>
+    <!-- Section Game Over -->
+    <div id="gameOver" class="game-over" style="display: none;">
+        <img src="images/game_over.png" alt="Game Over" class="game-over-image">
+        <h2>Game Over</h2>
     </div>
 
     <!-- Sons -->
@@ -101,6 +96,8 @@
     <audio id="beepSound" src="sounds/bip.mp3"></audio>
     <audio id="comSound" src="sounds/com.mp3"></audio>
     <audio id="finalSound" src="sounds/final.mp3"></audio>
+    <!-- Son Game Over -->
+    <audio id="gameOverSound" src="sounds/over.mp3"></audio>
 
     <!-- Fenêtre Modale pour Entrer le Nom du Joueur -->
     <div id="modal" class="modal" style="display:none;">
