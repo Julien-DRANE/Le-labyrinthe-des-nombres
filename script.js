@@ -148,9 +148,11 @@ function handleBeepSounds() {
             beepSound.play();
         }
     } else if (oxygenLevel <= 10 && oxygenLevel > 0) {
-        // Jouer le bip chaque seconde
+        // Jouer le bip chaque seconde et ajouter le son de stress.mp3
         if (Math.floor(oxygenLevel) === oxygenLevel) {
             beepSound.play();
+            const stressSound = document.getElementById('stressSound');
+            stressSound.play();
         }
     }
 }
@@ -200,12 +202,13 @@ function generateCalculations() {
     portals.forEach((portal, index) => {
         portal.querySelector('.calculation').textContent = allCalculations[index].expression;
         portal.dataset.answer = allCalculations[index].result;
-        portal.dataset.isCorrect = allCalculations[index].isCorrect; // 'true' ou 'false'
-        
-        // **Réinitialiser les classes visuelles des portails**
+        portal.dataset.isCorrect = allCalculations[index].isCorrect;
+
+        // Réinitialiser les classes visuelles des portails pour chaque nouvelle question
         portal.classList.remove('correct', 'wrong');
     });
 }
+
 
 /**
  * Fonction pour générer un calcul correct
