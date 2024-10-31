@@ -14,52 +14,54 @@
 
     <div class="game-container">
         <!-- Titre du Jeu -->
-        <h1>Mission Mathématique</h1>
-        
-        <!-- Jauge Horizontale de Progression -->
-        <div class="gauge-container">
-            <div class="gauge">
-                <div class="gauge-fill" id="gaugeFill"></div>
-            </div>
-            <div class="gauge-label">Progression</div>
-        </div>
-        
-        <!-- Image de la Planète avec Nombre Cible -->
-        <div class="planet-container">
-            <img src="images/planet.png" alt="Planète" class="planet">
-            <div id="targetNumber" class="target-number">32</div>
-        </div>
-        
-        <!-- Salle avec les Portails et le Personnage -->
-        <div class="room">
-            <!-- Personnage Astronaute placé au-dessus des portails -->
-            <div id="character" class="character">
-                <img src="images/astronaut.png" alt="Astronaute" />
-            </div>
-            <!-- Portails avec propositions de calculs -->
-            <div id="portal1" class="portal">
-                <div class="calculation">?</div>
-            </div>
-            <div id="portal2" class="portal">
-                <div class="calculation">?</div>
-            </div>
-            <div id="portal3" class="portal">
-                <div class="calculation">?</div>
-            </div>
-        </div>
-        
-        <!-- Contrôles du Jeu -->
-        <div class="controls">
-            <button id="start">Démarrer la Mission</button>
-        </div>
-        
-        <!-- Boîte de Message pour les Feedbacks -->
-        <div id="message"></div>
+        <header>
+            <h1>Mission Mathématique</h1>
+        </header>
 
-        <!-- Score Board Placé en Bas -->
-        <div class="score-board">
-            Score : <span id="score">0</span> ⭐
-        </div>
+        <!-- Section Principale du Jeu -->
+        <main>
+            <!-- Planète avec Nombre Cible -->
+            <div class="planet-container">
+                <img src="images/planet.png" alt="Planète" class="planet">
+                <div id="targetNumber" class="target-number">32</div>
+            </div>
+
+            <!-- Salle avec les Portails et le Personnage -->
+            <div class="room">
+                <!-- Portails avec propositions de calculs -->
+                <div id="portal1" class="portal">
+                    <div class="calculation">?</div>
+                </div>
+                <div id="portal2" class="portal">
+                    <div class="calculation">?</div>
+                </div>
+                <div id="portal3" class="portal">
+                    <div class="calculation">?</div>
+                </div>
+                <!-- Personnage Astronaute placé au-dessus des portails -->
+                <div id="character" class="character">
+                    <img src="images/astronaut.png" alt="Astronaute" />
+                </div>
+            </div>
+        </main>
+
+        <!-- Contrôles du Jeu et Score -->
+        <footer>
+            <div class="controls">
+                <button id="start">Démarrer la Mission</button>
+            </div>
+            <div class="score-board">
+                Score : <span id="score">0</span> ⭐
+            </div>
+            <div class="gauge-container">
+                <div class="gauge">
+                    <div class="gauge-fill" id="gaugeFill"></div>
+                </div>
+                <div class="gauge-label">Progression</div>
+            </div>
+            <!-- Boîte de Message pour les Feedbacks -->
+            <div id="message" class="message-box"></div>
+        </footer>
     </div>
 
     <!-- Sons -->
