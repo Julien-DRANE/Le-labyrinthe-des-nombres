@@ -28,6 +28,8 @@ const spaceshipSound = document.getElementById('spaceshipSound');
 const jetpackSound = document.getElementById('jetpackSound');
 const lowOxygenSound = document.getElementById('lowOxygenSound');
 const beepSound = document.getElementById('beepSound');
+const comSound = document.getElementById('comSound');
+const finalSound = document.getElementById('finalSound');
 
 // Barre de progression
 const progressFill = document.getElementById('progressFill');
@@ -61,9 +63,10 @@ let oxygenLevel = 60; // Temps en secondes (1 minute)
 const totalOxygenTime = 60; // Durée totale en secondes
 
 let oxygenInterval; // Interval pour la déplétion de l'oxygène
+let comSoundTimeout; // Timeout pour le son com.mp3
 
 // Variables pour la séquence de victoire
-const finalSoundSrc = 'sounds/final.mp3'; // Chemin du son final
+// const finalSoundSrc = 'sounds/final.mp3'; // Maintenant, on utilise le tag audio
 
 /* -------------------- Fonctions Principales -------------------- */
 
@@ -148,6 +151,7 @@ function handleBeepSounds() {
  */
 function stopOxygenDepletion() {
     clearInterval(oxygenInterval);
+    clearTimeout(comSoundTimeout);
 }
 
 /**
@@ -388,6 +392,11 @@ function startGame() {
     spaceshipSound.volume = 0.2; // Faible volume
     spaceshipSound.play();
 
+    // Démarrer le son com.mp3 après 35 secondes
+    comSoundTimeout = setTimeout(() => {
+        comSound.play();
+    }, 35000); // 35 000 ms = 35 secondes
+
     // Autoriser la lecture du son en jouant un son silencieux
     beepSound.play().catch(() => {});
 
@@ -423,6 +432,7 @@ function endGame(victory = false) {
     spaceshipSound.pause();
     lowOxygenSound.pause();
     beepSound.pause();
+    comSound.pause();
 
     if(victory) {
         messageBox.textContent = `Mission Accomplie ! Tu as atteint ${requiredStreak} bonnes réponses consécutives 🎉`;
@@ -435,7 +445,6 @@ function endGame(victory = false) {
         spaceStation.style.display = 'block';
 
         // Jouer le son final
-        const finalSound = new Audio(finalSoundSrc);
         finalSound.play();
 
         // Déplacer le personnage vers la station
@@ -637,6 +646,19 @@ saveScoreButton.addEventListener('click', saveScore);
 closeHighScoresButton.addEventListener('click', closeHighScores);
 closeModal.addEventListener('click', () => {
     modal.style.display = "none";
+});
+
+// Fermer la modale en cliquant en dehors de celle-ci
+window.addEventListener('click', (event) => {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+    if (event.target == highScoresDiv) {
+        highScoresDiv.style.display = "none";
+        // Réinitialiser le jeu
+        startButton.style.display = "inline";
+        startButton.textContent = "Rejouer la Mission";
+    }
 });
 
 // Initialisation au chargement de la fenêtre
