@@ -88,6 +88,7 @@ header h1 {
     color: #ffcc00;
     text-shadow: 2px 2px 4px #000;
     text-align: center;
+    font-family: 'Orbitron', sans-serif; /* Application de la police futuriste */
 }
 
 /* Planète avec Nombre Cible */
@@ -122,9 +123,10 @@ header h1 {
     height: 50vh; /* Ajustement pour mobile */
     perspective: 800px;
     display: flex;
-    justify-content: space-around;
+    justify-content: center; /* Centrer les portails */
     align-items: flex-end;
     margin-bottom: 20px; /* Réduit la marge inférieure */
+    position: relative;
 }
 
 .portal {
@@ -190,7 +192,9 @@ header h1 {
 /* Personnage Astronaute */
 .character {
     position: absolute;
-    width: 100px; /* Réduction de la taille pour mobile */
+    left: -120px; /* Positionné à gauche des portails */
+    bottom: 0; /* Aligné en bas */
+    width: 100px; /* Taille adaptée pour mobile */
     height: 100px;
     transition: transform 1s ease-in-out, left 1s ease-in-out, top 1s ease-in-out;
     z-index: 2; /* Au-dessus des portails */
@@ -220,9 +224,13 @@ footer {
 
 .controls {
     margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .controls button {
+    width: 80%; /* Largeur ajustée pour mobile */
     padding: 10px 20px; /* Réduction de la taille pour mobile */
     border: none;
     background-color: #00ff99;
@@ -288,13 +296,21 @@ footer {
 }
 
 /* Animation de déplacement du personnage */
-@keyframes shrink {
-    from { transform: scale(1); }
-    to { transform: scale(0.5); }
+@keyframes shrinkAndMove {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(100px, -50px) scale(0.5); /* Ajustez selon le besoin */
+    }
+    100% {
+        transform: translate(200px, -100px) scale(0.2); /* Ajustez selon le besoin */
+        opacity: 0;
+    }
 }
 
-.character.shrink {
-    animation: shrink 1s forwards;
+.character.travel {
+    animation: shrinkAndMove 1s forwards;
 }
 
 /* Responsive Design */
@@ -379,6 +395,7 @@ footer {
     .character {
         width: 80px; /* Réduction supplémentaire pour mobile */
         height: 80px;
+        left: -100px; /* Ajusté pour mobile */
     }
 
     footer button {
