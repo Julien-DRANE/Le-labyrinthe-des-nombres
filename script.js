@@ -65,9 +65,6 @@ const totalOxygenTime = 60; // Durée totale en secondes
 let oxygenInterval; // Interval pour la déplétion de l'oxygène
 let comSoundTimeout; // Timeout pour le son com.mp3
 
-// Variables pour la séquence de victoire
-// const finalSoundSrc = 'sounds/final.mp3'; // Maintenant, on utilise le tag audio
-
 /* -------------------- Fonctions Principales -------------------- */
 
 /**
@@ -443,6 +440,7 @@ function endGame(victory = false) {
 
         // Faire apparaître la station spatiale
         spaceStation.style.display = 'block';
+        spaceStation.classList.add('animate-station');
 
         // Jouer le son final
         finalSound.play();
@@ -469,9 +467,10 @@ function moveCharacterToStation(spaceStation) {
     // Obtenir les positions du personnage et de la station
     const characterRect = character.getBoundingClientRect();
     const stationRect = spaceStation.getBoundingClientRect();
+    const gameContainerRect = document.querySelector('.game-container').getBoundingClientRect();
 
-    // Calculer la distance à parcourir
-    const deltaX = stationRect.left - characterRect.left;
+    // Calculer la position relative dans le conteneur du jeu
+    const deltaX = stationRect.left - characterRect.left + (stationRect.width / 2) - (characterRect.width / 2);
     const deltaY = stationRect.top - characterRect.top;
 
     // Appliquer une transition au personnage
