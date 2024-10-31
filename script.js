@@ -467,7 +467,7 @@ function endGame(victory = false, gameOver = false) {
         gameOverDiv.style.display = 'block';
 
         // Appliquer l'animation de disparition lente à l'image
-        gameOverImage.style.animation = 'fadeOutShrinkSlow 8s ease forwards';
+       //  gameOverImage.style.animation = 'fadeOutShrinkSlow 8s ease forwards';
 
         // Jouer le son Game Over
         gameOverSound.play();
