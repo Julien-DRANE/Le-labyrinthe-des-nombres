@@ -258,7 +258,7 @@ body {
 
 /* -------------------- Section Game Over -------------------- */
 
-.game-over {
+/*.game-over {
     position: fixed;
     top: 50%;
     left: 50%;
