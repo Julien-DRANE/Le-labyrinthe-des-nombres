@@ -262,28 +262,36 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) scale(1);
     z-index: 1000; /* Au-dessus de tous les autres éléments */
     text-align: center;
     color: #ff0000; /* Rouge */
     font-size: 3em;
     font-weight: bold;
-    animation: fadeIn 1s ease-in-out forwards;
+    /* Ajouter la nouvelle animation fadeInZoomOut */
+    animation: fadeInZoomOut 2s forwards;
 }
 
 .game-over-image {
-    width: 200px; /* Ajustez selon vos préférences */
+    width: 400px; /* Augmentation de la taille de l'image */
+    max-width: 80%; /* Assure la responsivité */
     height: auto;
     margin-bottom: 20px;
 }
 
-/* Animation pour faire apparaître progressivement la section Game Over */
-@keyframes fadeIn {
-    from {
+/* Animation pour faire apparaître progressivement la section Game Over avec zoom inversé */
+@keyframes fadeInZoomOut {
+    0% {
         opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
     }
-    to {
+    20% {
         opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2); /* Zoom avant partiel */
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5); /* Zoom avant complet, image semble disparaître */
     }
 }
 
@@ -595,3 +603,62 @@ footer {
         background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent pour mieux voir le contenu */
     }
 }
+
+/* -------------------- Animation de la Station Spatiale -------------------- */
+
+.space-station {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    z-index: 99; /* Assurez-vous qu'elle est au-dessus du jeu */
+    opacity: 0;
+}
+
+.space-station img {
+    width: 300px; /* Ajustez selon la taille souhaitée */
+    height: auto;
+}
+
+/* -------------------- Section Game Over -------------------- */
+
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 1000; /* Au-dessus de tous les autres éléments */
+    text-align: center;
+    color: #ff0000; /* Rouge */
+    font-size: 3em;
+    font-weight: bold;
+    /* Ajouter la nouvelle animation fadeInZoomOut */
+    animation: fadeInZoomOut 2s forwards;
+}
+
+.game-over-image {
+    width: 400px; /* Augmentation de la taille de l'image */
+    max-width: 80%; /* Assure la responsivité */
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Animation pour faire apparaître progressivement la section Game Over avec zoom inversé */
+@keyframes fadeInZoomOut {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.2); /* Zoom avant partiel */
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5); /* Zoom avant complet, image semble disparaître */
+    }
+}
+
+/* -------------------- Contrôles et Score -------------------- */
+
+/* ... [Le reste de votre CSS existant] ... */
