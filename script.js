@@ -189,13 +189,26 @@ function selectPortal(portal) {
         score += 10;
         scoreDisplay.textContent = score;
 
-        // Déplacer le personnage à travers le portail
-        moveCharacterThroughPortal(portal);
+        // Mettre à jour la jauge de progression
+        updateGauge();
 
-        // Générer une nouvelle cible et de nouveaux calculs après un court délai
-        setTimeout(() => {
-            nextRound();
-        }, 1500); // 1.5 secondes pour voir l'animation
+        // Déplacer le personnage à travers le portail avec animation de réduction
+        moveCharacterThroughPortal(portal);
+        
+        // Incrémenter le nombre de questions
+        currentQuestion++;
+
+        // Vérifier si la mission est terminée
+        if(currentQuestion >= maxQuestions) {
+            setTimeout(() => {
+                endGame();
+            }, 1500); // 1.5 secondes pour voir l'animation
+        } else {
+            // Générer une nouvelle cible et de nouveaux calculs après un court délai
+            setTimeout(() => {
+                nextRound();
+            }, 1500); // 1.5 secondes pour voir l'animation
+        }
     } else {
         // Jouer le son incorrect
         wrongSound.play();
@@ -226,11 +239,6 @@ function startGame() {
 
 // Fonction pour passer au prochain tour
 function nextRound() {
-    if(currentQuestion >= maxQuestions) {
-        endGame();
-        return;
-    }
-
     generateTargetNumber();
     generateCalculations();
     
@@ -315,28 +323,33 @@ function updateGauge() {
     gaugeFill.style.width = `${progress}%`;
 }
 
-// Fonction pour déplacer le personnage à travers le portail
+// Fonction pour déplacer le personnage à travers le portail avec animation de réduction
 function moveCharacterThroughPortal(portal) {
-    portal.classList.add('correct');
+    // Ajouter la classe de rétrécissement
+    character.classList.add('shrink');
+
+    // Déplacer le personnage
     const isMobile = window.innerWidth <= 600;
+    let translateX = 0;
+    let translateY = 0;
 
     if(isMobile) {
-        // Layout vertical
-        // Déplacer le personnage vers le bas
-        character.style.transition = "transform 1s ease-in-out";
-        character.style.transform = "translateY(100px)";
+        // Sur mobile, déplacer vers le bas
+        translateY = 100;
     } else {
-        // Layout horizontal
-        // Déplacer le personnage vers la droite
-        character.style.transition = "transform 1s ease-in-out";
-        character.style.transform = "translateX(200px)";
+        // Sur desktop/tablette, déplacer vers la droite
+        translateX = 200;
     }
 
-    // Réinitialiser la position après l'animation
+    // Appliquer la transformation avec translation
+    character.style.transform = `translate(${translateX}px, ${translateY}px) scale(0.5)`;
+
+    // Après l'animation, réinitialiser la transformation et la taille
     setTimeout(() => {
         character.style.transition = "transform 0.5s ease-in-out";
-        character.style.transform = "translate(0, 0)";
-    }, 1000);
+        character.style.transform = "translate(0, 0) scale(1)";
+        character.classList.remove('shrink');
+    }, 1000); // Durée de l'animation
 }
 
 // Fonction pour ajouter les écouteurs d'événements aux portails
@@ -362,8 +375,8 @@ function generateStars() {
         star.style.width = `${size}px`;
         star.style.height = `${size}px`;
 
-        // Position aléatoire : bottom dans les 30% inférieurs, left aléatoire
-        star.style.bottom = `${Math.random() * 30}%`;
+        // Position aléatoire : couvrant toute la surface
+        star.style.top = `${Math.random() * 100}%`;
         star.style.left = `${Math.random() * 100}%`;
 
         // Ajouter une classe spéciale pour certaines étoiles rapides
