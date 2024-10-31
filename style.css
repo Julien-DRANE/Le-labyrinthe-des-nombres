@@ -276,39 +276,9 @@ body {
     max-width: 80%; /* Assure la responsivité */
     height: auto;
     margin-bottom: 20px;
-    animation: fadeOutShrink 6s ease forwards; /* Animation pour 5 secondes */
 }
 
-/* Animation pour faire rétrécir et disparaître l’image */
-@keyframes fadeOutShrink {
-    0% {
-        opacity: 1;
-        transform: scale(1); /* Taille normale */
-    }
-    100% {
-        opacity: 0;
-        transform: scale(0.1); /* Rétrécie à 10 % de la taille */
-    }
-}
-/* Animation pour faire apparaître progressivement la section Game Over avec zoom inversé */
-@keyframes fadeInZoomOut {
-    0% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1);
-    }
-    20% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.2); /* Zoom avant partiel */
-    }
-    70% {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1.2); /* Maintien de l'opacité */
-    }
-    100% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(1.5); /* Zoom avant complet, image semble disparaître */
-    }
-}
+
 
 /* -------------------- Contrôles et Score -------------------- */
 
