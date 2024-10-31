@@ -1,6 +1,7 @@
 /* style.css */
 
-/* Style Global */
+/* -------------------- Styles Globaux -------------------- */
+
 html, body {
     height: 100%;
     margin: 0;
@@ -10,11 +11,12 @@ html, body {
 body {
     background-color: #000;
     color: #fff;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    font-family: 'Orbitron', sans-serif;
     overflow: hidden; /* Empêche les barres de défilement causées par le fond étoilé */
 }
 
-/* Fond étoilé */
+/* -------------------- Fond Étoilé -------------------- */
+
 .starfield {
     position: fixed;
     top: 0;
@@ -27,49 +29,6 @@ body {
     animation: zoomIn 60s linear infinite;
 }
 
-/* Jauge d'Oxygène Ronde */
-#oxygenCanvas {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 80px;
-    height: 80px;
-    z-index: 10; /* Au-dessus des autres éléments */
-}
-
-/* Station Spatiale */
-.space-station {
-    position: absolute;
-    top: 20%;
-    right: 10%;
-    width: 150px;
-    height: auto;
-    z-index: 5;
-}
-
-.space-station img {
-    width: 100%;
-    height: auto;
-}
-
-/* Animation de scintillement des étoiles */
-@keyframes twinkle {
-    0%, 100% { opacity: 0.8; }
-    50% { opacity: 0.4; }
-}
-
-/* Animation de déplacement des étoiles vers l'avant (zoom avant) */
-@keyframes moveStar {
-    from {
-        transform: translateZ(0) scale(1);
-        opacity: 1;
-    }
-    to {
-        transform: translateZ(-1000px) scale(3); /* Ajustez la distance et l'échelle selon l'effet désiré */
-        opacity: 0;
-    }
-}
-
 /* Animation de zoom infini pour le fond étoilé */
 @keyframes zoomIn {
     from {
@@ -79,11 +38,20 @@ body {
         transform: scale(1.05);
     }
 }
-/* style.css */
 
-/* ... autres styles ... */
+/* -------------------- Jauge d'Oxygène Ronde -------------------- */
 
-/* Barre de Progression */
+#oxygenCanvas {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 80px;
+    height: 80px;
+    z-index: 10; /* Au-dessus des autres éléments */
+}
+
+/* -------------------- Barre de Progression -------------------- */
+
 .progress-container {
     display: flex;
     align-items: center;
@@ -112,100 +80,11 @@ body {
     transition: width 0.5s ease;
 }
 
-/* ... autres styles ... */
-
-/* Responsive Design */
-
-/* Mobile */
-@media (max-width: 600px) {
-    /* ... autres styles ... */
-    .progress-character, .progress-station {
-        width: 30px;
-        height: 30px;
-    }
-    .progress-bar {
-        height: 15px;
-    }
-    /* ... autres styles ... */
-}
-
-/* Style des étoiles */
-.star {
-    position: absolute;
-    background: white;
-    border-radius: 50%;
-    opacity: 0.8;
-    animation: twinkle 2s infinite, moveStar 10s linear infinite;
-}
-
-.fast-star {
-    background: #ffffff;
-    animation: twinkle 1s infinite, moveStar 5s linear infinite;
-}
-
-/* Game Container */
-.game-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-/* Titre */
-header h1 {
-    margin: 0;
-    font-size: 2.5em; /* Ajustable selon vos préférences */
-    color: #ffcc00;
-    text-shadow: 2px 2px 4px #000;
-    text-align: center;
-    font-family: 'Orbitron', sans-serif; /* Application de la police futuriste */
-}
-
-/* Planète avec Nombre Cible */
-.planet-container {
-    position: relative;
-    width: 150px; /* Réduction de la taille pour mobile */
-    height: 150px;
-    margin: 20px 0;
-}
-
-.planet {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.target-number {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.5em; /* Réduction de la taille pour mobile */
-    color: #ff5722;
-    font-weight: bold;
-    text-shadow: 2px 2px 4px #000;
-}
-
-/* Room and Portals */
-.room {
-    position: relative;
-    width: 100%;
-    height: 50vh; /* Ajustement pour mobile */
-    perspective: 800px; /* Ajouté pour les animations 3D */
-    display: flex;
-    justify-content: center; /* Centrer les portails */
-    align-items: flex-end;
-    margin-bottom: 20px; /* Réduit la marge inférieure */
-    position: relative;
-}
+/* -------------------- Animation des Portails -------------------- */
 
 .portal {
     position: relative;
-    width: 120px; /* Réduction de la taille pour mobile */
+    width: 120px; /* Taille ajustable */
     height: 180px;
     background-image: url('images/vortex.png');
     background-size: cover;
@@ -233,7 +112,7 @@ header h1 {
     text-align: center;
     width: 90%;
     height: 90%;
-    font-size: 1em; /* Réduction de la taille pour mobile */
+    font-size: 1em; /* Taille ajustable */
     color: #ffffff;
     text-shadow: 2px 2px 4px #000;
     pointer-events: none; /* Permet de cliquer sur le portail sans interférence du texte */
@@ -263,12 +142,13 @@ header h1 {
     animation: shake 0.5s;
 }
 
-/* Personnage Astronaute */
+/* -------------------- Personnage Astronaute -------------------- */
+
 .character {
     position: absolute;
-    left: -100px; /* Déplacement de 20px vers la droite par rapport à -120px */
+    left: -100px; /* Position initiale */
     bottom: 0; /* Aligné en bas */
-    width: 100px; /* Taille adaptée pour desktop/tablette */
+    width: 100px;
     height: 100px;
     transition: transform 1s ease-in-out, left 1s ease-in-out, top 1s ease-in-out;
     z-index: 2; /* Au-dessus des portails */
@@ -287,7 +167,8 @@ header h1 {
     50% { transform: translate(-50%, -10px); }
 }
 
-/* Contrôles et Score */
+/* -------------------- Contrôles et Score -------------------- */
+
 footer {
     width: 100%;
     display: flex;
@@ -304,12 +185,12 @@ footer {
 }
 
 .controls button {
-    width: 80%; /* Largeur ajustée pour mobile */
-    padding: 10px 20px; /* Réduction de la taille pour mobile */
+    width: 80%; /* Largeur ajustée */
+    padding: 10px 20px;
     border: none;
     background-color: #00ff99;
     color: #000000;
-    font-size: 14px; /* Réduction de la taille pour mobile */
+    font-size: 14px;
     border-radius: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
@@ -326,18 +207,20 @@ footer {
 }
 
 .score-board {
-    font-size: 1.2em; /* Réduction de la taille pour mobile */
+    font-size: 1.2em;
     color: #00ff99;
     text-shadow: 2px 2px 4px #000;
     margin-bottom: 10px;
 }
 
 .message-box {
-    font-size: 1em; /* Réduction de la taille pour mobile */
+    font-size: 1em;
     margin-top: 10px;
     color: #ff5722;
     min-height: 24px;
 }
+
+/* -------------------- Séquence de Victoire -------------------- */
 
 /* Animation de déplacement du personnage */
 @keyframes shrinkAndMove {
@@ -357,7 +240,7 @@ footer {
     animation: shrinkAndMove 1s forwards;
 }
 
-/* Responsive Design */
+/* -------------------- Responsive Design -------------------- */
 
 /* Tablette */
 @media (max-width: 1024px) {
@@ -374,30 +257,27 @@ footer {
         font-size: 1.3em;
     }
 
-    .gauge-container {
-        width: 180px;
+    .progress-character, .progress-station {
+        width: 50px;
+        height: 50px;
     }
 
-    .gauge-label {
-        font-size: 12px;
+    .progress-bar {
+        height: 25px;
     }
 
-    .space-station {
-        width: 200px;
+    .score-board {
+        font-size: 1.3em;
     }
 
     .character {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
     }
 
     footer button {
         padding: 10px 20px;
         font-size: 14px;
-    }
-
-    .score-board {
-        font-size: 1.3em;
     }
 }
 
@@ -431,22 +311,18 @@ footer {
         font-size: 1.1em;
     }
 
-    .gauge-container {
-        width: 150px;
-        height: 15px;
+    .progress-character, .progress-station {
+        width: 30px;
+        height: 30px;
     }
 
-    .gauge-label {
-        font-size: 10px;
+    .progress-bar {
+        height: 15px;
     }
 
     #oxygenCanvas {
         width: 60px;
         height: 60px;
-    }
-
-    .space-station {
-        width: 120px;
     }
 
     .character {
