@@ -30,6 +30,7 @@ const lowOxygenSound = document.getElementById('lowOxygenSound');
 const beepSound = document.getElementById('beepSound');
 const comSound = document.getElementById('comSound');
 const finalSound = document.getElementById('finalSound');
+const gameOverSound = document.getElementById('gameOverSound');
 
 // Barre de progression
 const progressFill = document.getElementById('progressFill');
@@ -52,10 +53,15 @@ const closeHighScoresButton = document.getElementById('closeHighScores');
 // Station spatiale (séquence de victoire)
 const spaceStation = document.getElementById('spaceStation');
 
+// Section Game Over
+const gameOverDiv = document.getElementById('gameOver');
+const gameOverImage = gameOverDiv.querySelector('.game-over-image');
+const gameOverText = gameOverDiv.querySelector('h2');
+
 // Variables de jeu
 let currentStreak = 0;
 const requiredStreak = 7; // Nombre de bonnes réponses consécutives requises pour gagner
-let score = 0;
+let score = 60.0; // Initialisé à 60 secondes
 let targetNumber = 0;
 
 // Variables pour la jauge d'oxygène
@@ -119,14 +125,18 @@ function startOxygenDepletion() {
     drawOxygenGauge(); // Dessiner la jauge initiale
 
     oxygenInterval = setInterval(() => {
-        oxygenLevel--;
+        oxygenLevel -= 0.1; // Décrémenter au dixième de seconde
         if (oxygenLevel < 0) oxygenLevel = 0;
         drawOxygenGauge();
         updateOxygenGauge(); // Pour gérer la fin du jeu
 
         // Gérer les bips sonores
         handleBeepSounds();
-    }, 1000); // Décrémenter chaque seconde
+
+        // Mettre à jour le score (60 - temps restant)
+        score = (60 - oxygenLevel).toFixed(1);
+        document.getElementById('score').textContent = score;
+    }, 100); // Décrémenter chaque 0.1 seconde
 }
 
 /**
@@ -134,12 +144,14 @@ function startOxygenDepletion() {
  */
 function handleBeepSounds() {
     if (oxygenLevel > 10) {
-        if (oxygenLevel % 10 === 0) {
+        if (Math.floor(oxygenLevel) % 10 === 0 && oxygenLevel % 1 === 0) {
             beepSound.play();
         }
     } else if (oxygenLevel <= 10 && oxygenLevel > 0) {
         // Jouer le bip chaque seconde
-        beepSound.play();
+        if (Math.floor(oxygenLevel) === oxygenLevel) {
+            beepSound.play();
+        }
     }
 }
 
@@ -157,7 +169,7 @@ function stopOxygenDepletion() {
 function updateOxygenGauge() {
     // Vérifier si l'oxygène est épuisé
     if (oxygenLevel <= 0) {
-        endGame(false); // Passer un paramètre pour indiquer l'échec
+        endGame(false, true); // Passer un paramètre pour indiquer Game Over
     }
 }
 
@@ -318,7 +330,7 @@ function generateWrongCalculations(target, correctCalculation) {
  * Fonction pour sélectionner un portail
  */
 function selectPortal(portal) {
-    const isCorrect = portal.dataset.isCorrect === 'true';
+    const isCorrect = parseFloat(portal.dataset.isCorrect) === 1;
     const calculation = portal.querySelector('.calculation').textContent;
 
     if(isCorrect) {
@@ -330,17 +342,10 @@ function selectPortal(portal) {
         // Ajouter la classe pour l'animation de rotation
         portal.classList.add('correct');
         
-        // Mettre à jour le score (par exemple, +10 points)
-        score += 10;
-        document.getElementById('score').textContent = score;
-
         // Incrémenter le streak
         currentStreak++;
         updateGauge();
 
-        // Déplacer le personnage à travers le portail avec animation de réduction
-        moveCharacterThroughPortal(portal);
-        
         // Vérifier si le streak requis est atteint
         if(currentStreak >= requiredStreak) {
             endGame(true); // Passer un paramètre pour indiquer la victoire
@@ -379,9 +384,9 @@ function selectPortal(portal) {
  */
 function startGame() {
     currentStreak = 0; // Réinitialisation du streak
-    score = 0;
+    score = 60.0; // Réinitialiser le score à 60.0
     oxygenLevel = 60; // Réinitialiser l'oxygène à 60 secondes
-    document.getElementById('score').textContent = score;
+    document.getElementById('score').textContent = score.toFixed(1);
     updateGauge();
     drawOxygenGauge(); // Mettre à jour la jauge d'oxygène
     startButton.style.display = "none";
@@ -421,7 +426,7 @@ function nextRound() {
 /**
  * Fonction pour terminer le jeu
  */
-function endGame(victory = false) {
+function endGame(victory = false, gameOver = false) {
     // Arrêter la déplétion de l'oxygène
     stopOxygenDepletion();
 
@@ -438,6 +443,11 @@ function endGame(victory = false) {
         // Mettre à jour la barre de progression à 100%
         progressFill.style.width = `100%`;
 
+        // Faire disparaître les portails
+        portals.forEach(portal => {
+            portal.style.display = 'none';
+        });
+
         // Faire apparaître la station spatiale
         spaceStation.style.display = 'block';
         spaceStation.classList.add('animate-station');
@@ -452,6 +462,15 @@ function endGame(victory = false) {
         setTimeout(() => {
             modal.style.display = "block";
         }, 5000); // 5 secondes pour laisser le temps à l'animation
+    } else if(gameOver) {
+        // Afficher la section Game Over
+        gameOverDiv.style.display = 'block';
+
+        // Jouer le son Game Over
+        gameOverSound.play();
+
+        // Optionnel : Arrêter tous les sons sauf Game Over
+        // Vous pouvez également ajouter des effets supplémentaires ici
     } else {
         messageBox.textContent = `Mission Terminée ! Ton score est de ${score} points ⭐`;
         messageBox.style.color = "#ff5722";
@@ -520,7 +539,7 @@ function saveScore() {
     }
 
     const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-    highScores.push({ name: playerName, score: score });
+    highScores.push({ name: playerName, score: parseFloat(score) });
 
     // Trier les scores par ordre décroissant
     highScores.sort((a, b) => b.score - a.score);
@@ -637,6 +656,34 @@ function initStarfield() {
     generateStars();
 }
 
+/**
+ * Fonction pour fermer la Game Over
+ */
+function closeGameOver() {
+    gameOverDiv.style.display = 'none';
+    // Réinitialiser le jeu
+    resetGame();
+}
+
+/**
+ * Fonction pour réinitialiser le jeu après Game Over
+ */
+function resetGame() {
+    currentStreak = 0;
+    score = 60.0;
+    oxygenLevel = 60;
+    document.getElementById('score').textContent = score.toFixed(1);
+    updateGauge();
+    drawOxygenGauge();
+    messageBox.textContent = "";
+    nextRound();
+
+    // Réinitialiser les animations et positions
+    spaceStation.style.display = 'none';
+    spaceStation.classList.remove('animate-station');
+    character.style.transform = "translate(0, 0) scale(1)";
+}
+
 /* -------------------- Gestion des Événements -------------------- */
 
 // Écouteurs d'événements
@@ -646,6 +693,9 @@ closeHighScoresButton.addEventListener('click', closeHighScores);
 closeModal.addEventListener('click', () => {
     modal.style.display = "none";
 });
+
+// Écouteur pour fermer la Game Over en cliquant dessus
+gameOverDiv.addEventListener('click', closeGameOver);
 
 // Fermer la modale en cliquant en dehors de celle-ci
 window.addEventListener('click', (event) => {
