@@ -325,8 +325,8 @@ function updateGauge() {
 
 // Fonction pour déplacer le personnage à travers le portail avec animation de réduction
 function moveCharacterThroughPortal(portal) {
-    // Ajouter la classe de rétrécissement
-    character.classList.add('shrink');
+    // Ajouter la classe de déplacement
+    character.classList.add('travel');
 
     // Déplacer le personnage
     const isMobile = window.innerWidth <= 600;
@@ -341,14 +341,14 @@ function moveCharacterThroughPortal(portal) {
         translateX = 200;
     }
 
-    // Appliquer la transformation avec translation
-    character.style.transform = `translate(${translateX}px, ${translateY}px) scale(0.5)`;
+    // Appliquer la transformation avec translation et réduction de la taille
+    character.style.transform = `translate(${translateX}px, ${translateY}px) scale(0.2)`;
 
     // Après l'animation, réinitialiser la transformation et la taille
     setTimeout(() => {
         character.style.transition = "transform 0.5s ease-in-out";
         character.style.transform = "translate(0, 0) scale(1)";
-        character.classList.remove('shrink');
+        character.classList.remove('travel');
     }, 1000); // Durée de l'animation
 }
 
