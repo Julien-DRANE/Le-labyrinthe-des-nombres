@@ -52,37 +52,6 @@ body {
     height: auto;
 }
 
-/* Autres styles existants... */
-
-/* style.css */
-
-/* Style Global */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    background-color: #000;
-    color: #fff;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-    overflow: hidden; /* Empêche les barres de défilement causées par le fond étoilé */
-}
-
-/* Fond étoilé */
-.starfield {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%; /* Étendre sur toute la hauteur */
-    background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
-    overflow: hidden;
-    z-index: -1; /* Place le fond derrière tous les autres éléments */
-    animation: zoomIn 60s linear infinite;
-}
-
 /* Animation de scintillement des étoiles */
 @keyframes twinkle {
     0%, 100% { opacity: 0.8; }
@@ -314,36 +283,6 @@ footer {
     margin-bottom: 10px;
 }
 
-.gauge-container {
-    width: 150px; /* Réduction de la taille pour mobile */
-    height: 15px; /* Réduction de la taille pour mobile */
-    background-color: #444;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.gauge {
-    width: 100%;
-    height: 100%;
-    background-color: #555;
-    border-radius: 10px;
-    position: relative;
-}
-
-.gauge-fill {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, yellow, blue, green); /* Dégradé du jaune au vert via le bleu */
-    transition: width 0.5s ease;
-}
-
-.gauge-label {
-    margin-top: 5px;
-    font-size: 12px; /* Réduction de la taille pour mobile */
-    color: #ffffff;
-    text-align: center;
-}
-
 .message-box {
     font-size: 1em; /* Réduction de la taille pour mobile */
     margin-top: 10px;
@@ -392,6 +331,10 @@ footer {
 
     .gauge-label {
         font-size: 12px;
+    }
+
+    .space-station {
+        width: 200px;
     }
 
     .character {
@@ -448,6 +391,15 @@ footer {
         font-size: 10px;
     }
 
+    #oxygenCanvas {
+        width: 60px;
+        height: 60px;
+    }
+
+    .space-station {
+        width: 120px;
+    }
+
     .character {
         width: 80px; /* Réduction supplémentaire pour mobile */
         height: 80px;
@@ -478,7 +430,7 @@ footer {
         width: 80%; /* Largeur ajustée pour mobile */
     }
 
-    /* Assurer que la jauge de progression est visible et bien positionnée */
+    /* Assurer que la jauge de progression et d'oxygène sont visibles et bien positionnées */
     footer {
         padding-bottom: 20px; /* Ajout d'un padding en bas pour éviter le chevauchement */
     }
