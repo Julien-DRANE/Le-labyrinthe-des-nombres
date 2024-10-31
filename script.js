@@ -45,431 +45,6 @@ function generateCalculations() {
     const allCalculations = [...wrongCalculations, correctCalculation];
     
     // Shuffle les calculs
-    for (let i = allCalculations.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [allCalculations[i], allCalculations[j]] = [allCalculations[j], allCalculations[i]];
-    }
-
-    // Assigner les calculs aux portails
-    portals.forEach((portal, index) => {
-        portal.querySelector('.calculation').textContent = allCalculations[index].expression;
-        portal.dataset.answer = allCalculations[index].result;
-        portal.dataset.isCorrect = allCalculations[index].isCorrect;
-    });
-}
-
-// Fonction pour générer une calcul correcte
-function generateCorrectCalculation(target) {
-    // Choisir un opérateur aléatoire parmi +, -, *, /
-    const operators = ['+', '-', '*', '/'];
-    const operator = operators[Math.floor(Math.random() * operators.length)];
-    let num1, num2, expression, result;
-
-    switch(operator) {
-        case '+':
-            num1 = Math.floor(Math.random() * (target)) + 1;
-            num2 = target - num1;
-            expression = `${num1} + ${num2}`;
-            result = target;
-            break;
-        case '-':
-            num2 = Math.floor(Math.random() * (target)) + 1;
-            num1 = target + num2;
-            expression = `${num1} - ${num2}`;
-            result = target;
-            break;
-        case '*':
-            // Choisir un diviseur de target
-            const divisors = getDivisors(target);
-            if (divisors.length < 2) { // target est 1 ou un nombre premier
-                // Fallback à addition
-                num1 = Math.floor(Math.random() * (target)) + 1;
-                num2 = target - num1;
-                expression = `${num1} + ${num2}`;
-                result = target;
-            } else {
-                num2 = divisors[Math.floor(Math.random() * (divisors.length -1)) +1]; // exclure 1
-                num1 = target / num2;
-                expression = `${num1} * ${num2}`;
-                result = target;
-            }
-            break;
-        case '/':
-            // target doit être le résultat d'une division entière
-            num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
-            num1 = target * num2;
-            expression = `${num1} / ${num2}`;
-            result = target;
-            break;
-        default:
-            // Fallback
-            num1 = Math.floor(Math.random() * (target)) + 1;
-            num2 = target - num1;
-            expression = `${num1} + ${num2}`;
-            result = target;
-    }
-
-    return { expression, result, isCorrect: true };
-}
-
-// Fonction pour obtenir les diviseurs d'un nombre
-function getDivisors(n) {
-    let divisors = [];
-    for(let i=1; i<=Math.floor(n/2); i++) {
-        if(n % i === 0) divisors.push(i);
-    }
-    return divisors;
-}
-
-// Fonction pour générer des calculs incorrects
-function generateWrongCalculations(target, correctCalculation) {
-    const wrongCalculations = [];
-    const operators = ['+', '-', '*', '/'];
-
-    while(wrongCalculations.length < 2) {
-        const operator = operators[Math.floor(Math.random() * operators.length)];
-        let num1, num2, expression, result;
-
-        switch(operator) {
-            case '+':
-                num1 = Math.floor(Math.random() * (target)) + 1;
-                num2 = Math.floor(Math.random() * (target)) + 1;
-                result = num1 + num2;
-                expression = `${num1} + ${num2}`;
-                break;
-            case '-':
-                num1 = Math.floor(Math.random() * (target * 2)) + 1;
-                num2 = Math.floor(Math.random() * (num1)) + 1;
-                result = num1 - num2;
-                expression = `${num1} - ${num2}`;
-                break;
-            case '*':
-                num1 = Math.floor(Math.random() * 20) + 1;
-                num2 = Math.floor(Math.random() * 20) + 1;
-                result = num1 * num2;
-                expression = `${num1} * ${num2}`;
-                break;
-            case '/':
-                num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
-                num1 = Math.floor(Math.random() * (target * num2 * 2)) + 1;
-                result = Math.floor(num1 / num2);
-                expression = `${num1} / ${num2}`;
-                break;
-            default:
-                num1 = Math.floor(Math.random() * (target)) + 1;
-                num2 = Math.floor(Math.random() * (target)) + 1;
-                result = num1 + num2;
-                expression = `${num1} + ${num2}`;
-        }
-
-        // Assurer que le calcul incorrect ne soit pas égal à la cible et différent du calcul correct
-        if(result !== target && expression !== correctCalculation.expression) {
-            wrongCalculations.push({ expression, result, isCorrect: false });
-        }
-    }
-
-    return wrongCalculations;
-}
-
-// Fonction pour sélectionner une porte
-function selectPortal(portal) {
-    const isCorrect = portal.dataset.isCorrect === 'true';
-    const calculation = portal.querySelector('.calculation').textContent;
-
-    if(isCorrect) {
-        // Jouer le son correct
-        correctSound.play();
-        messageBox.textContent = `Bravo ! ${calculation} = ${targetNumber}.`;
-        messageBox.style.color = "#00ff99";
-        
-        // Ajouter la classe pour l'animation de rotation
-        portal.classList.add('correct');
-        
-        // Mettre à jour le score (par exemple, +10 points)
-        score += 10;
-        scoreDisplay.textContent = score;
-
-        // Déplacer le personnage à travers le portail
-        moveCharacterThroughPortal(portal);
-
-        // Générer une nouvelle cible et de nouveaux calculs après un court délai
-        setTimeout(() => {
-            nextRound();
-        }, 1500); // 1.5 secondes pour voir l'animation
-    } else {
-        // Jouer le son incorrect
-        wrongSound.play();
-        messageBox.textContent = `Mauvaise réponse, réessaie !`;
-        messageBox.style.color = "#ff5722";
-
-        // Ajouter l'animation de secousse
-        portal.classList.add('wrong');
-        setTimeout(() => {
-            portal.classList.remove('wrong');
-        }, 500);
-    }
-}
-
-// Fonction pour démarrer le jeu
-function startGame() {
-    currentQuestion = 0;
-    score = 0;
-    scoreDisplay.textContent = score;
-    updateGauge();
-    startButton.style.display = "none";
-    messageBox.textContent = "";
-    nextRound();
-    // Démarrer le son d'ambiance
-    spaceshipSound.volume = 0.2; // Faible volume
-    spaceshipSound.play();
-}
-
-// Fonction pour passer au prochain tour
-function nextRound() {
-    if(currentQuestion >= maxQuestions) {
-        endGame();
-        return;
-    }
-
-    currentQuestion++;
-    generateTargetNumber();
-    generateCalculations();
-    
-    // Réinitialiser les animations des portails
-    portals.forEach(portal => {
-        portal.classList.remove('correct');
-    });
-
-    // Réinitialiser le message
-    messageBox.textContent = "";
-    messageBox.style.color = "#ff5722";
-}
-
-// Fonction pour terminer le jeu
-function endGame() {
-    submitButton.style.display = "none";
-    messageBox.textContent = `Mission Accomplie ! Ton score est de ${score} points 🎉`;
-    messageBox.style.color = "#00ff99";
-    // Arrêter le son d'ambiance
-    spaceshipSound.pause();
-    // Afficher la fenêtre modale pour entrer le nom
-    modal.style.display = "block";
-}
-
-// Fonction pour enregistrer le score
-function saveScore() {
-    const playerName = playerNameInput.value.trim();
-    if(playerName === "") {
-        alert("Veuillez entrer un nom.");
-        return;
-    }
-
-    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-    highScores.push({ name: playerName, score: score });
-
-    // Trier les scores par ordre décroissant
-    highScores.sort((a, b) => b.score - a.score);
-
-    // Limiter le tableau à 10 meilleurs scores
-    if(highScores.length > 10) {
-        highScores.pop();
-    }
-
-    localStorage.setItem('highScores', JSON.stringify(highScores));
-
-    // Fermer la modale et afficher le tableau des scores
-    modal.style.display = "none";
-    displayHighScores();
-}
-
-// Fonction pour afficher le tableau des scores
-function displayHighScores() {
-    highScoresBody.innerHTML = "";
-    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-
-    highScores.forEach(scoreEntry => {
-        const row = document.createElement('tr');
-        const nameCell = document.createElement('td');
-        const scoreCell = document.createElement('td');
-
-        nameCell.textContent = scoreEntry.name;
-        scoreCell.textContent = scoreEntry.score;
-
-        row.appendChild(nameCell);
-        row.appendChild(scoreCell);
-        highScoresBody.appendChild(row);
-    });
-
-    highScoresDiv.style.display = "block";
-}
-
-// Fonction pour fermer le tableau des scores
-function closeHighScores() {
-    highScoresDiv.style.display = "none";
-    // Réinitialiser le jeu
-    startButton.style.display = "inline";
-    startButton.textContent = "Rejouer la Mission";
-}
-
-// Fonction pour mettre à jour la jauge horizontale
-function updateGauge() {
-    const progress = (currentQuestion / maxQuestions) * 100;
-    gaugeFill.style.width = `${progress}%`;
-}
-
-// Fonction pour déplacer le personnage à travers le portail
-function moveCharacterThroughPortal(portal) {
-    portal.classList.add('correct');
-    const portalRect = portal.getBoundingClientRect();
-    const characterRect = character.getBoundingClientRect();
-
-    // Calculer la position de destination en fonction de l'orientation
-    const isMobile = window.innerWidth <= 600;
-    let destinationX, destinationY;
-
-    if(isMobile) {
-        // Sur mobile, avancer verticalement
-        destinationX = "50%";
-        destinationY = "100px"; // Positionnement en bas
-    } else {
-        // Sur desktop/tablette, avancer horizontalement
-        destinationX = `${portalRect.left + (portalRect.width / 2) - (characterRect.width / 2)}px`;
-        destinationY = "-60px"; // Position original
-    }
-
-    // Appliquer la transformation
-    character.style.transition = "left 1s ease-in-out, top 1s ease-in-out";
-    character.style.left = destinationX;
-    character.style.top = destinationY;
-
-    // Optionnel: Réinitialiser la position après l'animation
-    setTimeout(() => {
-        // Recentrer le personnage
-        character.style.left = "50%";
-        character.style.top = "-60px";
-    }, 1000);
-}
-
-// Fonction pour générer une calcul correcte
-function generateCorrectCalculation(target) {
-    // Choisir un opérateur aléatoire parmi +, -, *, /
-    const operators = ['+', '-', '*', '/'];
-    const operator = operators[Math.floor(Math.random() * operators.length)];
-    let num1, num2, expression, result;
-
-    switch(operator) {
-        case '+':
-            num1 = Math.floor(Math.random() * (target)) + 1;
-            num2 = target - num1;
-            expression = `${num1} + ${num2}`;
-            result = target;
-            break;
-        case '-':
-            num2 = Math.floor(Math.random() * (target)) + 1;
-            num1 = target + num2;
-            expression = `${num1} - ${num2}`;
-            result = target;
-            break;
-        case '*':
-            // Choisir un diviseur de target
-            const divisors = getDivisors(target);
-            if (divisors.length < 2) { // target est 1 ou un nombre premier
-                // Fallback à addition
-                num1 = Math.floor(Math.random() * (target)) + 1;
-                num2 = target - num1;
-                expression = `${num1} + ${num2}`;
-                result = target;
-            } else {
-                num2 = divisors[Math.floor(Math.random() * (divisors.length -1)) +1]; // exclure 1
-                num1 = target / num2;
-                expression = `${num1} * ${num2}`;
-                result = target;
-            }
-            break;
-        case '/':
-            // target doit être le résultat d'une division entière
-            num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
-            num1 = target * num2;
-            expression = `${num1} / ${num2}`;
-            result = target;
-            break;
-        default:
-            // Fallback
-            num1 = Math.floor(Math.random() * (target)) + 1;
-            num2 = target - num1;
-            expression = `${num1} + ${num2}`;
-            result = target;
-    }
-
-    return { expression, result, isCorrect: true };
-}
-
-// Fonction pour obtenir les diviseurs d'un nombre
-function getDivisors(n) {
-    let divisors = [];
-    for(let i=1; i<=Math.floor(n/2); i++) {
-        if(n % i === 0) divisors.push(i);
-    }
-    return divisors;
-}
-
-// Fonction pour générer des calculs incorrects
-function generateWrongCalculations(target, correctCalculation) {
-    const wrongCalculations = [];
-    const operators = ['+', '-', '*', '/'];
-
-    while(wrongCalculations.length < 2) {
-        const operator = operators[Math.floor(Math.random() * operators.length)];
-        let num1, num2, expression, result;
-
-        switch(operator) {
-            case '+':
-                num1 = Math.floor(Math.random() * (target)) + 1;
-                num2 = Math.floor(Math.random() * (target)) + 1;
-                result = num1 + num2;
-                expression = `${num1} + ${num2}`;
-                break;
-            case '-':
-                num1 = Math.floor(Math.random() * (target * 2)) + 1;
-                num2 = Math.floor(Math.random() * (num1)) + 1;
-                result = num1 - num2;
-                expression = `${num1} - ${num2}`;
-                break;
-            case '*':
-                num1 = Math.floor(Math.random() * 20) + 1;
-                num2 = Math.floor(Math.random() * 20) + 1;
-                result = num1 * num2;
-                expression = `${num1} * ${num2}`;
-                break;
-            case '/':
-                num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
-                num1 = Math.floor(Math.random() * (target * num2 * 2)) + 1;
-                result = Math.floor(num1 / num2);
-                expression = `${num1} / ${num2}`;
-                break;
-            default:
-                num1 = Math.floor(Math.random() * (target)) + 1;
-                num2 = Math.floor(Math.random() * (target)) + 1;
-                result = num1 + num2;
-                expression = `${num1} + ${num2}`;
-        }
-
-        // Assurer que le calcul incorrect ne soit pas égal à la cible et différent du calcul correct
-        if(result !== target && expression !== correctCalculation.expression) {
-            wrongCalculations.push({ expression, result, isCorrect: false });
-        }
-    }
-
-    return wrongCalculations;
-}
-
-// Fonction pour générer des calculs
-function generateCalculations() {
-    const correctCalculation = generateCorrectCalculation(targetNumber);
-    const wrongCalculations = generateWrongCalculations(targetNumber, correctCalculation);
-    const allCalculations = [...wrongCalculations, correctCalculation];
-    
-    // Shuffle les calculs
     for(let i = allCalculations.length -1; i > 0; i--){
         const j = Math.floor(Math.random() * (i +1));
         [allCalculations[i], allCalculations[j]] = [allCalculations[j], allCalculations[i]];
@@ -483,7 +58,120 @@ function generateCalculations() {
     });
 }
 
-// Fonction pour sélectionner une porte
+// Fonction pour générer une calcul correcte
+function generateCorrectCalculation(target) {
+    // Choisir un opérateur aléatoire parmi +, -, *, /
+    const operators = ['+', '-', '*', '/'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    let num1, num2, expression, result;
+
+    switch(operator) {
+        case '+':
+            num1 = Math.floor(Math.random() * (target)) + 1;
+            num2 = target - num1;
+            expression = `${num1} + ${num2}`;
+            result = target;
+            break;
+        case '-':
+            num2 = Math.floor(Math.random() * (target)) + 1;
+            num1 = target + num2;
+            expression = `${num1} - ${num2}`;
+            result = target;
+            break;
+        case '*':
+            // Choisir un diviseur de target
+            const divisors = getDivisors(target);
+            if (divisors.length < 2) { // target est 1 ou un nombre premier
+                // Fallback à addition
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = target - num1;
+                expression = `${num1} + ${num2}`;
+                result = target;
+            } else {
+                num2 = divisors[Math.floor(Math.random() * (divisors.length -1)) +1]; // exclure 1
+                num1 = target / num2;
+                expression = `${num1} * ${num2}`;
+                result = target;
+            }
+            break;
+        case '/':
+            // target doit être le résultat d'une division entière
+            num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
+            num1 = target * num2;
+            expression = `${num1} / ${num2}`;
+            result = target;
+            break;
+        default:
+            // Fallback
+            num1 = Math.floor(Math.random() * (target)) + 1;
+            num2 = target - num1;
+            expression = `${num1} + ${num2}`;
+            result = target;
+    }
+
+    return { expression, result, isCorrect: true };
+}
+
+// Fonction pour obtenir les diviseurs d'un nombre
+function getDivisors(n) {
+    let divisors = [];
+    for(let i=1; i<=Math.floor(n/2); i++) {
+        if(n % i === 0) divisors.push(i);
+    }
+    return divisors;
+}
+
+// Fonction pour générer des calculs incorrects
+function generateWrongCalculations(target, correctCalculation) {
+    const wrongCalculations = [];
+    const operators = ['+', '-', '*', '/'];
+
+    while(wrongCalculations.length < 2) {
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+        let num1, num2, expression, result;
+
+        switch(operator) {
+            case '+':
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = Math.floor(Math.random() * (target)) + 1;
+                result = num1 + num2;
+                expression = `${num1} + ${num2}`;
+                break;
+            case '-':
+                num1 = Math.floor(Math.random() * (target * 2)) + 1;
+                num2 = Math.floor(Math.random() * (num1)) + 1;
+                result = num1 - num2;
+                expression = `${num1} - ${num2}`;
+                break;
+            case '*':
+                num1 = Math.floor(Math.random() * 20) + 1;
+                num2 = Math.floor(Math.random() * 20) + 1;
+                result = num1 * num2;
+                expression = `${num1} * ${num2}`;
+                break;
+            case '/':
+                num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
+                num1 = Math.floor(Math.random() * (target * num2 * 2)) + 1;
+                result = Math.floor(num1 / num2);
+                expression = `${num1} / ${num2}`;
+                break;
+            default:
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = Math.floor(Math.random() * (target)) + 1;
+                result = num1 + num2;
+                expression = `${num1} + ${num2}`;
+        }
+
+        // Assurer que le calcul incorrect ne soit pas égal à la cible et différent du calcul correct
+        if(result !== target && expression !== correctCalculation.expression) {
+            wrongCalculations.push({ expression, result, isCorrect: false });
+        }
+    }
+
+    return wrongCalculations;
+}
+
+// Fonction pour sélectionner un portail
 function selectPortal(portal) {
     const isCorrect = portal.dataset.isCorrect === 'true';
     const calculation = portal.querySelector('.calculation').textContent;
@@ -630,35 +318,24 @@ function updateGauge() {
 // Fonction pour déplacer le personnage à travers le portail
 function moveCharacterThroughPortal(portal) {
     portal.classList.add('correct');
-    const portalRect = portal.getBoundingClientRect();
-    const characterRect = character.getBoundingClientRect();
-
-    // Calculer la position de destination en fonction de l'orientation
     const isMobile = window.innerWidth <= 600;
-    let destinationX, destinationY;
 
     if(isMobile) {
         // Layout vertical
-        // Positionner le personnage au-dessus de la porte sélectionnée
-        destinationX = "50%";
-        destinationY = "100px"; // Positionnement en bas
+        // Déplacer le personnage vers le bas
+        character.style.transition = "transform 1s ease-in-out";
+        character.style.transform = "translateY(100px)";
     } else {
         // Layout horizontal
-        const doorCenterX = portal.offsetLeft + portal.offsetWidth / 2;
-        destinationX = `${doorCenterX}px`;
-        destinationY = "-60px"; // Position original
+        // Déplacer le personnage vers la droite
+        character.style.transition = "transform 1s ease-in-out";
+        character.style.transform = "translateX(200px)";
     }
 
-    // Appliquer la transformation
-    character.style.transition = "left 1s ease-in-out, top 1s ease-in-out";
-    character.style.left = destinationX;
-    character.style.top = destinationY;
-
-    // Optionnel: Réinitialiser la position après l'animation
+    // Réinitialiser la position après l'animation
     setTimeout(() => {
-        // Recentrer le personnage
-        character.style.left = "50%";
-        character.style.top = "-60px";
+        character.style.transition = "transform 0.5s ease-in-out";
+        character.style.transform = "translate(0, 0)";
     }, 1000);
 }
 
