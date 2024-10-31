@@ -152,21 +152,19 @@ function startOxygenDepletion() {
  */
 function handleBeepSounds() {
     if (oxygenLevel > 10) {
+        // Jouer le son beep toutes les 10 secondes
         if (Math.floor(oxygenLevel) % 10 === 0 && oxygenLevel % 1 === 0) {
             beepSound.play();
         }
     } else if (oxygenLevel <= 10 && oxygenLevel > 0) {
-        // Jouer le bip chaque seconde
-        if (Math.floor(oxygenLevel) === oxygenLevel) {
-            beepSound.play();
-        }
-        // Jouer stress.mp3 chaque seconde
+        // Jouer le son stress.mp3 chaque seconde dans les 10 dernières secondes sans beepSound
         if (Math.floor(oxygenLevel) === oxygenLevel) {
             const stressSound = document.getElementById('stressSound');
             stressSound.play();
         }
     }
 }
+
 
 
 /**
