@@ -1,13 +1,12 @@
 // script.js
 
 // Sélection des éléments
-const doors = [
-    document.getElementById('question1'),
-    document.getElementById('question2'),
-    document.getElementById('question3')
+const portals = [
+    document.getElementById('portal1'),
+    document.getElementById('portal2'),
+    document.getElementById('portal3')
 ];
-const answerInput = document.getElementById('answer');
-const submitButton = document.getElementById('submit');
+const targetNumberDisplay = document.getElementById('targetNumber');
 const startButton = document.getElementById('start');
 const messageBox = document.getElementById('message');
 const character = document.getElementById('character');
@@ -29,229 +28,226 @@ const closeHighScoresButton = document.getElementById('closeHighScores');
 
 let currentQuestion = 0;
 let score = 0;
-let selectedDoor = null;
-let difficulty = 1;
+let targetNumber = 0;
 const maxQuestions = 10;
 
-// Fonction pour calculer la réponse sans utiliser eval
-function calculateAnswer(num1, num2, operator) {
+// Fonction pour générer un nombre cible
+function generateTargetNumber() {
+    // Par exemple, entre 10 et 100
+    targetNumber = Math.floor(Math.random() * 91) + 10;
+    targetNumberDisplay.textContent = targetNumber;
+}
+
+// Fonction pour générer des propositions de calculs
+function generateCalculations() {
+    const correctCalculation = generateCorrectCalculation(targetNumber);
+    const wrongCalculations = generateWrongCalculations(targetNumber, correctCalculation);
+    const allCalculations = [...wrongCalculations, correctCalculation];
+    
+    // Shuffle les calculs
+    for (let i = allCalculations.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [allCalculations[i], allCalculations[j]] = [allCalculations[j], allCalculations[i]];
+    }
+
+    // Assigner les calculs aux portails
+    portals.forEach((portal, index) => {
+        portal.querySelector('.calculation').textContent = allCalculations[index].expression;
+        portal.dataset.answer = allCalculations[index].result;
+        portal.dataset.isCorrect = allCalculations[index].isCorrect;
+    });
+}
+
+// Fonction pour générer une calcul correcte
+function generateCorrectCalculation(target) {
+    // Choisir un opérateur aléatoire parmi +, -, *, /
+    const operators = ['+', '-', '*', '/'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    let num1, num2, expression, result;
+
     switch(operator) {
         case '+':
-            return num1 + num2;
+            num1 = Math.floor(Math.random() * (target)) + 1;
+            num2 = target - num1;
+            expression = `${num1} + ${num2}`;
+            result = target;
+            break;
         case '-':
-            return num1 - num2;
+            num2 = Math.floor(Math.random() * (target)) + 1;
+            num1 = target + num2;
+            expression = `${num1} - ${num2}`;
+            result = target;
+            break;
         case '*':
-            return num1 * num2;
+            // Choisir un diviseur de target
+            const divisors = getDivisors(target);
+            if (divisors.length < 2) { // target est 1 ou un nombre premier
+                // Fallback à addition
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = target - num1;
+                expression = `${num1} + ${num2}`;
+                result = target;
+            } else {
+                num2 = divisors[Math.floor(Math.random() * (divisors.length -1)) +1]; // exclure 1
+                num1 = target / num2;
+                expression = `${num1} * ${num2}`;
+                result = target;
+            }
+            break;
         case '/':
-            return Math.floor(num1 / num2); // Assure un entier
+            // target doit être le résultat d'une division entière
+            num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
+            num1 = target * num2;
+            expression = `${num1} / ${num2}`;
+            result = target;
+            break;
         default:
-            return null;
+            // Fallback
+            num1 = Math.floor(Math.random() * (target)) + 1;
+            num2 = target - num1;
+            expression = `${num1} + ${num2}`;
+            result = target;
     }
+
+    return { expression, result, isCorrect: true };
 }
 
-// Fonction pour générer 3 opérateurs uniques
-function getUniqueOperators() {
+// Fonction pour obtenir les diviseurs d'un nombre
+function getDivisors(n) {
+    let divisors = [];
+    for(let i=1; i<=Math.floor(n/2); i++) {
+        if(n % i === 0) divisors.push(i);
+    }
+    return divisors;
+}
+
+// Fonction pour générer des calculs incorrects
+function generateWrongCalculations(target, correctCalculation) {
+    const wrongCalculations = [];
     const operators = ['+', '-', '*', '/'];
-    // Shuffle les opérateurs
-    for (let i = operators.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [operators[i], operators[j]] = [operators[j], operators[i]];
-    }
-    return operators.slice(0, 3);
-}
 
-// Fonction pour générer des questions pour chaque porte
-function generateQuestions() {
-    const selectedOperators = getUniqueOperators();
-    doors.forEach((door, index) => {
-        const operator = selectedOperators[index];
-        let num1 = Math.floor(Math.random() * (10 * difficulty)) + 1;
-        let num2 = Math.floor(Math.random() * (10 * difficulty)) + 1;
+    while(wrongCalculations.length < 2) {
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+        let num1, num2, expression, result;
 
-        if (operator === '/' && num2 === 0) num2 = 1; // Éviter la division par zéro
-        if (operator === '/' && num1 % num2 !== 0) {
-            num1 = num1 * num2;
+        switch(operator) {
+            case '+':
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = Math.floor(Math.random() * (target)) + 1;
+                result = num1 + num2;
+                expression = `${num1} + ${num2}`;
+                break;
+            case '-':
+                num1 = Math.floor(Math.random() * (target * 2)) + 1;
+                num2 = Math.floor(Math.random() * (num1)) + 1;
+                result = num1 - num2;
+                expression = `${num1} - ${num2}`;
+                break;
+            case '*':
+                num1 = Math.floor(Math.random() * 20) + 1;
+                num2 = Math.floor(Math.random() * 20) + 1;
+                result = num1 * num2;
+                expression = `${num1} * ${num2}`;
+                break;
+            case '/':
+                num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
+                num1 = Math.floor(Math.random() * (target * num2 * 2)) + 1;
+                result = Math.floor(num1 / num2);
+                expression = `${num1} / ${num2}`;
+                break;
+            default:
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = Math.floor(Math.random() * (target)) + 1;
+                result = num1 + num2;
+                expression = `${num1} + ${num2}`;
         }
 
-        let answer = calculateAnswer(num1, num2, operator);
-        let question = `${num1} ${operator} ${num2}`;
+        // Assurer que le calcul incorrect ne soit pas égal à la cible et différent du calcul correct
+        if(result !== target && expression !== correctCalculation.expression) {
+            wrongCalculations.push({ expression, result, isCorrect: false });
+        }
+    }
 
-        const questionText = door.querySelector('.question-text');
-        questionText.textContent = question;
-        door.dataset.answer = answer;
-        door.dataset.operator = operator;
-    });
-
-    // Déplacer le personnage devant une porte aléatoire
-    const newSelectedDoor = Math.floor(Math.random() * doors.length);
-    selectDoor(newSelectedDoor);
+    return wrongCalculations;
 }
 
 // Fonction pour sélectionner une porte
-function selectDoor(doorIndex) {
-    if (selectedDoor !== null && selectedDoor !== doorIndex) {
-        // Jouer le son du jetpack lorsqu'on change de porte
-        jetpackSound.currentTime = 0;
-        jetpackSound.play();
-    }
+function selectPortal(portal) {
+    const isCorrect = portal.dataset.isCorrect === 'true';
+    const calculation = portal.querySelector('.calculation').textContent;
 
-    selectedDoor = doorIndex;
-    moveCharacterTo(doorIndex);
-    // Mettre en évidence la porte sélectionnée
-    doors.forEach((door, index) => {
-        if (index === doorIndex) {
-            door.style.border = '4px solid #00ff99'; // Bordure verte pour la porte sélectionnée
-        } else {
-            door.style.border = '4px solid #ffffff'; // Bordure blanche pour les autres portes
-        }
-    });
+    if(isCorrect) {
+        // Jouer le son correct
+        correctSound.play();
+        messageBox.textContent = `Bravo ! ${calculation} = ${targetNumber}.`;
+        messageBox.style.color = "#00ff99";
+        
+        // Ajouter la classe pour l'animation de rotation
+        portal.classList.add('correct');
+        
+        // Mettre à jour le score (par exemple, +10 points)
+        score += 10;
+        scoreDisplay.textContent = score;
+
+        // Déplacer le personnage à travers le portail
+        moveCharacterThroughPortal(portal);
+
+        // Générer une nouvelle cible et de nouveaux calculs après un court délai
+        setTimeout(() => {
+            nextRound();
+        }, 1500); // 1.5 secondes pour voir l'animation
+    } else {
+        // Jouer le son incorrect
+        wrongSound.play();
+        messageBox.textContent = `Mauvaise réponse, réessaie !`;
+        messageBox.style.color = "#ff5722";
+
+        // Ajouter l'animation de secousse
+        portal.classList.add('wrong');
+        setTimeout(() => {
+            portal.classList.remove('wrong');
+        }, 500);
+    }
 }
 
 // Fonction pour démarrer le jeu
 function startGame() {
     currentQuestion = 0;
     score = 0;
-    difficulty = 1;
     scoreDisplay.textContent = score;
     updateGauge();
-    nextRound();
     startButton.style.display = "none";
-    submitButton.style.display = "inline";
-    answerInput.style.display = "inline-block";
-    answerInput.value = "";
-    answerInput.focus();
     messageBox.textContent = "";
-    selectedDoor = null;
-    // Réinitialiser les portes
-    doors.forEach(door => {
-        door.style.border = '4px solid #ffffff';
-        door.classList.remove('rotate');
-    });
-    // Repositionner le personnage en haut au centre
-    character.style.left = "50%";
-    character.style.top = "-60px";
+    nextRound();
     // Démarrer le son d'ambiance
     spaceshipSound.volume = 0.2; // Faible volume
     spaceshipSound.play();
 }
 
-// Fonction pour le prochain tour de questions
+// Fonction pour passer au prochain tour
 function nextRound() {
-    if (currentQuestion >= maxQuestions) {
+    if(currentQuestion >= maxQuestions) {
         endGame();
         return;
     }
-    generateQuestions();
-    answerInput.value = "";
-    answerInput.focus();
-    selectedDoor = null;
-    // Réinitialiser les styles des portes
-    doors.forEach(door => {
-        door.style.border = '4px solid #ffffff';
-        door.classList.remove('rotate');
+
+    currentQuestion++;
+    generateTargetNumber();
+    generateCalculations();
+    
+    // Réinitialiser les animations des portails
+    portals.forEach(portal => {
+        portal.classList.remove('correct');
     });
-    // Repositionner le personnage en haut au centre
-    character.style.left = "50%";
-    character.style.top = "-60px";
-}
 
-// Fonction pour vérifier la réponse
-function checkAnswer() {
-    if (selectedDoor === null) {
-        messageBox.textContent = "Veuillez sélectionner une porte.";
-        messageBox.style.color = "#ff5722";
-        return;
-    }
-
-    const userAnswer = parseInt(answerInput.value, 10);
-
-    if (isNaN(userAnswer)) {
-        messageBox.textContent = "Veuillez entrer un nombre valide.";
-        messageBox.style.color = "#ff5722";
-        return;
-    }
-
-    const door = doors[selectedDoor];
-    const correctAnswer = parseInt(door.dataset.answer, 10);
-
-    if (userAnswer === correctAnswer) {
-        currentQuestion++;
-        // Attribuer des points selon l'opération
-        let points = 0;
-        const operator = door.dataset.operator;
-        switch(operator) {
-            case '+':
-                points = 2;
-                break;
-            case '-':
-                points = 3;
-                break;
-            case '*':
-                points = 4;
-                break;
-            case '/':
-                points = 6;
-                break;
-            default:
-                points = 0;
-        }
-        score += points;
-        scoreDisplay.textContent = score;
-        correctSound.play();
-        messageBox.textContent = `Bravo ! +${points} points.`;
-        messageBox.style.color = "#00ff99";
-        // Animer la rotation de la porte
-        door.classList.add('rotate');
-
-        // Mettre à jour la jauge
-        updateGauge();
-
-        // Augmenter la difficulté progressivement
-        if (currentQuestion % 3 === 0 && difficulty < 5) { // Limite de difficulté pour éviter des nombres trop grands
-            difficulty++;
-        }
-
-        nextRound();
-    } else {
-        // Appliquer l'animation de secousse
-        doors.forEach(door => door.classList.add('shake'));
-        setTimeout(() => {
-            doors.forEach(door => door.classList.remove('shake'));
-        }, 500);
-
-        wrongSound.play();
-        messageBox.textContent = "Mauvaise réponse, réessaie !";
-        messageBox.style.color = "#ff5722";
-    }
-}
-
-// Fonction de déplacement du personnage vers une porte spécifique
-function moveCharacterTo(doorIndex) {
-    const door = doors[doorIndex];
-    const doorRect = door.getBoundingClientRect();
-    const containerRect = door.parentElement.getBoundingClientRect();
-    const isMobile = window.innerWidth <= 600; // Détecter si l'écran est mobile
-
-    if (isMobile) {
-        // Layout vertical
-        // Positionner le personnage au-dessus de la porte sélectionnée
-        const topPosition = door.offsetTop - character.offsetHeight - 10; // 10px d'espace
-        character.style.top = `${topPosition}px`;
-        character.style.left = "50%"; // Centré horizontalement
-    } else {
-        // Layout horizontal
-        const doorCenterX = door.offsetLeft + door.offsetWidth / 2;
-        const containerCenterX = containerRect.width / 2;
-        const leftPosition = doorCenterX - (character.offsetWidth / 2);
-        character.style.left = `${leftPosition}px`;
-        character.style.top = "-60px"; // Assure que le personnage est en haut
-    }
+    // Réinitialiser le message
+    messageBox.textContent = "";
+    messageBox.style.color = "#ff5722";
 }
 
 // Fonction pour terminer le jeu
 function endGame() {
     submitButton.style.display = "none";
-    answerInput.style.display = "none";
     messageBox.textContent = `Mission Accomplie ! Ton score est de ${score} points 🎉`;
     messageBox.style.color = "#00ff99";
     // Arrêter le son d'ambiance
@@ -263,7 +259,7 @@ function endGame() {
 // Fonction pour enregistrer le score
 function saveScore() {
     const playerName = playerNameInput.value.trim();
-    if (playerName === "") {
+    if(playerName === "") {
         alert("Veuillez entrer un nom.");
         return;
     }
@@ -275,7 +271,7 @@ function saveScore() {
     highScores.sort((a, b) => b.score - a.score);
 
     // Limiter le tableau à 10 meilleurs scores
-    if (highScores.length > 10) {
+    if(highScores.length > 10) {
         highScores.pop();
     }
 
@@ -321,12 +317,366 @@ function updateGauge() {
     gaugeFill.style.width = `${progress}%`;
 }
 
+// Fonction pour déplacer le personnage à travers le portail
+function moveCharacterThroughPortal(portal) {
+    portal.classList.add('correct');
+    const portalRect = portal.getBoundingClientRect();
+    const characterRect = character.getBoundingClientRect();
+
+    // Calculer la position de destination en fonction de l'orientation
+    const isMobile = window.innerWidth <= 600;
+    let destinationX, destinationY;
+
+    if(isMobile) {
+        // Sur mobile, avancer verticalement
+        destinationX = "50%";
+        destinationY = "100px"; // Positionnement en bas
+    } else {
+        // Sur desktop/tablette, avancer horizontalement
+        destinationX = `${portalRect.left + (portalRect.width / 2) - (characterRect.width / 2)}px`;
+        destinationY = "-60px"; // Position original
+    }
+
+    // Appliquer la transformation
+    character.style.transition = "left 1s ease-in-out, top 1s ease-in-out";
+    character.style.left = destinationX;
+    character.style.top = destinationY;
+
+    // Optionnel: Réinitialiser la position après l'animation
+    setTimeout(() => {
+        // Recentrer le personnage
+        character.style.left = "50%";
+        character.style.top = "-60px";
+    }, 1000);
+}
+
+// Fonction pour générer une calcul correcte
+function generateCorrectCalculation(target) {
+    // Choisir un opérateur aléatoire parmi +, -, *, /
+    const operators = ['+', '-', '*', '/'];
+    const operator = operators[Math.floor(Math.random() * operators.length)];
+    let num1, num2, expression, result;
+
+    switch(operator) {
+        case '+':
+            num1 = Math.floor(Math.random() * (target)) + 1;
+            num2 = target - num1;
+            expression = `${num1} + ${num2}`;
+            result = target;
+            break;
+        case '-':
+            num2 = Math.floor(Math.random() * (target)) + 1;
+            num1 = target + num2;
+            expression = `${num1} - ${num2}`;
+            result = target;
+            break;
+        case '*':
+            // Choisir un diviseur de target
+            const divisors = getDivisors(target);
+            if (divisors.length < 2) { // target est 1 ou un nombre premier
+                // Fallback à addition
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = target - num1;
+                expression = `${num1} + ${num2}`;
+                result = target;
+            } else {
+                num2 = divisors[Math.floor(Math.random() * (divisors.length -1)) +1]; // exclure 1
+                num1 = target / num2;
+                expression = `${num1} * ${num2}`;
+                result = target;
+            }
+            break;
+        case '/':
+            // target doit être le résultat d'une division entière
+            num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
+            num1 = target * num2;
+            expression = `${num1} / ${num2}`;
+            result = target;
+            break;
+        default:
+            // Fallback
+            num1 = Math.floor(Math.random() * (target)) + 1;
+            num2 = target - num1;
+            expression = `${num1} + ${num2}`;
+            result = target;
+    }
+
+    return { expression, result, isCorrect: true };
+}
+
+// Fonction pour obtenir les diviseurs d'un nombre
+function getDivisors(n) {
+    let divisors = [];
+    for(let i=1; i<=Math.floor(n/2); i++) {
+        if(n % i === 0) divisors.push(i);
+    }
+    return divisors;
+}
+
+// Fonction pour générer des calculs incorrects
+function generateWrongCalculations(target, correctCalculation) {
+    const wrongCalculations = [];
+    const operators = ['+', '-', '*', '/'];
+
+    while(wrongCalculations.length < 2) {
+        const operator = operators[Math.floor(Math.random() * operators.length)];
+        let num1, num2, expression, result;
+
+        switch(operator) {
+            case '+':
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = Math.floor(Math.random() * (target)) + 1;
+                result = num1 + num2;
+                expression = `${num1} + ${num2}`;
+                break;
+            case '-':
+                num1 = Math.floor(Math.random() * (target * 2)) + 1;
+                num2 = Math.floor(Math.random() * (num1)) + 1;
+                result = num1 - num2;
+                expression = `${num1} - ${num2}`;
+                break;
+            case '*':
+                num1 = Math.floor(Math.random() * 20) + 1;
+                num2 = Math.floor(Math.random() * 20) + 1;
+                result = num1 * num2;
+                expression = `${num1} * ${num2}`;
+                break;
+            case '/':
+                num2 = Math.floor(Math.random() * 9) + 1; // éviter num2 =0
+                num1 = Math.floor(Math.random() * (target * num2 * 2)) + 1;
+                result = Math.floor(num1 / num2);
+                expression = `${num1} / ${num2}`;
+                break;
+            default:
+                num1 = Math.floor(Math.random() * (target)) + 1;
+                num2 = Math.floor(Math.random() * (target)) + 1;
+                result = num1 + num2;
+                expression = `${num1} + ${num2}`;
+        }
+
+        // Assurer que le calcul incorrect ne soit pas égal à la cible et différent du calcul correct
+        if(result !== target && expression !== correctCalculation.expression) {
+            wrongCalculations.push({ expression, result, isCorrect: false });
+        }
+    }
+
+    return wrongCalculations;
+}
+
+// Fonction pour générer des calculs
+function generateCalculations() {
+    const correctCalculation = generateCorrectCalculation(targetNumber);
+    const wrongCalculations = generateWrongCalculations(targetNumber, correctCalculation);
+    const allCalculations = [...wrongCalculations, correctCalculation];
+    
+    // Shuffle les calculs
+    for(let i = allCalculations.length -1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i +1));
+        [allCalculations[i], allCalculations[j]] = [allCalculations[j], allCalculations[i]];
+    }
+
+    // Assigner les calculs aux portails
+    portals.forEach((portal, index) => {
+        portal.querySelector('.calculation').textContent = allCalculations[index].expression;
+        portal.dataset.answer = allCalculations[index].result;
+        portal.dataset.isCorrect = allCalculations[index].isCorrect;
+    });
+}
+
+// Fonction pour sélectionner une porte
+function selectPortal(portal) {
+    const isCorrect = portal.dataset.isCorrect === 'true';
+    const calculation = portal.querySelector('.calculation').textContent;
+
+    if(isCorrect) {
+        // Jouer le son correct
+        correctSound.play();
+        messageBox.textContent = `Bravo ! ${calculation} = ${targetNumber}.`;
+        messageBox.style.color = "#00ff99";
+        
+        // Ajouter la classe pour l'animation de rotation
+        portal.classList.add('correct');
+        
+        // Mettre à jour le score (par exemple, +10 points)
+        score += 10;
+        scoreDisplay.textContent = score;
+
+        // Déplacer le personnage à travers le portail
+        moveCharacterThroughPortal(portal);
+
+        // Générer une nouvelle cible et de nouveaux calculs après un court délai
+        setTimeout(() => {
+            nextRound();
+        }, 1500); // 1.5 secondes pour voir l'animation
+    } else {
+        // Jouer le son incorrect
+        wrongSound.play();
+        messageBox.textContent = `Mauvaise réponse, réessaie !`;
+        messageBox.style.color = "#ff5722";
+
+        // Ajouter l'animation de secousse
+        portal.classList.add('wrong');
+        setTimeout(() => {
+            portal.classList.remove('wrong');
+        }, 500);
+    }
+}
+
+// Fonction pour démarrer le jeu
+function startGame() {
+    currentQuestion = 0;
+    score = 0;
+    scoreDisplay.textContent = score;
+    updateGauge();
+    startButton.style.display = "none";
+    messageBox.textContent = "";
+    nextRound();
+    // Démarrer le son d'ambiance
+    spaceshipSound.volume = 0.2; // Faible volume
+    spaceshipSound.play();
+}
+
+// Fonction pour passer au prochain tour
+function nextRound() {
+    if(currentQuestion >= maxQuestions) {
+        endGame();
+        return;
+    }
+
+    generateTargetNumber();
+    generateCalculations();
+    
+    // Réinitialiser les animations des portails
+    portals.forEach(portal => {
+        portal.classList.remove('correct');
+    });
+
+    // Réinitialiser le message
+    messageBox.textContent = "";
+    messageBox.style.color = "#ff5722";
+}
+
+// Fonction pour terminer le jeu
+function endGame() {
+    messageBox.textContent = `Mission Accomplie ! Ton score est de ${score} points 🎉`;
+    messageBox.style.color = "#00ff99";
+    // Arrêter le son d'ambiance
+    spaceshipSound.pause();
+    // Afficher la fenêtre modale pour entrer le nom
+    modal.style.display = "block";
+}
+
+// Fonction pour enregistrer le score
+function saveScore() {
+    const playerName = playerNameInput.value.trim();
+    if(playerName === "") {
+        alert("Veuillez entrer un nom.");
+        return;
+    }
+
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+    highScores.push({ name: playerName, score: score });
+
+    // Trier les scores par ordre décroissant
+    highScores.sort((a, b) => b.score - a.score);
+
+    // Limiter le tableau à 10 meilleurs scores
+    if(highScores.length > 10) {
+        highScores.pop();
+    }
+
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+
+    // Fermer la modale et afficher le tableau des scores
+    modal.style.display = "none";
+    displayHighScores();
+}
+
+// Fonction pour afficher le tableau des scores
+function displayHighScores() {
+    highScoresBody.innerHTML = "";
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+
+    highScores.forEach(scoreEntry => {
+        const row = document.createElement('tr');
+        const nameCell = document.createElement('td');
+        const scoreCell = document.createElement('td');
+
+        nameCell.textContent = scoreEntry.name;
+        scoreCell.textContent = scoreEntry.score;
+
+        row.appendChild(nameCell);
+        row.appendChild(scoreCell);
+        highScoresBody.appendChild(row);
+    });
+
+    highScoresDiv.style.display = "block";
+}
+
+// Fonction pour fermer le tableau des scores
+function closeHighScores() {
+    highScoresDiv.style.display = "none";
+    // Réinitialiser le jeu
+    startButton.style.display = "inline";
+    startButton.textContent = "Rejouer la Mission";
+}
+
+// Fonction pour mettre à jour la jauge horizontale
+function updateGauge() {
+    const progress = (currentQuestion / maxQuestions) * 100;
+    gaugeFill.style.width = `${progress}%`;
+}
+
+// Fonction pour déplacer le personnage à travers le portail
+function moveCharacterThroughPortal(portal) {
+    portal.classList.add('correct');
+    const portalRect = portal.getBoundingClientRect();
+    const characterRect = character.getBoundingClientRect();
+
+    // Calculer la position de destination en fonction de l'orientation
+    const isMobile = window.innerWidth <= 600;
+    let destinationX, destinationY;
+
+    if(isMobile) {
+        // Layout vertical
+        // Positionner le personnage au-dessus de la porte sélectionnée
+        destinationX = "50%";
+        destinationY = "100px"; // Positionnement en bas
+    } else {
+        // Layout horizontal
+        const doorCenterX = portal.offsetLeft + portal.offsetWidth / 2;
+        destinationX = `${doorCenterX}px`;
+        destinationY = "-60px"; // Position original
+    }
+
+    // Appliquer la transformation
+    character.style.transition = "left 1s ease-in-out, top 1s ease-in-out";
+    character.style.left = destinationX;
+    character.style.top = destinationY;
+
+    // Optionnel: Réinitialiser la position après l'animation
+    setTimeout(() => {
+        // Recentrer le personnage
+        character.style.left = "50%";
+        character.style.top = "-60px";
+    }, 1000);
+}
+
+// Fonction pour ajouter les écouteurs d'événements aux portails
+function addPortalEventListeners() {
+    portals.forEach(portal => {
+        portal.addEventListener('click', () => {
+            selectPortal(portal);
+        });
+    });
+}
+
 // Génération des étoiles pour le fond étoilé avec zoom continu
 function generateStars() {
     const starfield = document.querySelector('.starfield');
     const numberOfStars = 200; // Ajustez ce nombre selon vos préférences
 
-    for (let i = 0; i < numberOfStars; i++) {
+    for(let i = 0; i < numberOfStars; i++) {
         const star = document.createElement('div');
         star.classList.add('star');
 
@@ -340,7 +690,7 @@ function generateStars() {
         star.style.left = `${Math.random() * 100}%`;
 
         // Ajouter une classe spéciale pour certaines étoiles rapides
-        if (Math.random() < 0.05) { // 5% des étoiles seront des étoiles rapides
+        if(Math.random() < 0.05) { // 5% des étoiles seront des étoiles rapides
             star.classList.add('fast-star');
         }
 
@@ -362,47 +712,15 @@ function initStarfield() {
 }
 
 // Écouteurs d'événements
-submitButton.addEventListener('click', checkAnswer);
 startButton.addEventListener('click', startGame);
-
-// Permettre de soumettre la réponse en appuyant sur "Entrée"
-answerInput.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-        checkAnswer();
-    }
-});
-
-// Gestion de la modale
+saveScoreButton.addEventListener('click', saveScore);
+closeHighScoresButton.addEventListener('click', closeHighScores);
 closeModal.addEventListener('click', () => {
     modal.style.display = "none";
 });
 
-// Enregistrer le score
-saveScoreButton.addEventListener('click', saveScore);
-
-// Gestion de l'affichage du tableau des scores
-closeHighScoresButton.addEventListener('click', closeHighScores);
-
-// Permettre de cliquer sur une porte pour sélectionner la réponse
-doors.forEach((door, index) => {
-    door.addEventListener('click', () => {
-        // Sélectionner la porte cliquée
-        selectDoor(index);
-        // Afficher le champ de saisie si ce n'est pas déjà fait
-        if (answerInput.style.display === "none") {
-            answerInput.style.display = "inline-block";
-            submitButton.style.display = "inline-block";
-        }
-    });
-});
-
-// Fonction pour afficher les scores au chargement (optionnel)
-function loadHighScores() {
-    // Vous pouvez appeler cette fonction si vous voulez afficher les scores au début
-}
-
-// Initialiser le fond étoilé au chargement de la fenêtre
+// Initialisation au chargement de la fenêtre
 window.onload = () => {
-    loadHighScores();
     initStarfield();
+    addPortalEventListeners();
 };
