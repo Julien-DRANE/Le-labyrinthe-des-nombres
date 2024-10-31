@@ -39,6 +39,35 @@ body {
     }
 }
 
+/* -------------------- Étoiles de Fond -------------------- */
+
+.star {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 50%;
+    opacity: 0.8;
+    /* Initialisation des étoiles */
+}
+
+.fast-star {
+    animation: twinkleFast 1s infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes twinkleFast {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 0.3; }
+}
+
+@keyframes moveStar {
+    from { transform: translateY(0px); }
+    to { transform: translateY(100px); }
+}
+
 /* -------------------- Jauge d'Oxygène Ronde -------------------- */
 
 #oxygenCanvas {
@@ -112,7 +141,7 @@ body {
     text-align: center;
     width: 90%;
     height: 90%;
-    font-size: 1em; /* Taille ajustable */
+    font-size: 1.5em; /* Taille ajustée pour être plus grand */
     color: #ffffff;
     text-shadow: 2px 2px 4px #000;
     pointer-events: none; /* Permet de cliquer sur le portail sans interférence du texte */
@@ -240,6 +269,112 @@ footer {
     animation: shrinkAndMove 1s forwards;
 }
 
+/* -------------------- Modal Styles -------------------- */
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom:0;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background-color: #222;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 400px;
+    color: #fff;
+}
+
+.modal-content input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #00ff99;
+    color: #000;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+    background-color: #00e676;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* -------------------- Tableau des Scores -------------------- */
+
+.high-scores {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right:0;
+    bottom:0;
+    background-color: rgba(0,0,0,0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    color: #fff;
+}
+
+.high-scores table {
+    width: 80%;
+    max-width: 600px;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.high-scores th, .high-scores td {
+    border: 1px solid #555;
+    padding: 10px;
+    text-align: center;
+}
+
+.high-scores th {
+    background-color: #00ff99;
+    color: #000;
+}
+
+.high-scores button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #ff5722;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.high-scores button:hover {
+    background-color: #e64a19;
+}
+
 /* -------------------- Responsive Design -------------------- */
 
 /* Tablette */
@@ -290,15 +425,27 @@ footer {
     .planet-container {
         width: 120px; /* Réduction de la taille pour mobile */
         height: 120px;
+        position: relative;
+    }
+
+    .planet {
+        width: 100%;
+        height: 100%;
     }
 
     .target-number {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         font-size: 1.2em; /* Réduction de la taille pour mobile */
     }
 
     .room {
         flex-direction: column; /* Alignement vertical pour mobile */
         height: 40vh; /* Utilise moins de hauteur pour mobile */
+        justify-content: center;
+        align-items: center;
     }
 
     .portal {
