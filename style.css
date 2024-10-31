@@ -553,20 +553,49 @@ footer {
 
 /* -------------------- Animation de la Station Spatiale -------------------- */
 
-.space-station {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0.1);
-    z-index: 99; /* Assurez-vous qu'elle est au-dessus du jeu */
-    opacity: 0;
+/* Animation d'approche de la station spatiale */
+@keyframes approachStation {
+    from {
+        transform: translate(-50%, -50%) scale(0.1);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
 }
 
 .space-station.animate-station {
     animation: approachStation 3s forwards;
 }
 
-.space-station img {
-    width: 300px; /* Ajustez selon la taille souhaitée */
+/* -------------------- Section Game Over -------------------- */
+
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Au-dessus de tous les autres éléments */
+    text-align: center;
+    color: #ff0000; /* Rouge */
+    font-size: 3em;
+    font-weight: bold;
+    animation: fadeIn 1s ease-in-out forwards;
+}
+
+.game-over-image {
+    width: 200px; /* Ajustez selon vos préférences */
     height: auto;
+    margin-bottom: 20px;
+}
+
+/* Animation pour faire apparaître progressivement la section Game Over */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
