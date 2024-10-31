@@ -206,6 +206,42 @@ body {
     50% { transform: translate(-50%, -10px); }
 }
 
+/* -------------------- Séquence de Victoire -------------------- */
+
+/* Animation de déplacement du personnage vers la station spatiale */
+@keyframes shrinkAndMove {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(100px, -50px) scale(0.5); /* Ajustez selon le besoin */
+    }
+    100% {
+        transform: translate(200px, -100px) scale(0.2); /* Ajustez selon le besoin */
+        opacity: 0;
+    }
+}
+
+.character.travel {
+    animation: shrinkAndMove 1s forwards;
+}
+
+/* Animation d'approche de la station spatiale */
+@keyframes approachStation {
+    from {
+        transform: scale(0.1);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.space-station.animate-station {
+    animation: approachStation 3s forwards;
+}
+
 /* -------------------- Contrôles et Score -------------------- */
 
 footer {
@@ -259,26 +295,6 @@ footer {
     margin-top: 10px;
     color: #ff5722;
     min-height: 24px;
-}
-
-/* -------------------- Séquence de Victoire -------------------- */
-
-/* Animation de déplacement du personnage */
-@keyframes shrinkAndMove {
-    0% {
-        transform: translate(0, 0) scale(1);
-    }
-    50% {
-        transform: translate(100px, -50px) scale(0.5); /* Ajustez selon le besoin */
-    }
-    100% {
-        transform: translate(200px, -100px) scale(0.2); /* Ajustez selon le besoin */
-        opacity: 0;
-    }
-}
-
-.character.travel {
-    animation: shrinkAndMove 1s forwards;
 }
 
 /* -------------------- Modal Styles -------------------- */
@@ -533,4 +549,24 @@ footer {
         left: 0;
         background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent pour mieux voir le contenu */
     }
+}
+
+/* -------------------- Animation de la Station Spatiale -------------------- */
+
+.space-station {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.1);
+    z-index: 99; /* Assurez-vous qu'elle est au-dessus du jeu */
+    opacity: 0;
+}
+
+.space-station.animate-station {
+    animation: approachStation 3s forwards;
+}
+
+.space-station img {
+    width: 300px; /* Ajustez selon la taille souhaitée */
+    height: auto;
 }
