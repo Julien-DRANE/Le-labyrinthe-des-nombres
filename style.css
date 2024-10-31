@@ -46,7 +46,7 @@ body {
     background-color: #fff;
     border-radius: 50%;
     opacity: 0.8;
-    /* Initialisation des étoiles */
+    /* Taille dynamique définie via JavaScript */
 }
 
 .fast-star {
@@ -85,6 +85,8 @@ body {
     display: flex;
     align-items: center;
     margin-top: 10px;
+    width: 80%; /* Ajusté pour une meilleure responsivité */
+    max-width: 600px; /* Limite la largeur sur les grands écrans */
 }
 
 .progress-character, .progress-station {
@@ -127,6 +129,7 @@ body {
     align-items: center;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    margin: 10px; /* Ajouté pour espacer les portails */
 }
 
 .portal:hover {
@@ -240,6 +243,8 @@ footer {
     color: #00ff99;
     text-shadow: 2px 2px 4px #000;
     margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
 }
 
 .message-box {
@@ -438,14 +443,15 @@ footer {
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        font-size: 1.2em; /* Réduction de la taille pour mobile */
+        font-size: 1.5em; /* Augmenté pour être plus visible */
     }
 
     .room {
         flex-direction: column; /* Alignement vertical pour mobile */
-        height: 40vh; /* Utilise moins de hauteur pour mobile */
+        height: 60vh; /* Utilise plus de hauteur pour mobile afin de voir tous les portails */
         justify-content: center;
         align-items: center;
+        overflow-y: auto; /* Permet le défilement si nécessaire */
     }
 
     .portal {
@@ -455,7 +461,7 @@ footer {
     }
 
     .calculation {
-        font-size: 1.1em;
+        font-size: 1.2em;
     }
 
     .progress-character, .progress-station {
@@ -485,6 +491,8 @@ footer {
 
     .score-board {
         font-size: 1.1em;
+        position: absolute;
+        bottom: 70px; /* Ajuster pour éviter d'être trop bas */
     }
 
     .message-box {
@@ -505,5 +513,10 @@ footer {
     /* Assurer que la jauge de progression et d'oxygène sont visibles et bien positionnées */
     footer {
         padding-bottom: 20px; /* Ajout d'un padding en bas pour éviter le chevauchement */
+        width: 100%;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent pour mieux voir le contenu */
     }
 }
