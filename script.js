@@ -26,10 +26,10 @@ const highScoresDiv = document.getElementById('highScores');
 const highScoresBody = document.getElementById('highScoresBody');
 const closeHighScoresButton = document.getElementById('closeHighScores');
 
-let currentQuestion = 0;
+let currentStreak = 0;
+const requiredStreak = 7;
 let score = 0;
 let targetNumber = 0;
-const maxQuestions = 10;
 
 // Fonction pour générer un nombre cible
 function generateTargetNumber() {
@@ -189,20 +189,16 @@ function selectPortal(portal) {
         score += 10;
         scoreDisplay.textContent = score;
 
-        // Mettre à jour la jauge de progression
+        // Incrémenter le streak
+        currentStreak++;
         updateGauge();
 
         // Déplacer le personnage à travers le portail avec animation de réduction
         moveCharacterThroughPortal(portal);
         
-        // Incrémenter le nombre de questions
-        currentQuestion++;
-
-        // Vérifier si la mission est terminée
-        if(currentQuestion >= maxQuestions) {
-            setTimeout(() => {
-                endGame();
-            }, 1500); // 1.5 secondes pour voir l'animation
+        // Vérifier si le streak requis est atteint
+        if(currentStreak >= requiredStreak) {
+            endGame(true); // Passer un paramètre pour indiquer la victoire
         } else {
             // Générer une nouvelle cible et de nouveaux calculs après un court délai
             setTimeout(() => {
@@ -212,8 +208,12 @@ function selectPortal(portal) {
     } else {
         // Jouer le son incorrect
         wrongSound.play();
-        messageBox.textContent = `Mauvaise réponse, réessaie !`;
+        messageBox.textContent = `Mauvaise réponse, le streak est réinitialisé !`;
         messageBox.style.color = "#ff5722";
+
+        // Réinitialiser le streak
+        currentStreak = 0;
+        updateGauge();
 
         // Ajouter l'animation de secousse
         portal.classList.add('wrong');
@@ -225,7 +225,7 @@ function selectPortal(portal) {
 
 // Fonction pour démarrer le jeu
 function startGame() {
-    currentQuestion = 0;
+    currentStreak = 0; // Réinitialisation du streak
     score = 0;
     scoreDisplay.textContent = score;
     updateGauge();
@@ -253,9 +253,14 @@ function nextRound() {
 }
 
 // Fonction pour terminer le jeu
-function endGame() {
-    messageBox.textContent = `Mission Accomplie ! Ton score est de ${score} points 🎉`;
-    messageBox.style.color = "#00ff99";
+function endGame(victory = false) {
+    if(victory) {
+        messageBox.textContent = `Mission Accomplie ! Tu as atteint ${requiredStreak} bonnes réponses consécutives 🎉`;
+        messageBox.style.color = "#00ff99";
+    } else {
+        messageBox.textContent = `Mission Terminée ! Ton score est de ${score} points ⭐`;
+        messageBox.style.color = "#ff5722";
+    }
     // Arrêter le son d'ambiance
     spaceshipSound.pause();
     // Afficher la fenêtre modale pour entrer le nom
@@ -319,7 +324,7 @@ function closeHighScores() {
 
 // Fonction pour mettre à jour la jauge horizontale
 function updateGauge() {
-    const progress = (currentQuestion / maxQuestions) * 100;
+    const progress = (currentStreak / requiredStreak) * 100;
     gaugeFill.style.width = `${progress}%`;
 }
 
@@ -364,7 +369,7 @@ function addPortalEventListeners() {
 // Génération des étoiles pour le fond étoilé avec zoom continu
 function generateStars() {
     const starfield = document.querySelector('.starfield');
-    const numberOfStars = 200; // Ajustez ce nombre selon vos préférences
+    const numberOfStars = 300; // Augmenté pour plus d'étoiles
 
     for(let i = 0; i < numberOfStars; i++) {
         const star = document.createElement('div');
@@ -379,6 +384,10 @@ function generateStars() {
         star.style.top = `${Math.random() * 100}%`;
         star.style.left = `${Math.random() * 100}%`;
 
+        // Profondeur pour l'effet 3D
+        const depth = Math.random() * 1000; // Profondeur entre 0 et 1000px
+        star.style.transform = `translateZ(${depth}px)`;
+
         // Ajouter une classe spéciale pour certaines étoiles rapides
         if(Math.random() < 0.05) { // 5% des étoiles seront des étoiles rapides
             star.classList.add('fast-star');
@@ -386,10 +395,10 @@ function generateStars() {
 
         // Assignation de délais et durées aléatoires pour éviter les regroupements
         const twinkleDuration = Math.random() * 2 + 3; // 3s à 5s pour twinkle
-        const zoomDuration = Math.random() * 5 + 5; // 5s à 10s pour zoom
+        const moveDuration = Math.random() * 5 + 5; // 5s à 10s pour moveStar
         const animationDelay = Math.random() * 10; // 0s à 10s de délai
 
-        star.style.animationDuration = `twinkle ${twinkleDuration}s infinite, zoom ${zoomDuration}s linear infinite`;
+        star.style.animationDuration = `twinkle ${twinkleDuration}s infinite, moveStar ${moveDuration}s linear infinite`;
         star.style.animationDelay = `${animationDelay}s, ${animationDelay}s`; // Même délai pour les deux animations
 
         starfield.appendChild(star);
