@@ -24,28 +24,32 @@
             <div class="gauge-label">Progression</div>
         </div>
         
-        <!-- Salle avec les Portes et le Personnage -->
+        <!-- Image de la Planète avec Nombre Cible -->
+        <div class="planet-container">
+            <img src="images/planet.png" alt="Planète" class="planet">
+            <div id="targetNumber" class="target-number">32</div>
+        </div>
+        
+        <!-- Salle avec les Portails et le Personnage -->
         <div class="room">
-            <!-- Personnage Astronaute placé au-dessus des portes -->
+            <!-- Personnage Astronaute placé au-dessus des portails -->
             <div id="character" class="character">
                 <img src="images/astronaut.png" alt="Astronaute" />
             </div>
-            <!-- Portes avec questions mathématiques -->
-            <div id="question1" class="door">
-                <div class="question-text">?</div>
+            <!-- Portails avec propositions de calculs -->
+            <div id="portal1" class="portal">
+                <div class="calculation">?</div>
             </div>
-            <div id="question2" class="door">
-                <div class="question-text">?</div>
+            <div id="portal2" class="portal">
+                <div class="calculation">?</div>
             </div>
-            <div id="question3" class="door">
-                <div class="question-text">?</div>
+            <div id="portal3" class="portal">
+                <div class="calculation">?</div>
             </div>
         </div>
         
         <!-- Contrôles du Jeu -->
         <div class="controls">
-            <input type="number" id="answer" style="display:none;" placeholder="Votre réponse" />
-            <button id="submit" style="display:none;">Soumettre</button>
             <button id="start">Démarrer la Mission</button>
         </div>
         
