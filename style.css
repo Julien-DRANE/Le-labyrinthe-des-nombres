@@ -33,14 +33,14 @@ body {
     50% { opacity: 0.4; }
 }
 
-/* Animation de zoom pour les étoiles */
-@keyframes zoom {
-    0% {
-        transform: scale(0.5);
-        opacity: 0.5;
+/* Animation de déplacement des étoiles vers l'avant (zoom avant) */
+@keyframes moveStar {
+    from {
+        transform: translateZ(0) scale(1);
+        opacity: 1;
     }
-    100% {
-        transform: scale(2);
+    to {
+        transform: translateZ(-1000px) scale(3); /* Ajustez la distance et l'échelle selon l'effet désiré */
         opacity: 0;
     }
 }
@@ -60,13 +60,13 @@ body {
     position: absolute;
     background: white;
     border-radius: 50%;
-    opacity: 0.5;
-    animation: twinkle 5s infinite, zoom 10s linear infinite;
+    opacity: 0.8;
+    animation: twinkle 2s infinite, moveStar 10s linear infinite;
 }
 
 .fast-star {
     background: #ffffff;
-    animation: twinkle 1s infinite, zoom 5s linear infinite;
+    animation: twinkle 1s infinite, moveStar 5s linear infinite;
 }
 
 /* Game Container */
@@ -84,7 +84,7 @@ body {
 /* Titre */
 header h1 {
     margin: 0;
-    font-size: 2.5em; /* Réduction de la taille pour mobile */
+    font-size: 2.5em; /* Ajustable selon vos préférences */
     color: #ffcc00;
     text-shadow: 2px 2px 4px #000;
     text-align: center;
@@ -121,7 +121,7 @@ header h1 {
     position: relative;
     width: 100%;
     height: 50vh; /* Ajustement pour mobile */
-    perspective: 800px;
+    perspective: 800px; /* Ajouté pour les animations 3D */
     display: flex;
     justify-content: center; /* Centrer les portails */
     align-items: flex-end;
@@ -192,9 +192,9 @@ header h1 {
 /* Personnage Astronaute */
 .character {
     position: absolute;
-    left: -105px; /* Positionné à gauche des portails */
+    left: -100px; /* Déplacement de 20px vers la droite par rapport à -120px */
     bottom: 0; /* Aligné en bas */
-    width: 100px; /* Taille adaptée pour mobile */
+    width: 100px; /* Taille adaptée pour desktop/tablette */
     height: 100px;
     transition: transform 1s ease-in-out, left 1s ease-in-out, top 1s ease-in-out;
     z-index: 2; /* Au-dessus des portails */
@@ -277,7 +277,7 @@ footer {
 .gauge-fill {
     width: 0%;
     height: 100%;
-    background-color: #00ff99;
+    background: linear-gradient(90deg, yellow, blue, green); /* Dégradé du jaune au vert via le bleu */
     transition: width 0.5s ease;
 }
 
@@ -395,7 +395,7 @@ footer {
     .character {
         width: 80px; /* Réduction supplémentaire pour mobile */
         height: 80px;
-        left: -100px; /* Ajusté pour mobile */
+        left: -80px; /* Déplacement de 20px vers la droite par rapport à -100px */
     }
 
     footer button {
