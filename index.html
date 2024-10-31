@@ -34,14 +34,18 @@
             <!-- Salle avec les Portails et le Personnage -->
             <div class="room">
                 <!-- Portails avec propositions de calculs -->
-                <div id="portal1" class="portal">
-                    <div class="calculation">?</div>
+                <div class="portals-wrapper">
+                    <div id="portal1" class="portal">
+                        <div class="calculation">?</div>
+                    </div>
+                    <div id="portal2" class="portal">
+                        <div class="calculation">?</div>
+                    </div>
                 </div>
-                <div id="portal2" class="portal">
-                    <div class="calculation">?</div>
-                </div>
-                <div id="portal3" class="portal">
-                    <div class="calculation">?</div>
+                <div class="portals-wrapper">
+                    <div id="portal3" class="portal">
+                        <div class="calculation">?</div>
+                    </div>
                 </div>
                 <!-- Personnage Astronaute placé à gauche des portails -->
                 <div id="character" class="character">
@@ -84,6 +88,8 @@
     <!-- Sons Supplémentaires -->
     <audio id="lowOxygenSound" src="sounds/low_oxygen.mp3"></audio>
     <audio id="beepSound" src="sounds/bip.mp3"></audio>
+    <audio id="comSound" src="sounds/com.mp3"></audio>
+    <audio id="finalSound" src="sounds/final.mp3"></audio>
 
     <!-- Fenêtre Modale pour Entrer le Nom du Joueur -->
     <div id="modal" class="modal" style="display:none;">
