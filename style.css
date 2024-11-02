@@ -74,8 +74,8 @@ body {
     position: absolute;
     top: 10px;
     right: 10px;
-    width: 80px;
-    height: 80px;
+    width: 120px; /* Augmenté pour être plus visible sur écran de bureau */
+    height: 120px; /* Augmenté pour être plus visible sur écran de bureau */
     z-index: 10; /* Au-dessus des autres éléments */
 }
 
@@ -84,22 +84,22 @@ body {
 .progress-container {
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 20px;
     width: 80%; /* Ajusté pour une meilleure responsivité */
-    max-width: 600px; /* Limite la largeur sur les grands écrans */
+    max-width: 800px; /* Limite la largeur sur les grands écrans */
 }
 
 .progress-character, .progress-station {
-    width: 40px;
-    height: 40px;
+    width: 60px; /* Augmenté pour être plus visible sur écran de bureau */
+    height: 60px; /* Augmenté pour être plus visible sur écran de bureau */
 }
 
 .progress-bar {
     flex: 1;
-    height: 20px;
+    height: 30px; /* Augmenté pour être plus visible sur écran de bureau */
     background-color: #555;
-    border-radius: 10px;
-    margin: 0 10px;
+    border-radius: 15px;
+    margin: 0 20px;
     position: relative;
     overflow: hidden;
 }
@@ -122,8 +122,8 @@ body {
 
 .portal {
     position: relative;
-    width: 120px; /* Taille ajustable */
-    height: 180px;
+    width: 180px; /* Augmenté pour être plus visible sur écran de bureau */
+    height: 240px; /* Augmenté pour être plus visible sur écran de bureau */
     background-image: url('images/vortex.png');
     background-size: cover;
     background-position: center;
@@ -136,11 +136,11 @@ body {
     align-items: center;
     overflow: hidden;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-    margin: 10px; /* Ajouté pour espacer les portails */
+    margin: 15px; /* Augmenté pour espacer les portails */
 }
 
 .portal:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
     border-color: #00ff99;
 }
 
@@ -151,7 +151,7 @@ body {
     text-align: center;
     width: 90%;
     height: 90%;
-    font-size: 1.5em; /* Taille ajustée pour être plus grand */
+    font-size: 2em; /* Augmenté pour être plus lisible sur écran de bureau */
     color: #ffffff;
     text-shadow: 2px 2px 4px #000;
     pointer-events: none; /* Permet de cliquer sur le portail sans interférence du texte */
@@ -185,12 +185,12 @@ body {
 
 .character {
     position: absolute;
-    left: -100px; /* Position initiale */
-    bottom: 0; /* Aligné en bas */
-    width: 100px;
-    height: 100px;
+    left: -150px; /* Augmenté pour être plus visible sur écran de bureau */
+    bottom: 0;
+    width: 150px; /* Augmenté pour être plus visible sur écran de bureau */
+    height: 150px; /* Augmenté pour être plus visible sur écran de bureau */
     transition: transform 1s ease-in-out, left 1s ease-in-out, top 1s ease-in-out;
-    z-index: 2; /* Au-dessus des portails */
+    z-index: 2;
 }
 
 .character img {
@@ -199,11 +199,6 @@ body {
     animation: float 3s ease-in-out infinite;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     border-radius: 50%;
-}
-
-@keyframes float {
-    0%, 100% { transform: translate(-50%, 0px); }
-    50% { transform: translate(-50%, -10px); }
 }
 
 /* -------------------- Séquence de Victoire -------------------- */
