@@ -376,7 +376,7 @@ function selectPortal(portal) {
         updateGauge();
 
         // Dépléter l'oxygène en cas d'erreur
-        oxygenLevel -= 15; // Perdre 15% d'oxygène
+        oxygenLevel -= 5; // Perdre 15% d'oxygène
         if (oxygenLevel < 0) oxygenLevel = 0;
         drawOxygenGauge();
         updateOxygenGauge();
