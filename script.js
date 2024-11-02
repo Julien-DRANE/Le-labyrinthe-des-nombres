@@ -165,7 +165,12 @@ function handleBeepSounds() {
         }
     }
 }
-
+function handleLowOxygenSound() {
+    if (oxygenLevel <= 10 && oxygenLevel > 0) {
+        lowOxygenSound.load(); // Préparez le son à être joué
+        lowOxygenSound.play();
+    }
+}
 
 
 /**
