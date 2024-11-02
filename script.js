@@ -698,7 +698,11 @@ function closeGameOver() {
 /**
  * Fonction pour réinitialiser le jeu après Game Over
  */
+/**
+ * Fonction pour réinitialiser le jeu après Game Over ou une victoire
+ */
 function resetGame() {
+    // Réinitialiser les variables de jeu
     currentStreak = 0;
     score = 60.0;
     oxygenLevel = 60;
@@ -716,14 +720,25 @@ function resetGame() {
     // Réinitialiser la barre de progression
     progressFill.style.width = '0%';
 
-    // Réinitialiser la station spatiale
+    // Masquer la station spatiale
     spaceStation.style.display = 'none';
     spaceStation.classList.remove('animate-station');
 
     // Réinitialiser la position du personnage
     character.style.transition = "none"; // Annuler la transition en cours
     character.style.transform = "translate(0, 0) scale(1)";
+
+    // Masquer la section Game Over
+    gameOverDiv.style.display = 'none';
+
+    // Masquer la fenêtre modale si elle est ouverte
+    modal.style.display = 'none';
+
+    // Réinitialiser le bouton "Démarrer la Mission"
+    startButton.style.display = "inline";
+    startButton.textContent = "Rejouer la Mission";
 }
+
 /**
  * Fonction pour réinitialiser le jeu après Game Over
  */
