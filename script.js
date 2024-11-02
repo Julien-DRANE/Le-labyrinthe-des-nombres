@@ -156,10 +156,11 @@ function handleBeepSounds() {
         if (Math.floor(oxygenLevel) % 10 === 0 && Math.abs(oxygenLevel % 10) < 0.1) {
             beepSound.play();
         }
-   } else if (oxygenLevel <= 10 && oxygenLevel > 0) {
-        if (Math.floor(oxygenLevel) === oxygenLevel) {
+    } else if (oxygenLevel <= 10 && oxygenLevel > 0) {
+        if (!lowOxygenSoundPlayed) {
             lowOxygenSound.load(); // Préparez le son à être joué
             lowOxygenSound.play();
+            lowOxygenSoundPlayed = true; // Marquer le son comme joué pour éviter de le rejouer constamment
         }
     }
 }
