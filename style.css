@@ -648,3 +648,16 @@ footer {
 /* -------------------- Contrôles et Score -------------------- */
 
 /* ... [Le reste de votre CSS existant] ... */
+/* Animation de zoom infini pour le fond étoilé */
+@keyframes zoomIn {
+    from {
+        transform: scale(1.0);
+    }
+    to {
+        transform: scale(1.2);
+    }
+}
+
+.starfield {
+    animation: zoomIn 120s ease-in-out infinite alternate;
+}
