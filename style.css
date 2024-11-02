@@ -485,9 +485,11 @@ footer {
 
 /* Mobile */
 @media (max-width: 600px) {
-    header h1 {
-        font-size: 2em; /* Réduction de la taille pour mobile */
+    .target-number {
+        font-size: 2em; /* Réduire la taille de la police pour s'adapter aux écrans mobiles */
     }
+}
+
 
     .planet-container {
         width: 120px; /* Réduction de la taille pour mobile */
@@ -501,12 +503,15 @@ footer {
     }
 
     .target-number {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 1.5em; /* Augmenté pour être plus visible */
-    }
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3em; /* Augmenté pour être plus visible sur grand écran */
+    color: #fff;
+    text-shadow: 2px 2px 4px #000;
+}
+
 
     .room {
         flex-direction: column; /* Alignement vertical pour mobile */
