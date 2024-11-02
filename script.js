@@ -455,7 +455,7 @@ function endGame(victory = false, gameOver = false) {
     beepSound.pause();
     comSound.pause();
 
-    if(victory) {
+    if (victory) {
         messageBox.textContent = `Mission Accomplie ! Tu as atteint ${requiredStreak} bonnes réponses consécutives 🎉`;
         messageBox.style.color = "#00ff99";
 
@@ -481,17 +481,14 @@ function endGame(victory = false, gameOver = false) {
         setTimeout(() => {
             modal.style.display = "block";
         }, 5000); // 5 secondes pour laisser le temps à l'animation
-    } else if(gameOver) {
+    } else if (gameOver) {
         // Afficher la section Game Over
         gameOverDiv.style.display = 'block';
-
-        // Appliquer l'animation de disparition lente à l'image
-       //  gameOverImage.style.animation = 'fadeOutShrinkSlow 8s ease forwards';
 
         // Jouer le son Game Over
         gameOverSound.play();
 
-       // Après un délai, réinitialiser le jeu
+        // Après un délai, réinitialiser le jeu
         setTimeout(resetGame, 5000); // 5 secondes avant de réinitialiser le jeu
     } else {
         messageBox.textContent = `Mission Terminée ! Ton score est de ${score} points ⭐`;
@@ -501,6 +498,7 @@ function endGame(victory = false, gameOver = false) {
         modal.style.display = "block";
     }
 }
+
 
 /**
  * Fonction pour déplacer le personnage vers la station spatiale
@@ -699,13 +697,25 @@ function resetGame() {
     updateGauge();
     drawOxygenGauge();
     messageBox.textContent = "";
-    nextRound();
 
-    // Réinitialiser les animations et positions
+    // Réinitialiser les portails
+    portals.forEach(portal => {
+        portal.style.display = 'block';
+        portal.classList.remove('correct', 'wrong');
+    });
+
+    // Réinitialiser la barre de progression
+    progressFill.style.width = '0%';
+
+    // Réinitialiser la station spatiale
     spaceStation.style.display = 'none';
     spaceStation.classList.remove('animate-station');
+
+    // Réinitialiser la position du personnage
+    character.style.transition = "none"; // Annuler la transition en cours
     character.style.transform = "translate(0, 0) scale(1)";
 }
+
 
 /* -------------------- Gestion des Événements -------------------- */
 
