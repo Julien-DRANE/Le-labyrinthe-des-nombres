@@ -57,6 +57,15 @@ const spaceStation = document.getElementById('spaceStation');
 const gameOverDiv = document.getElementById('gameOver');
 const gameOverImage = gameOverDiv.querySelector('.game-over-image');
 const gameOverText = gameOverDiv.querySelector('h2');
+// Sélectionner le bouton "Nouvelle Partie"
+const newGameButton = document.getElementById('newGameButton');
+
+// Écouteur d'événement pour le bouton "Nouvelle Partie"
+newGameButton.addEventListener('click', () => {
+    resetGame(); // Réinitialiser le jeu
+    startGame(); // Démarrer une nouvelle partie
+});
+
 
 // Variables de jeu
 let currentStreak = 0;
@@ -714,6 +723,42 @@ function resetGame() {
     // Réinitialiser la position du personnage
     character.style.transition = "none"; // Annuler la transition en cours
     character.style.transform = "translate(0, 0) scale(1)";
+}
+/**
+ * Fonction pour réinitialiser le jeu après Game Over
+ */
+function resetGame() {
+    currentStreak = 0;
+    score = 60.0;
+    oxygenLevel = 60;
+    document.getElementById('score').textContent = score.toFixed(1);
+    updateGauge();
+    drawOxygenGauge();
+    messageBox.textContent = "";
+
+    // Réinitialiser les portails
+    portals.forEach(portal => {
+        portal.style.display = 'block';
+        portal.classList.remove('correct', 'wrong');
+    });
+
+    // Réinitialiser la barre de progression
+    progressFill.style.width = '0%';
+
+    // Réinitialiser la station spatiale
+    spaceStation.style.display = 'none';
+    spaceStation.classList.remove('animate-station');
+
+    // Réinitialiser la position du personnage
+    character.style.transition = "none"; // Annuler la transition en cours
+    character.style.transform = "translate(0, 0) scale(1)";
+
+    // Masquer la section Game Over
+    gameOverDiv.style.display = 'none';
+
+    // Réinitialiser le bouton "Démarrer la Mission"
+    startButton.style.display = "inline";
+    startButton.textContent = "Rejouer la Mission";
 }
 
 
