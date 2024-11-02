@@ -149,15 +149,16 @@ function startOxygenDepletion() {
 
 /**
  * Fonction pour gérer les bips sonores de l'oxygène
- */
+/* ----------------- Ajout des fonctions pour les bips sonores et le son de fin ----------------- */
+
 function handleBeepSounds() {
     if (oxygenLevel > 10) {
-        if (Math.floor(oxygenLevel) % 10 === 0 && oxygenLevel % 1 === 0) {
+        if (Math.floor(oxygenLevel) % 10 === 0 && Math.abs(oxygenLevel % 10) < 0.1) {
             beepSound.play();
         }
     } else if (oxygenLevel <= 10 && oxygenLevel > 0) {
         if (Math.floor(oxygenLevel) === oxygenLevel) {
-            stressSound.play();
+            lowOxygenSound.play();
         }
     }
 }
