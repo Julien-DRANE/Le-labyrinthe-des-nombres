@@ -201,6 +201,11 @@ body {
     border-radius: 50%;
 }
 
+@keyframes float {
+    0%, 100% { transform: translate(-50%, 0px); }
+    50% { transform: translate(-50%, -10px); }
+}
+
 /* -------------------- Séquence de Victoire -------------------- */
 
 /* Animation de déplacement du personnage vers la station spatiale */
