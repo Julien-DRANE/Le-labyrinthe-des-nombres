@@ -491,11 +491,12 @@ function endGame(victory = false, gameOver = false) {
         // Jouer le son Game Over
         gameOverSound.play();
 
-        // Optionnel : Arrêter tous les sons sauf Game Over
-        // Vous pouvez également ajouter des effets supplémentaires ici
+       // Après un délai, réinitialiser le jeu
+        setTimeout(resetGame, 5000); // 5 secondes avant de réinitialiser le jeu
     } else {
         messageBox.textContent = `Mission Terminée ! Ton score est de ${score} points ⭐`;
         messageBox.style.color = "#ff5722";
+
         // Afficher la fenêtre modale pour entrer le nom
         modal.style.display = "block";
     }
